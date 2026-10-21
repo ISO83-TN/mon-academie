@@ -1,0 +1,1312 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mon Académie</title>
+<meta name="theme-color" content="#2747d8">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="fonts.css">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+
+/* Layout : cahier Seyès — rail de navigation à gauche en paysage (tablette), barre en bas en portrait ; surligneur fluo comme seul effet fort. */
+:root{
+  --paper:#f6f8fc; --card:#ffffff; --ink:#15213b; --muted:#5b6782; --line:#dbe2f0;
+  --rule:rgba(39,71,216,.055); --rule-strong:rgba(39,71,216,.11); --margin:#e7718d;
+  --accent:#2747d8; --accent-ink:#ffffff; --fluo:#ffe14d; --fluo-ink:#2a2300;
+  --good:#16884f; --good-bg:#e3f5ea; --bad:#c8392f; --bad-bg:#fbe7e5; --warn:#b26b00;
+  --c-maths:#2747d8; --c-geom:#0c8f81; --c-prog:#7438cc; --c-hg:#9a5424; --c-fr:#c92a62; --c-en:#0b7fb3; --c-rev:#5b6782; --c-defi:#b07a00;
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", Roboto, system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+  --r:14px; --shadow:0 1px 0 rgba(21,33,59,.05), 0 6px 18px -10px rgba(21,33,59,.25);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#132024; --card:#1b2c31; --ink:#edf3ee; --muted:#9db0ad; --line:#2c4247;
+  --rule:rgba(237,243,238,.035); --rule-strong:rgba(237,243,238,.06); --margin:#c25a74;
+  --accent:#8eaaff; --accent-ink:#0d1a3d; --fluo:#ffe14d; --fluo-ink:#2a2300;
+  --good:#5fd396; --good-bg:#173a2a; --bad:#ff8a7f; --bad-bg:#43211f; --warn:#f0b65a;
+  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d;
+  --shadow:0 1px 0 rgba(0,0,0,.2), 0 8px 20px -12px rgba(0,0,0,.6); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#132024; --card:#1b2c31; --ink:#edf3ee; --muted:#9db0ad; --line:#2c4247;
+  --rule:rgba(237,243,238,.035); --rule-strong:rgba(237,243,238,.06); --margin:#c25a74;
+  --accent:#8eaaff; --accent-ink:#0d1a3d; --fluo:#ffe14d; --fluo-ink:#2a2300;
+  --good:#5fd396; --good-bg:#173a2a; --bad:#ff8a7f; --bad-bg:#43211f; --warn:#f0b65a;
+  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d;
+  --shadow:0 1px 0 rgba(0,0,0,.2), 0 8px 20px -12px rgba(0,0,0,.6); color-scheme:dark }
+
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.45;
+  background-image:linear-gradient(var(--rule-strong) 1px,transparent 1px),linear-gradient(var(--rule) 1px,transparent 1px);
+  background-size:100% 32px,100% 8px;-webkit-tap-highlight-color:transparent}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:22px;font-weight:700}
+h3{font-size:18px;font-weight:700}
+p{margin:0}
+.mark{background:linear-gradient(transparent 58%,var(--fluo) 58%,var(--fluo) 92%,transparent 92%);padding:0 .1em;color:inherit}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+.app{display:grid;grid-template-columns:96px minmax(0,1fr);min-height:100%}
+.rail{position:sticky;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column;gap:6px;padding:14px 8px;
+  padding-left:max(8px,env(safe-area-inset-left,0px));background:var(--card);border-right:1px solid var(--line)}
+.brand{display:grid;place-items:center;height:56px;margin-bottom:8px;font-family:var(--f-display);font-weight:800;font-size:22px;
+  color:var(--accent);border-bottom:2px solid var(--margin)}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border:0;background:none;border-radius:12px;
+  color:var(--muted);font-size:13px;font-weight:700}
+.nav-btn svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn[aria-current="page"]{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+main{min-width:0;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:fixed;inset:auto 0 0 0;top:auto;height:auto;flex-direction:row;justify-content:space-around;z-index:20;
+    padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));
+    border-right:0;border-top:1px solid var(--line)}
+  .brand{display:none}
+  .nav-btn{flex:1;padding:6px 2px}
+  main{padding-bottom:96px}
+}
+
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.top > div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:13px;font-weight:700;
+  background:var(--card);border:1px solid var(--line);color:var(--muted)}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.pill.ok .dot{background:var(--good)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.section{display:flex;flex-direction:column;gap:12px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:12px;border:0;
+  background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:16px}
+.btn:hover{filter:brightness(1.06)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.small{min-height:40px;padding:0 14px;font-size:15px}
+.btn.fluo{background:var(--fluo);color:var(--fluo-ink)}
+.btn.danger{background:var(--bad);color:#fff}
+.link{border:0;background:none;color:var(--accent);font-weight:700;padding:6px 0}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.stat{padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.stat .big{font-family:var(--f-display);font-size:34px;font-weight:800;line-height:1}
+.bar{height:10px;border-radius:99px;background:color-mix(in srgb,var(--ink) 9%,transparent);overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:99px;background:var(--accent)}
+@media (max-width:640px){.stats{grid-template-columns:minmax(0,1fr)}}
+
+/* slots */
+.slots{display:flex;flex-direction:column}
+.slot{display:grid;grid-template-columns:64px 44px minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.slot:first-child{border-top:0}
+.slot .time{font-family:var(--f-mono);font-size:15px;color:var(--muted)}
+.slot.done .ttl{text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+.glyph{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;font-family:var(--f-display);font-weight:800;font-size:15px;
+  color:#fff;background:var(--sc,var(--accent));letter-spacing:-.02em;flex:none}
+:root[data-theme="dark"] .glyph{color:#0f1a1d}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .glyph{color:#0f1a1d}}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:.03em;
+  background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--muted)}
+.tag.beyond{background:color-mix(in srgb,var(--fluo) 70%,transparent);color:var(--fluo-ink)}
+.tag.good{background:var(--good-bg);color:var(--good)}
+@media (max-width:520px){.slot{grid-template-columns:44px minmax(0,1fr) auto}.slot .time{display:none}}
+
+/* banner */
+.banner{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--r);background:var(--fluo);color:var(--fluo-ink);flex-wrap:wrap}
+.banner b{font-family:var(--f-display);font-size:19px}
+.banner .grow{flex:1;min-width:180px}
+.banner .btn{background:var(--fluo-ink);color:var(--fluo)}
+.banner .x{border:0;background:none;color:var(--fluo-ink);font-weight:700;padding:8px}
+
+/* cards grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tile{padding:18px;display:flex;flex-direction:column;gap:12px;text-align:left;border:1px solid var(--line);min-width:0}
+button.tile{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow)}
+button.tile:hover{border-color:var(--sc,var(--accent))}
+.tile-head{display:flex;gap:12px;align-items:center;min-width:0}
+.tile-head > div{min-width:0}
+.medal{font-size:12px;font-weight:800;padding:2px 8px;border-radius:99px}
+.medal.or{background:#f7d34a;color:#3a2c00}.medal.argent{background:#cfd6e2;color:#253047}.medal.bronze{background:#e2a974;color:#3b1f05}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font-weight:700;font-size:15px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.theme-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px 18px}
+.theme-row + .theme-row{border-top:1px solid var(--line)}
+.theme-row .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.theme-row .bar{max-width:280px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:14px;font-weight:700;color:var(--muted)}
+.input,select.input{min-height:48px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);width:100%}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.row > .field{flex:1;min-width:140px}
+.ai-card{padding:18px;display:flex;flex-direction:column;gap:14px;border:1.5px dashed var(--c-defi);background:color-mix(in srgb,var(--c-defi) 7%,var(--card))}
+
+/* progress */
+.chart{width:100%;height:auto;display:block}
+.chart .b{fill:var(--accent)}.chart .b.today{fill:var(--c-defi)}
+.chart text{fill:var(--muted);font-size:13px;font-family:var(--f-body)}
+.chart .v{fill:var(--ink);font-weight:700}
+.chart .g{stroke:var(--line);stroke-width:1}
+.mastery{display:grid;grid-template-columns:44px minmax(0,1fr) 54px;gap:12px;align-items:center;padding:10px 16px}
+.mastery .bar{height:12px}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-top:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-top:0}
+td.num{text-align:right}
+
+/* planning */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+.day{padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.day.today{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.day h3{font-size:16px}
+.pslot{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:10px;border-left:4px solid var(--sc);background:color-mix(in srgb,var(--sc) 10%,transparent);font-size:14px;min-width:0}
+.pslot b{font-size:14px}
+.pslot .del{align-self:flex-start;border:0;background:none;color:var(--bad);font-weight:700;font-size:13px;padding:2px 0}
+@media (max-width:980px){.week{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+
+/* pin */
+.pin{display:grid;grid-template-columns:repeat(3,72px);gap:10px;justify-content:center}
+.pin button{height:64px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-family:var(--f-display);font-size:24px;font-weight:700}
+.pin-dots{display:flex;gap:12px;justify-content:center}
+.pin-dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--ink)}
+.pin-dots i.on{background:var(--ink)}
+
+/* quiz */
+.quiz{position:fixed;inset:0;z-index:50;background:var(--paper);overflow-y:auto;
+  background-image:linear-gradient(var(--rule-strong) 1px,transparent 1px),linear-gradient(var(--rule) 1px,transparent 1px);background-size:100% 32px,100% 8px;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.qwrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:16px;min-height:100%}
+.qtop{display:flex;align-items:center;gap:12px}
+.qtop .bar{flex:1;height:12px}
+.qtop .bar > i{background:var(--sc,var(--accent));transition:width .3s}
+.qclose{min-width:48px;height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font-weight:700;padding:0 12px}
+.qtext{font-family:var(--f-display);font-size:clamp(22px,3.2vw,30px);font-weight:700;line-height:1.2;text-wrap:pretty}
+.passage{padding:14px 16px;font-size:17px;line-height:1.55}
+pre.code{margin:0;padding:14px 16px;border-radius:12px;background:#0f1730;color:#e7ecff;font-family:var(--f-mono);font-size:16px;line-height:1.55;overflow-x:auto}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:600px){.choices{grid-template-columns:minmax(0,1fr)}}
+.choice{min-height:68px;padding:12px 16px;border-radius:14px;border:2px solid var(--line);background:var(--card);text-align:left;font-size:19px;font-weight:700;
+  display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);min-width:0;overflow-wrap:anywhere}
+.choice .k{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:color-mix(in srgb,var(--ink) 8%,transparent);font-size:14px;color:var(--muted)}
+.choice:hover:not(:disabled){border-color:var(--sc,var(--accent))}
+.choice.right{border-color:var(--good);background:var(--good-bg)}
+.choice.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.choice:disabled{cursor:default}
+.answer-row{display:flex;gap:12px;flex-wrap:wrap}
+.answer-row .input{flex:1;min-width:180px;font-size:22px;min-height:60px;font-weight:700;background:var(--card)}
+.answer-row .input.right{border-color:var(--good);background:var(--good-bg)}
+.answer-row .input.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.listen{align-self:flex-start;min-height:56px;padding:0 22px;border-radius:999px;border:0;background:var(--c-en);color:#fff;font-weight:700;font-size:17px;display:inline-flex;gap:10px;align-items:center}
+.listen svg{width:22px;height:22px;fill:currentColor}
+.feedback{padding:16px 18px;border-radius:var(--r);display:flex;flex-direction:column;gap:8px}
+.feedback.ok{background:var(--good-bg)}.feedback.ko{background:var(--bad-bg)}
+.feedback .verdict{font-family:var(--f-display);font-weight:800;font-size:22px}
+.feedback.ok .verdict{color:var(--good)}.feedback.ko .verdict{color:var(--bad)}
+.feedback .ai{font-style:italic}
+.qnext{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;margin-top:auto}
+.result{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:30px 0}
+.score{font-family:var(--f-display);font-size:88px;font-weight:800;line-height:1}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--paper);
+  padding:12px 18px;border-radius:12px;font-weight:700;max-width:calc(100vw - 32px)}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+.qsplit{display:flex;flex-direction:column;gap:14px}
+.qside{display:flex;flex-direction:column;gap:12px;min-width:0}
+.figbox{padding:10px}
+.fig{display:block;width:100%;height:min(42vh,340px);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.fig.big{height:min(56vh,440px)}
+.fig.wide{height:auto;max-height:min(56vh,440px)}
+@media (min-width:760px) and (orientation:landscape){.qsplit{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start}.qsplit .choices{grid-template-columns:minmax(0,1fr)}.fig,.fig.big{height:min(62vh,440px)}.fig.wide{height:auto;max-height:min(62vh,440px)}}
+.fig .sh{fill:color-mix(in srgb,var(--sc) 20%,transparent);stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round}
+.fig .cod{fill:none;stroke:var(--ink);stroke-width:1.6}
+.fig .ax{stroke:var(--bad);stroke-width:3;stroke-dasharray:9 6}
+.fig .ray,.fig .ln{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.fig .arc{fill:none;stroke:var(--sc);stroke-width:3}
+.fig .dotv{fill:var(--ink)}
+.fig .gl{stroke:var(--line);stroke-width:1}
+.fig .cellf{fill:color-mix(in srgb,var(--sc) 45%,transparent);stroke:var(--ink);stroke-width:1.2}
+.fig .ed{stroke:var(--ink);stroke-width:2.5;stroke-linecap:round;fill:none}
+.fig .ed.hid{stroke-dasharray:6 5;stroke-width:1.8;opacity:.7}
+.fig .face{fill:color-mix(in srgb,var(--sc) 20%,transparent)}
+.fig .face2{fill:color-mix(in srgb,var(--sc) 36%,transparent)}
+.fig .lbl{fill:var(--ink);font:800 18px var(--f-display)}
+.fig .gdot{fill:var(--muted)}
+.fig .hitp,.fig .hit{fill:transparent;cursor:pointer}
+.fig .dline{fill:none;stroke:var(--sc);stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
+.fig .dpoly{fill:color-mix(in srgb,var(--sc) 25%,transparent);stroke:var(--sc);stroke-width:3.5;stroke-linejoin:round}
+.fig .dpoly.ok{fill:color-mix(in srgb,var(--good) 25%,transparent);stroke:var(--good)}
+.fig .dpoly.ko{fill:color-mix(in srgb,var(--bad) 18%,transparent);stroke:var(--bad)}
+.fig .vtx{fill:var(--sc)}
+.fig .first{fill:var(--card);stroke:var(--sc);stroke-width:3.5}
+.fig .csh{fill:color-mix(in srgb,var(--ink) 4%,transparent);stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round}
+.fig .csh.okc{stroke:var(--good);stroke-width:5}
+.fig .csh.miss{stroke:var(--good);stroke-width:5;stroke-dasharray:8 6}
+.fig .csh.bad{stroke:var(--bad);stroke-width:5}
+.fig .cell{fill:transparent;stroke:var(--line);stroke-width:1.5;cursor:pointer}
+.fig .cell.fix{fill:color-mix(in srgb,var(--sc) 60%,transparent);stroke:var(--ink);cursor:default}
+.fig .cell.miss{stroke:var(--good);stroke-width:3.5;stroke-dasharray:6 4}
+.fig .cell.bad{stroke:var(--bad);stroke-width:3.5}
+.crayons{display:flex;gap:12px;flex-wrap:wrap}
+.crayon{width:50px;height:50px;border-radius:50%;border:4px solid var(--card);box-shadow:0 0 0 2px var(--line)}
+.crayon[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink);transform:scale(1.08)}
+.tools{display:flex;gap:10px;flex-wrap:wrap}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@keyframes pop{from{transform:scale(.96);opacity:.6}to{transform:none;opacity:1}}
+.feedback,.result{animation:pop .25s ease-out}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="rail" id="nav" aria-label="Navigation"></nav>
+  <main id="main"><div class="wrap"><p class="muted">Chargement…</p></div></main>
+</div>
+<div id="quiz" class="quiz" hidden></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+"use strict";
+/* ================= utilitaires ================= */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pad=n=>String(n).padStart(2,"0");
+const dkey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const r2=x=>Math.round(x*100)/100, r3=x=>Math.round(x*1000)/1000;
+const fmt=n=>{const v=r3(n);return (v<0?"−":"")+Math.abs(v).toLocaleString("fr-FR",{maximumFractionDigits:3}).replace(/ | /g," ")};
+const fs=n=>n<0?`(−${-n})`:`(+${n})`;
+const SUP={0:"⁰",1:"¹",2:"²",3:"³",4:"⁴",5:"⁵",6:"⁶",7:"⁷",8:"⁸",9:"⁹"};
+const sup=n=>String(n).split("").map(c=>SUP[c]).join("");
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const normNum=s=>String(s).replace(/[\s  ]/g,"").replace(/−/g,"-").replace(",",".").replace(/[a-zA-Zé²³€]+$/,"");
+const normTxt=s=>String(s).toLowerCase().normalize("NFC").replace(/[’`]/g,"'").replace(/\s+/g," ").replace(/[.!]$/,"").trim();
+
+function mcq(q,good,wrongs,expl,ex={}){
+  const w=[];for(const x of wrongs){const s=String(x);if(s!==String(good)&&!w.includes(s))w.push(s)}
+  const choices=shuffle([String(good),...w.slice(0,3)]);
+  return {type:"mcq",q,choices,answer:choices.indexOf(String(good)),expl,...ex};
+}
+function inp(q,ans,expl,ex={}){
+  const numeric=typeof ans==="number";
+  return {type:"input",q,ans:numeric?ans:String(ans),numeric,expl,alt:[],tol:0,unit:"",...ex};
+}
+function fromBank(e){const [q,good,wr,expl,ex]=e;return wr===null?inp(q,good,expl,ex||{}):mcq(q,good,wr,expl,ex||{})}
+function isRight(qo,val){
+  if(qo.type==="mcq")return val===qo.answer;
+  if(qo.type==="color")return Array.isArray(val)&&val.map(Number).sort((a,b)=>a-b).join()===qo.targets.slice().sort((a,b)=>a-b).join();
+  if(qo.type==="sym")return Array.isArray(val)&&val.slice().sort().join(";")===qo.target.join(";");
+  if(qo.type==="draw")return evalDraw(qo,val).ok;
+  const v=String(val).trim(); if(!v)return false;
+  if(qo.check==="bin")return /^[01]+$/.test(v)&&parseInt(v,2)===qo.n;
+  if(qo.numeric){const n=parseFloat(normNum(v));return !isNaN(n)&&Math.abs(n-qo.ans)<=(qo.tol||1e-9)}
+  const t=normTxt(v);return [qo.ans,...(qo.alt||[])].some(a=>normTxt(a)===t);
+}
+const goodText=qo=>qo.type==="mcq"?qo.choices[qo.answer]:qo.type==="draw"?DRAW[qo.task].name:qo.type==="color"?"les bonnes formes":qo.type==="sym"?"le dessin symétrique":(qo.numeric?fmt(qo.ans)+(qo.unit?" "+qo.unit:""):qo.ans);
+
+/* ================= matières & niveaux ================= */
+const SUBJECTS={
+  maths:{label:"Mathématiques",short:"Maths",glyph:"+−",c:"var(--c-maths)"},
+  geom:{label:"Géométrie",short:"Géométrie",glyph:"△",c:"var(--c-geom)"},
+  prog:{label:"Programmation",short:"Code",glyph:"{ }",c:"var(--c-prog)"},
+  hg:{label:"Histoire-Géographie",short:"Histoire-Géo",glyph:"1789",c:"var(--c-hg)"},
+  fr:{label:"Français",short:"Français",glyph:"Aa",c:"var(--c-fr)"},
+  en:{label:"Anglais",short:"Anglais",glyph:"EN",c:"var(--c-en)"}
+};
+const EXTRA={rev:{label:"Révisions",short:"Révisions",glyph:"↺",c:"var(--c-rev)"},defi:{label:"Défi Claude",short:"Défi Claude",glyph:"★",c:"var(--c-defi)"}};
+const SUBINFO=k=>SUBJECTS[k]||EXTRA[k]||EXTRA.rev;
+const LEVELS=["CM2","6e","5e","4e"];
+const DAYS=["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+const TITLES=["Apprenti","Explorateur","Aventurier","Chercheur","Stratège","Expert","Maître","Génie","Légende"];
+
+/* ================= générateurs : maths ================= */
+const G={};
+G.calc=()=>{const t=R(1,6);let a,b;
+  if(t===1){a=R(3,12);b=R(3,12);return inp(`${a} × ${b} = ?`,a*b,`Table de ${a} : ${a} × ${b} = ${a*b}.`)}
+  if(t===2){a=R(25,99);b=R(15,99);return inp(`${a} + ${b} = ?`,a+b,`Dizaines : ${a-a%10} + ${b-b%10} = ${a-a%10+b-b%10}, unités : ${a%10} + ${b%10} = ${a%10+b%10}. Total ${a+b}.`)}
+  if(t===3){a=R(120,500);b=R(15,99);return inp(`${a} − ${b} = ?`,a-b,`${a} − ${b} = ${a-b}. Astuce : enlève d’abord ${b-b%10}, puis ${b%10}.`)}
+  if(t===4){const k=pick([10,100,1000]),z=String(k).length-1;
+    if(R(0,1)){a=R(2,99);return inp(`${a} × ${k} = ?`,a*k,`Multiplier par ${k}, c’est ajouter ${z} zéro${z>1?"s":""} : ${fmt(a*k)}.`)}
+    a=R(2,99)*k;return inp(`${fmt(a)} ÷ ${k} = ?`,a/k,`Diviser par ${k}, c’est enlever ${z} zéro${z>1?"s":""} : ${a/k}.`)}
+  if(t===5){a=R(12,49);b=R(3,9);const d=a-a%10,u=a%10;return inp(`${a} × ${b} = ?`,a*b,`${d} × ${b} = ${d*b} et ${u} × ${b} = ${u*b}, donc ${d*b} + ${u*b} = ${a*b}.`)}
+  a=R(6,250)*2;return inp(`La moitié de ${a} = ?`,a/2,`${a} ÷ 2 = ${a/2}.`)};
+G.decim=()=>{const t=R(1,6);
+  if(t===1){const a=R(1,9),d=R(2,9),x=a+d/10,y=(a*100+(d-1)*10+R(1,9))/100;
+    return mcq("Quel nombre est le plus grand ?",fmt(x),[fmt(y)],`On compare chiffre par chiffre : même partie entière, puis les dixièmes ${d} > ${d-1}. Donc ${fmt(x)} est plus grand, même s’il a moins de chiffres.`)}
+  if(t===2){const x=R(11,99)/10,y=R(101,999)/100,s=r2(x+y);return inp(`${fmt(x)} + ${fmt(y)} = ?`,s,`On aligne les virgules : ${x.toFixed(2).replace(".",",")} + ${fmt(y)} = ${fmt(s)}.`)}
+  if(t===3){const x=R(101,9999)/100,k=pick([10,100,1000]),z=String(k).length-1;return inp(`${fmt(x)} × ${k} = ?`,Math.round(x*100*k)/100,`× ${k} : la virgule se déplace de ${z} rang${z>1?"s":""} vers la droite → ${fmt(Math.round(x*100*k)/100)}.`)}
+  if(t===4){const u=R(1,9),c=R(1,9),g=`${u},0${c}`;return mcq(`Écris en nombre décimal : ${u} unités et ${c} centièmes`,g,[`${u},${c}`,`${u},00${c}`,`${u}${c}`],`Les centièmes sont au 2e rang après la virgule : ${g}.`)}
+  if(t===5){const x=R(50,99)/10,y=R(11,49)/10;return inp(`${fmt(x)} − ${fmt(y)} = ?`,Math.round((x-y)*10)/10,`${fmt(x)} − ${fmt(y)} = ${fmt(Math.round((x-y)*10)/10)}.`)}
+  const x=R(1001,9999)/100;return inp(`Arrondis ${fmt(x)} à l’unité.`,Math.round(x),`On regarde le chiffre des dixièmes : ${Math.floor(x*10)%10} ${Math.floor(x*10)%10>=5?"≥ 5, on arrondit au-dessus":"< 5, on garde"} → ${Math.round(x)}.`)};
+G.fract=()=>{const t=R(1,6);
+  if(t===1){const d=pick([2,3,4,5,10]),n=R(1,d-1),q=d*R(2,10);return inp(`Combien font ${n}/${d} de ${q} ?`,n*q/d,`${q} ÷ ${d} = ${q/d}, puis × ${n} = ${n*q/d}.`)}
+  if(t===2){const [a,b]=pick([[1,2],[1,3],[2,3],[1,4],[3,4],[2,5],[3,5],[4,5],[5,6],[3,7],[5,8]]),k=R(2,5);
+    return mcq(`Simplifie la fraction ${a*k}/${b*k}`,`${a}/${b}`,[`${a+1}/${b}`,`${a}/${b+1}`,`${b}/${a}`,`${a*k}/${b}`],`On divise le haut et le bas par ${k} : ${a*k} ÷ ${k} = ${a}, ${b*k} ÷ ${k} = ${b}.`)}
+  if(t===3){const b=R(2,9),a=pick([R(1,b-1),b,R(b+1,15)]);const g=a<b?"plus petite que 1":a===b?"égale à 1":"plus grande que 1";
+    return mcq(`La fraction ${a}/${b} est…`,g,["plus petite que 1","égale à 1","plus grande que 1"],`Le numérateur (${a}) est ${a<b?"plus petit que":a===b?"égal au":"plus grand que"} le dénominateur (${b}), donc la fraction est ${g}.`)}
+  if(t===4){const n=R(5,12),a=R(1,n-2),b=R(1,n-1-a);return mcq(`${a}/${n} + ${b}/${n} = ?`,`${a+b}/${n}`,[`${a+b}/${2*n}`,`${a*b}/${n}`,`${a+b+1}/${n}`],`Même dénominateur : on additionne seulement les numérateurs, ${a} + ${b} = ${a+b}.`)}
+  if(t===5){if(R(0,1)){const d=R(5,12);let a=R(1,d-1),b=R(1,d-1);while(b===a)b=R(1,d-1);
+      return mcq("Quelle fraction est la plus grande ?",`${Math.max(a,b)}/${d}`,[`${Math.min(a,b)}/${d}`],`Même dénominateur : la plus grande a le plus grand numérateur.`)}
+    const n=R(1,3);let d1=R(n+1,9),d2=R(n+1,9);while(d2===d1)d2=R(n+1,9);
+    return mcq("Quelle fraction est la plus grande ?",`${n}/${Math.min(d1,d2)}`,[`${n}/${Math.max(d1,d2)}`],`Même numérateur : plus on partage en beaucoup de parts, plus chaque part est petite. Donc ${n}/${Math.min(d1,d2)} est la plus grande.`)}
+  const L=[["1/2","0,5"],["1/4","0,25"],["3/4","0,75"],["1/5","0,2"],["1/10","0,1"],["3/10","0,3"],["7/100","0,07"],["2/5","0,4"]];const [f,v]=pick(L);
+  return mcq(`Quelle est l’écriture décimale de ${f} ?`,v,shuffle(L.filter(x=>x[1]!==v).map(x=>x[1])).concat(["1,2"]),`${f} = ${v}.`)};
+G.percent=()=>{const t=R(1,5);
+  if(t===1){const p=pick([10,20,25,50,75]),q=20*R(1,15);return inp(`Combien font ${p} % de ${q} ?`,p*q/100,`${p} % = ${p}/100. ${q} × ${p} ÷ 100 = ${p*q/100}.`)}
+  if(t===2){const k=R(2,9),a=R(2,6);let c=R(3,12);while(c===a)c=R(3,12);return inp(`Tableau de proportionnalité : ${a} → ${a*k}. Que donne ${c} ?`,c*k,`On multiplie toujours par ${k} (car ${a*k} ÷ ${a} = ${k}) : ${c} × ${k} = ${c*k}.`)}
+  if(t===3){const pr=pick([20,40,60,80,120,200]),p=pick([10,25,50]);return inp(`Un jeu coûte ${pr} €. Il est soldé à −${p} %. Nouveau prix (en €) ?`,pr*(100-p)/100,`Réduction : ${p} % de ${pr} = ${pr*p/100} €. ${pr} − ${pr*p/100} = ${pr*(100-p)/100} €.`,{unit:"€"})}
+  if(t===4){const v=R(4,25)*5,h=R(2,4);return inp(`Un train roule à ${v} km/h. Quelle distance en ${h} heures ?`,v*h,`Distance = vitesse × temps = ${v} × ${h} = ${v*h} km.`,{unit:"km"})}
+  const n=R(2,9),s=pick([100000,50000]);return inp(`Sur une carte à l’échelle 1/${fmt(s)}, ${n} cm représentent combien de km ?`,n*s/100000,`1 cm = ${fmt(s)} cm = ${s/100000} km en vrai. ${n} × ${s/100000} = ${fmt(n*s/100000)} km.`,{unit:"km"})};
+G.prior=()=>{const t=R(1,6);let a,b,c;
+  if(t===1){a=R(2,20);b=R(2,9);c=R(2,9);return inp(`${a} + ${b} × ${c} = ?`,a+b*c,`La multiplication d’abord : ${b} × ${c} = ${b*c}, puis ${a} + ${b*c} = ${a+b*c}.`)}
+  if(t===2){a=R(2,12);b=R(2,9);c=R(2,9);return inp(`(${a} + ${b}) × ${c} = ?`,(a+b)*c,`Les parenthèses d’abord : ${a+b}, puis × ${c} = ${(a+b)*c}.`)}
+  if(t===3){a=R(3,9);b=R(3,9);c=R(1,a*b-1);return inp(`${a} × ${b} − ${c} = ?`,a*b-c,`${a} × ${b} = ${a*b}, puis − ${c} = ${a*b-c}.`)}
+  if(t===4){c=R(2,9);b=c*R(2,9);a=R(2,30);return inp(`${a} + ${b} ÷ ${c} = ?`,a+b/c,`La division d’abord : ${b} ÷ ${c} = ${b/c}, puis ${a} + ${b/c} = ${a+b/c}.`)}
+  if(t===5){a=R(2,9);b=R(5,15);c=R(1,b-1);return inp(`${a} × (${b} − ${c}) = ?`,a*(b-c),`Parenthèses : ${b} − ${c} = ${b-c}, puis ${a} × ${b-c} = ${a*(b-c)}.`)}
+  a=R(12,30);b=R(1,9);c=R(1,9);return inp(`${a} − ${b} + ${c} = ?`,a-b+c,`Sans priorité, on calcule de gauche à droite : ${a} − ${b} = ${a-b}, puis + ${c} = ${a-b+c}.`)};
+G.rel=()=>{const nz=()=>{let x=0;while(!x)x=R(-12,12);return x};const t=R(1,3),a=nz(),b=nz();
+  if(t===1)return inp(`${fs(a)} + ${fs(b)} = ?`,a+b,`${a*b>0?"Même signe : on ajoute les distances à zéro et on garde le signe.":"Signes contraires : on soustrait les distances à zéro, et on garde le signe du plus « loin » de zéro."} Résultat : ${fmt(a+b)}.`);
+  if(t===2)return inp(`${fs(a)} − ${fs(b)} = ?`,a-b,`Soustraire un nombre, c’est ajouter son opposé : ${fs(a)} + ${fs(-b)} = ${fmt(a-b)}.`);
+  let x=-R(1,15),y=-R(1,15);while(y===x)y=-R(1,15);return mcq("Quel est le plus petit nombre ?",fmt(Math.min(x,y)),[fmt(Math.max(x,y))],`Chez les négatifs, le plus petit est le plus loin de zéro : ${fmt(Math.min(x,y))}.`)};
+G.equa=()=>{const t=R(1,3);let x=R(-5,12);if(!x)x=4;
+  if(t===1){const b=R(2,30),c=x+b;return inp(`Résous : x + ${b} = ${fmt(c)}`,x,`x = ${fmt(c)} − ${b} = ${fmt(x)}.`)}
+  if(t===2){const a=R(2,9),c=a*x;return inp(`Résous : ${a}x = ${fmt(c)}`,x,`x = ${fmt(c)} ÷ ${a} = ${fmt(x)}.`)}
+  const a=R(2,9);let b=R(-15,15);if(!b)b=7;const c=a*x+b;
+  return inp(`Résous : ${a}x ${b<0?"−":"+"} ${Math.abs(b)} = ${fmt(c)}`,x,`On ${b<0?"ajoute":"enlève"} ${Math.abs(b)} des deux côtés : ${a}x = ${fmt(c-b)}. Puis on divise par ${a} : x = ${fmt(x)}.`)};
+G.pow=()=>{const t=R(1,4);
+  if(t===1){const n=R(2,10);return inp(`2${sup(n)} = ?`,2**n,`2${sup(n)} = 2 multiplié ${n} fois par lui-même = ${fmt(2**n)}.`)}
+  if(t===2){const a=R(2,15);return inp(`${a}² = ?`,a*a,`${a}² = ${a} × ${a} = ${a*a}.`)}
+  if(t===3){const n=R(2,6);return mcq(`10${sup(n)} = ?`,fmt(10**n),[fmt(10**(n-1)),fmt(10**(n+1)),String(10*n)],`10${sup(n)} = 1 suivi de ${n} zéros = ${fmt(10**n)}.`)}
+  const n=R(3,7);return mcq(`Écris ${fmt(10**n)} comme une puissance de 10.`,`10${sup(n)}`,[`10${sup(n-1)}`,`10${sup(n+1)}`,`${n}${sup(10)}`],`On compte les zéros : ${n}, donc 10${sup(n)}.`)};
+G.suite=()=>{const t=R(1,5);let s,nx,e;
+  if(t===1){const a=R(1,20),d=R(2,12);s=[0,1,2,3].map(i=>a+i*d);nx=a+4*d;e=`On ajoute ${d} à chaque fois.`}
+  else if(t===2){const a=R(1,5),r=R(2,3);s=[0,1,2,3].map(i=>a*r**i);nx=a*r**4;e=`On multiplie par ${r} à chaque fois.`}
+  else if(t===3){const k=R(1,6);s=[0,1,2,3].map(i=>(k+i)**2);nx=(k+4)**2;e=`Ce sont les carrés : ${k}², ${k+1}², ${k+2}², ${k+3}², donc ${k+4}² = ${nx}.`}
+  else if(t===4){const a=R(60,100),d=R(3,9);s=[0,1,2,3].map(i=>a-i*d);nx=a-4*d;e=`On enlève ${d} à chaque fois.`}
+  else{let a=R(1,5),b=R(1,5);s=[a,b];for(let i=0;i<3;i++)s.push(s[s.length-1]+s[s.length-2]);nx=s[s.length-1]+s[s.length-2];e="Chaque nombre est la somme des deux précédents (comme la suite de Fibonacci)."}
+  return inp(`Quel nombre continue la suite : ${s.join(" ; ")} ; … ?`,nx,e)};
+
+/* ================= générateurs : géométrie ================= */
+G.aires=()=>{const t=R(1,6);
+  if(t===1){const L=R(5,20),l=R(2,L-1);return inp(`Périmètre d’un rectangle de ${L} cm sur ${l} cm ?`,2*(L+l),`P = 2 × (L + l) = 2 × (${L} + ${l}) = ${2*(L+l)} cm.`,{unit:"cm"})}
+  if(t===2){const L=R(4,15),l=R(2,L-1);return inp(`Aire d’un rectangle de ${L} cm sur ${l} cm (en cm²) ?`,L*l,`A = L × l = ${L} × ${l} = ${L*l} cm².`,{unit:"cm²"})}
+  if(t===3){const c=R(2,15);return R(0,1)?inp(`Périmètre d’un carré de côté ${c} cm ?`,4*c,`P = 4 × côté = 4 × ${c} = ${4*c} cm.`,{unit:"cm"}):inp(`Aire d’un carré de côté ${c} cm (en cm²) ?`,c*c,`A = côté × côté = ${c} × ${c} = ${c*c} cm².`,{unit:"cm²"})}
+  if(t===4){const c=R(2,15);return inp(`Un carré a un périmètre de ${4*c} cm. Quelle est la longueur de son côté ?`,c,`4 côtés égaux : ${4*c} ÷ 4 = ${c} cm.`,{unit:"cm"})}
+  if(t===5){const b=R(2,12)*2,h=R(2,10);return inp(`Aire d’un triangle rectangle dont les côtés de l’angle droit mesurent ${b} cm et ${h} cm ?`,b*h/2,`C’est la moitié d’un rectangle : ${b} × ${h} ÷ 2 = ${b*h/2} cm².`,{unit:"cm²"})}
+  const c=pick([["m","cm",100,"1 m = 100 cm"],["km","m",1000,"1 km = 1 000 m"],["cm","mm",10,"1 cm = 10 mm"],["kg","g",1000,"1 kg = 1 000 g"],["L","cL",100,"1 L = 100 cL"]]);
+  const v=pick([R(2,9),R(11,49)/10]);return inp(`${fmt(v)} ${c[0]} = combien de ${c[1]} ?`,r3(v*c[2]),`${c[3]}, donc ${fmt(v)} × ${fmt(c[2])} = ${fmt(v*c[2])} ${c[1]}.`,{unit:c[1]})};
+G.cercle=()=>{const t=R(1,4);
+  if(t===1){const d=R(2,12);return inp(`Périmètre d’un cercle de diamètre ${d} cm (prends π ≈ 3,14) ?`,r2(3.14*d),`P = π × diamètre ≈ 3,14 × ${d} = ${fmt(r2(3.14*d))} cm.`,{unit:"cm",tol:.06})}
+  if(t===2){const r=R(2,25);return inp(`Un cercle a un rayon de ${r} cm. Quel est son diamètre ?`,2*r,`Diamètre = 2 × rayon = ${2*r} cm.`,{unit:"cm"})}
+  if(t===3){const r=R(1,10);return inp(`Aire d’un disque de rayon ${r} cm (π ≈ 3,14) ?`,r2(3.14*r*r),`A = π × r × r ≈ 3,14 × ${r} × ${r} = ${fmt(r2(3.14*r*r))} cm².`,{unit:"cm²",tol:.1})}
+  const r=R(1,10);return inp(`Périmètre d’un cercle de rayon ${r} cm (π ≈ 3,14) ?`,r2(6.28*r),`P = 2 × π × r ≈ 2 × 3,14 × ${r} = ${fmt(r2(6.28*r))} cm.`,{unit:"cm",tol:.06})};
+G.angles=()=>{const t=R(1,5);
+  if(t===1){const a=R(30,90),b=R(20,150-a);return inp(`Dans un triangle, deux angles mesurent ${a}° et ${b}°. Combien mesure le troisième ?`,180-a-b,`La somme des angles d’un triangle fait 180° : 180 − ${a} − ${b} = ${180-a-b}°.`,{unit:"°"})}
+  if(t===2){const b=R(20,80);return inp(`Un triangle isocèle a deux angles de base de ${b}°. Combien mesure l’angle au sommet ?`,180-2*b,`180 − 2 × ${b} = ${180-2*b}°.`,{unit:"°"})}
+  if(t===3){const a=R(10,80);return inp(`Quel angle faut-il ajouter à ${a}° pour obtenir un angle droit ?`,90-a,`Un angle droit fait 90° : 90 − ${a} = ${90-a}°.`,{unit:"°"})}
+  if(t===4)return angleQ();
+  const a=R(20,160);return inp(`Deux angles sont supplémentaires (leur somme fait 180°). L’un mesure ${a}°. Et l’autre ?`,180-a,`180 − ${a} = ${180-a}°.`,{unit:"°"})};
+G.volumes=()=>{const t=R(1,3);
+  if(t===1){const L=R(2,10),l=R(2,8),h=R(2,6);return inp(`Volume d’un pavé droit de ${L} cm × ${l} cm × ${h} cm (en cm³) ?`,L*l*h,`V = L × l × h = ${L} × ${l} × ${h} = ${L*l*h} cm³.`,{unit:"cm³"})}
+  if(t===2){const a=R(2,10);return inp(`Volume d’un cube d’arête ${a} cm (en cm³) ?`,a**3,`V = a × a × a = ${a} × ${a} × ${a} = ${a**3} cm³.`,{unit:"cm³"})}
+  const L=R(3,8),l=R(2,5),h=R(2,5);return inp(`Un aquarium mesure ${L} dm × ${l} dm × ${h} dm. Combien de litres d’eau peut-il contenir ?`,L*l*h,`V = ${L*l*h} dm³, et 1 dm³ = 1 litre : ${L*l*h} L.`,{unit:"L"})};
+G.pyth=()=>{const T=pick([[3,4,5],[5,12,13],[8,15,17],[7,24,25],[6,8,10],[9,12,15]]),[a,b,c]=T;const t=R(1,3);
+  if(t===1)return inp(`Triangle rectangle : les côtés de l’angle droit mesurent ${a} cm et ${b} cm. Longueur de l’hypoténuse ?`,c,`Pythagore : c² = ${a}² + ${b}² = ${a*a} + ${b*b} = ${c*c}, donc c = √${c*c} = ${c} cm.`,{unit:"cm"});
+  if(t===2)return inp(`Triangle rectangle : hypoténuse ${c} cm, un côté ${a} cm. Longueur de l’autre côté ?`,b,`b² = ${c}² − ${a}² = ${c*c} − ${a*a} = ${b*b}, donc b = ${b} cm.`,{unit:"cm"});
+  const ok=R(0,1),z=ok?c:c+1;return mcq(`Un triangle a des côtés de ${a}, ${b} et ${z} cm. Est-il rectangle ?`,ok?"Oui":"Non",[ok?"Non":"Oui"],`${a}² + ${b}² = ${a*a+b*b} et ${z}² = ${z*z}. ${ok?"C’est égal : il est rectangle.":"Ce n’est pas égal : il n’est pas rectangle."}`)};
+G.bin=()=>{const n=R(2,31);
+  if(R(0,1)){const p=[16,8,4,2,1].filter(x=>n&x);return inp(`Écris ${n} en binaire.`,n.toString(2),`${n} = ${p.join(" + ")} → ${n.toString(2)}.`,{check:"bin",n})}
+  const b=n.toString(2);return inp(`Que vaut le nombre binaire ${b} en décimal ?`,n,`On lit les bits avec les valeurs ${[16,8,4,2,1].slice(5-b.length).join(", ")} : ${[16,8,4,2,1].filter(x=>n&x).join(" + ")} = ${n}.`)};
+
+/* ================= français : conjugaison ================= */
+const PRON=[["je","j’"],["tu"],["il|elle"],["nous"],["vous"],["ils|elles"]];
+const AUX={avoir:"ai as a avons avez ont".split(" "),être:"suis es est sommes êtes sont".split(" ")};
+const V=[
+ ["être","suis es est sommes êtes sont","étais étais était étions étiez étaient","serai seras sera serons serez seront","avoir","été","fus fus fut fûmes fûtes furent"],
+ ["avoir","ai as a avons avez ont","avais avais avait avions aviez avaient","aurai auras aura aurons aurez auront","avoir","eu","eus eus eut eûmes eûtes eurent"],
+ ["aller","vais vas va allons allez vont","allais allais allait allions alliez allaient","irai iras ira irons irez iront","être","allé","allai allas alla allâmes allâtes allèrent"],
+ ["faire","fais fais fait faisons faites font","faisais faisais faisait faisions faisiez faisaient","ferai feras fera ferons ferez feront","avoir","fait","fis fis fit fîmes fîtes firent"],
+ ["finir","finis finis finit finissons finissez finissent","finissais finissais finissait finissions finissiez finissaient","finirai finiras finira finirons finirez finiront","avoir","fini","finis finis finit finîmes finîtes finirent"],
+ ["chanter","chante chantes chante chantons chantez chantent","chantais chantais chantait chantions chantiez chantaient","chanterai chanteras chantera chanterons chanterez chanteront","avoir","chanté","chantai chantas chanta chantâmes chantâtes chantèrent"],
+ ["manger","mange manges mange mangeons mangez mangent","mangeais mangeais mangeait mangions mangiez mangeaient","mangerai mangeras mangera mangerons mangerez mangeront","avoir","mangé","mangeai mangeas mangea mangeâmes mangeâtes mangèrent"],
+ ["jouer","joue joues joue jouons jouez jouent","jouais jouais jouait jouions jouiez jouaient","jouerai joueras jouera jouerons jouerez joueront","avoir","joué","jouai jouas joua jouâmes jouâtes jouèrent"],
+ ["prendre","prends prends prend prenons prenez prennent","prenais prenais prenait prenions preniez prenaient","prendrai prendras prendra prendrons prendrez prendront","avoir","pris","pris pris prit prîmes prîtes prirent"],
+ ["venir","viens viens vient venons venez viennent","venais venais venait venions veniez venaient","viendrai viendras viendra viendrons viendrez viendront","être","venu","vins vins vint vînmes vîntes vinrent"],
+ ["partir","pars pars part partons partez partent","partais partais partait partions partiez partaient","partirai partiras partira partirons partirez partiront","être","parti","partis partis partit partîmes partîtes partirent"],
+ ["pouvoir","peux peux peut pouvons pouvez peuvent","pouvais pouvais pouvait pouvions pouviez pouvaient","pourrai pourras pourra pourrons pourrez pourront","avoir","pu","pus pus put pûmes pûtes purent"],
+ ["dire","dis dis dit disons dites disent","disais disais disait disions disiez disaient","dirai diras dira dirons direz diront","avoir","dit","dis dis dit dîmes dîtes dirent"],
+ ["voir","vois vois voit voyons voyez voient","voyais voyais voyait voyions voyiez voyaient","verrai verras verra verrons verrez verront","avoir","vu","vis vis vit vîmes vîtes virent"]
+].map(([inf,pres,imp,fut,aux,pp,ps])=>({inf,pres:pres.split(" "),imp:imp.split(" "),fut:fut.split(" "),aux,pp,ps:ps.split(" ")}));
+const TENSES={pres:"présent",imp:"imparfait",fut:"futur simple",pc:"passé composé",ps:"passé simple"};
+function form(v,t,p,fem){if(t!=="pc")return v[t][p];const a=AUX[v.aux][p];let pp=v.pp;if(v.aux==="être"){if(fem)pp+="e";if(p>=3)pp+="s"}return a+" "+pp}
+function conjQ(tenses){const v=pick(V),t=pick(tenses),p=R(0,5);const pr=PRON[p][0].split("|");const k=pick([0,pr.length-1]);let pron=pr[k];const fem=k===1;
+  const f=form(v,t,p,fem);if(p===0&&/^[aeéèêiouâîôh]/i.test(f))pron="j’";
+  const full=[0,1,2,3,4,5].map(i=>{let pn=PRON[i][0].split("|")[0];const x=form(v,t,i,false);if(i===0&&/^[aeéèêiouâîôh]/i.test(x))pn="j’";return (pn==="j’"?pn:pn+" ")+x}).join(", ");
+  const expl=`« ${v.inf[0].toUpperCase()+v.inf.slice(1)} » au ${TENSES[t]} : ${full}.`;
+  const q=`${pron==="j’"?"j’":pron} ___   (${v.inf}, ${TENSES[t]})`;
+  if(R(0,1)){const wr=Object.keys(TENSES).filter(x=>x!==t&&x!=="ps").map(x=>form(v,x,p,fem));wr.push(form(v,t,p===2?0:p===0?1:p===5?3:5,fem));return mcq(`Complète : ${q}`,f,shuffle(wr),expl)}
+  return inp(`Écris le verbe : ${q}`,f,expl,{alt:[f.replace("’","'")]})}
+G.conj=()=>conjQ(["pres","imp","fut","pc"]);
+G.conjPs=()=>R(0,2)?conjQ(["ps"]):conjQ(["pres","imp","fut","pc","ps"]);
+
+/* ================= anglais ================= */
+const VOC={
+ animals:["dog|chien","cat|chat","horse|cheval","bird|oiseau","fish|poisson","cow|vache","sheep|mouton","pig|cochon","rabbit|lapin","mouse|souris","monkey|singe","snake|serpent","bear|ours","duck|canard","frog|grenouille","wolf|loup"],
+ colours:["red|rouge","blue|bleu","green|vert","yellow|jaune","black|noir","white|blanc","pink|rose","purple|violet","grey|gris","brown|marron"],
+ family:["mother|mère","father|père","sister|sœur","brother|frère","grandmother|grand-mère","grandfather|grand-père","aunt|tante","uncle|oncle","son|fils","daughter|fille (enfant)"],
+ school:["book|livre","pencil|crayon à papier","pen|stylo","ruler|règle","rubber/eraser|gomme","schoolbag|cartable","teacher|enseignant","classroom|salle de classe","scissors|ciseaux","glue|colle"],
+ body:["head|tête","hand|main","foot|pied","eye|œil","ear|oreille","mouth|bouche","nose|nez","arm|bras","leg|jambe","hair|cheveux","teeth|dents","knee|genou"],
+ food:["bread|pain","cheese|fromage","apple|pomme","milk|lait","water|eau","egg|œuf","rice|riz","cake|gâteau","strawberry|fraise","butter|beurre","juice|jus"],
+ house:["kitchen|cuisine","bedroom|chambre","bathroom|salle de bain","garden|jardin","door|porte","window|fenêtre","chair|chaise","bed|lit","stairs|escalier"],
+ time:["Monday|lundi","Tuesday|mardi","Wednesday|mercredi","Thursday|jeudi","Friday|vendredi","Saturday|samedi","Sunday|dimanche","January|janvier","February|février","March|mars","April|avril","June|juin","July|juillet","August|août","September|septembre","December|décembre"],
+ weather:["sunny|ensoleillé","rainy|pluvieux","windy|venteux","cloudy|nuageux","snowy|neigeux","cold|froid","hot|chaud"],
+ verbs:["to run|courir","to swim|nager","to read|lire","to write|écrire","to eat|manger","to drink|boire","to sleep|dormir","to play|jouer","to sing|chanter","to jump|sauter","to speak|parler","to listen|écouter"]
+};
+function vocPair(){const c=pick(Object.keys(VOC)),[en,fr]=pick(VOC[c]).split("|");return {c,en,fr}}
+G.vocab=()=>{const {c,en,fr}=vocPair(),list=VOC[c].map(x=>x.split("|")),en1=en.split("/")[0],t=R(1,3);
+  if(t===1)return mcq(`Comment dit-on « ${fr} » en anglais ?`,en1,shuffle(list.filter(x=>x[0]!==en).map(x=>x[0].split("/")[0])),`« ${fr} » se dit « ${en1} ».`,{sayAfter:en1});
+  if(t===2)return mcq(`Que veut dire « ${en1} » ?`,fr,shuffle(list.filter(x=>x[1]!==fr).map(x=>x[1])),`« ${en1} » veut dire « ${fr} ».`,{say:en1});
+  return inp(`Écris en anglais : « ${fr} »`,en1,`« ${fr} » s’écrit « ${en1} ».`,{alt:en.split("/").concat(en.startsWith("to ")?[en.slice(3)]:[]),sayAfter:en1})};
+const LISTEN=[
+ ["My sister is ten years old.","Ma sœur a dix ans.",["Mon frère a dix ans.","Ma sœur a deux ans.","Ma sœur est grande."]],
+ ["I like apples but I don’t like bananas.","J’aime les pommes mais pas les bananes.",["J’aime les bananes mais pas les pommes.","Je n’aime pas les fruits.","J’aime les pommes et les bananes."]],
+ ["The cat is under the table.","Le chat est sous la table.",["Le chat est sur la table.","Le chien est sous la table.","Le chat est à côté de la chaise."]],
+ ["We play football on Wednesday.","Nous jouons au foot le mercredi.",["Nous jouons au foot le lundi.","Nous regardons le foot mercredi.","Ils jouent au basket le mercredi."]],
+ ["It is raining today.","Il pleut aujourd’hui.",["Il fait beau aujourd’hui.","Il a plu hier.","Il neige aujourd’hui."]],
+ ["Can you open the window, please?","Peux-tu ouvrir la fenêtre, s’il te plaît ?",["Peux-tu fermer la porte ?","Peux-tu ouvrir la porte ?","Ferme la fenêtre !"]],
+ ["My favourite colour is green.","Ma couleur préférée est le vert.",["Ma couleur préférée est le bleu.","Je n’aime pas le vert.","Mon pull est vert."]],
+ ["What time is it? It’s half past four.","Quelle heure est-il ? Il est 4 h 30.",["Il est 4 h 15.","Il est 3 h 30.","Il est 4 h 45."]],
+ ["I have got two brothers and one sister.","J’ai deux frères et une sœur.",["J’ai deux sœurs et un frère.","J’ai trois frères.","J’ai un frère et une sœur."]],
+ ["He goes to school by bike.","Il va à l’école à vélo.",["Il va à l’école en bus.","Il va au parc à vélo.","Elle va à l’école à pied."]]
+];
+G.listen=()=>{if(R(0,1)){const {c,en,fr}=vocPair(),list=VOC[c].map(x=>x.split("|")),en1=en.split("/")[0];
+    return mcq("Écoute le mot et choisis sa traduction.",fr,shuffle(list.filter(x=>x[1]!==fr).map(x=>x[1])),`Le mot était « ${en1} » = ${fr}.`,{listen:en1})}
+  const [s,f,w]=pick(LISTEN);return mcq("Écoute la phrase. Que veut-elle dire ?",f,w,`La phrase était : « ${s} »`,{listen:s})};
+const IRR=[["go","went","gone","aller"],["be","was / were","been","être"],["have","had","had","avoir"],["do","did","done","faire"],["see","saw","seen","voir"],["eat","ate","eaten","manger"],["take","took","taken","prendre"],["make","made","made","fabriquer"],["come","came","come","venir"],["give","gave","given","donner"],["buy","bought","bought","acheter"],["write","wrote","written","écrire"],["drink","drank","drunk","boire"],["swim","swam","swum","nager"],["run","ran","run","courir"],["sing","sang","sung","chanter"],["speak","spoke","spoken","parler"],["know","knew","known","savoir"],["think","thought","thought","penser"],["fly","flew","flown","voler"],["break","broke","broken","casser"],["begin","began","begun","commencer"],["find","found","found","trouver"],["leave","left","left","partir"],["read","read","read","lire"],["sleep","slept","slept","dormir"]];
+G.irr=()=>{const [b,p,pp,fr]=pick(IRR),o=pick(IRR.filter(x=>x[0]!==b)),t=R(1,3),ex=`to ${b} → ${p} → ${pp} (${fr}).`;
+  if(t===1)return mcq(`Prétérit (past simple) de « to ${b} » (${fr}) ?`,p,[b+"ed",pp!==p?pp:b+"s",o[1]],ex);
+  if(t===2)return mcq(`Participe passé de « to ${b} » (${fr}) ?`,pp,[b+"ed",pp!==p?p:b+"ing",o[2]],ex);
+  return inp(`Écris le prétérit de « to ${b} » (${fr}).`,p,ex,{alt:b==="be"?["was","were","was/were"]:[],sayAfter:p.split(" / ")[0]})};
+const ONES="zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split(" ");
+const TENS="  twenty thirty forty fifty sixty seventy eighty ninety".split(" ");
+const nw=n=>n===100?"one hundred":n<20?ONES[n]:TENS[Math.floor(n/10)]+(n%10?"-"+ONES[n%10]:"");
+G.numbers=()=>{if(R(0,1)){const n=R(13,99),m=n%10&&Math.floor(n/10)!==n%10?(n%10)*10+Math.floor(n/10):n+11;
+    return mcq(`Comment écrit-on ${n} en anglais ?`,nw(n),[nw(Math.min(99,m)),nw(n>=20?n-10:n+20),nw(n%10?n-1:n+1)],`${n} = ${nw(n)}.`,{sayAfter:nw(n)})}
+  const h=R(1,11),m=pick([0,15,30,45]);const T=(hh,mm)=>mm===0?`It’s ${nw(hh)} o’clock.`:mm===15?`It’s quarter past ${nw(hh)}.`:mm===30?`It’s half past ${nw(hh)}.`:`It’s quarter to ${nw(hh%12+1)}.`;
+  return mcq(`Il est ${h} h ${m?pad(m):"00"}. Comment le dit-on ?`,T(h,m),[0,15,30,45].filter(x=>x!==m).map(x=>T(h,x)),`« quarter past » = et quart, « half past » = et demie, « quarter to » = moins le quart (de l’heure suivante).`,{sayAfter:T(h,m)})};
+
+/* ================= géométrie visuelle ================= */
+const f1=x=>Math.round(x*10)/10;
+const rotp=(p,a)=>[p[0]*Math.cos(a)-p[1]*Math.sin(a),p[0]*Math.sin(a)+p[1]*Math.cos(a)];
+const sub2=(a,b)=>[a[0]-b[0],a[1]-b[1]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1],crs=(a,b)=>a[0]*b[1]-a[1]*b[0],len=a=>Math.hypot(a[0],a[1]);
+function place(pts,a,[bx,by,bw,bh]){const P=pts.map(p=>rotp(p,a));const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]);const mx=Math.min(...xs),my=Math.min(...ys),w=(Math.max(...xs)-mx)||1,h=(Math.max(...ys)-my)||1;const s=Math.min(bw/w,bh/h);const ox=bx+(bw-w*s)/2,oy=by+(bh-h*s)/2;return P.map(p=>[f1(ox+(p[0]-mx)*s),f1(oy+(p[1]-my)*s)])}
+const reg=n=>Array.from({length:n},(_,i)=>[Math.cos(2*Math.PI*i/n-Math.PI/2),Math.sin(2*Math.PI*i/n-Math.PI/2)]);
+function segX(a,b,c,d){const d1=crs(sub2(b,a),sub2(c,a)),d2=crs(sub2(b,a),sub2(d,a)),d3=crs(sub2(d,c),sub2(a,c)),d4=crs(sub2(d,c),sub2(b,c));return ((d1>0&&d2<0)||(d1<0&&d2>0))&&((d3>0&&d4<0)||(d3<0&&d4>0))}
+const ptsAttr=Q=>Q.map(p=>p.join(",")).join(" ");
+const figSvg=(inner,vb,cls="")=>`<svg class="fig ${cls}" viewBox="${vb}" role="img" aria-label="Figure">${inner}</svg>`;
+function shapeName(p){
+  if(p.n===3)return p.rights?(p.isoc?"triangle rectangle isocèle":"triangle rectangle"):p.equi?"triangle équilatéral":p.isoc?"triangle isocèle":"triangle quelconque";
+  if(p.n===4)return p.rights===4?(p.allEq?"carré":"rectangle"):p.allEq?"losange":(p.par02&&p.par13)?"parallélogramme":(p.par02||p.par13)?"trapèze":"quadrilatère quelconque";
+  return {5:"pentagone",6:"hexagone",7:"heptagone",8:"octogone"}[p.n]||`polygone à ${p.n} côtés`}
+function classify(P,tol=1e-9){
+  let Q=[];P.forEach(p=>{const l=Q[Q.length-1];if(!l||l[0]!==p[0]||l[1]!==p[1])Q.push(p)});
+  if(Q.length>1&&Q[0][0]===Q[Q.length-1][0]&&Q[0][1]===Q[Q.length-1][1])Q.pop();
+  let ch=true;while(ch&&Q.length>=3){ch=false;for(let i=0;i<Q.length;i++){const a=Q[(i-1+Q.length)%Q.length],b=Q[i],c=Q[(i+1)%Q.length];const u=sub2(b,a),v=sub2(c,b);if(Math.abs(crs(u,v))<=tol*4*len(u)*len(v)+1e-12){Q.splice(i,1);ch=true;break}}}
+  const n=Q.length;if(n<3)return {n,bad:"Il faut au moins 3 sommets qui ne sont pas tous alignés."};
+  for(let i=0;i<n;i++)for(let j=i+2;j<n;j++){if(i===0&&j===n-1)continue;if(segX(Q[i],Q[(i+1)%n],Q[j],Q[(j+1)%n]))return {n,bad:"Des côtés se croisent : ce n’est pas un polygone."}}
+  const S=Q.map((p,i)=>sub2(Q[(i+1)%n],p)),L=S.map(s=>dot(s,s));
+  const eq=(a,b)=>Math.abs(a-b)<=tol*4*Math.max(a,b)+1e-12;
+  const right=Q.map((p,i)=>{const u=S[(i-1+n)%n],v=S[i];return Math.abs(dot(u,v))<=tol*4*len(u)*len(v)+1e-12});
+  const par=(i,j)=>Math.abs(crs(S[i],S[j]))<=tol*4*len(S[i])*len(S[j])+1e-12;
+  let area=0;Q.forEach((p,i)=>{const q=Q[(i+1)%n];area+=p[0]*q[1]-q[0]*p[1]});
+  const pr={n,Q,L,rights:right.filter(Boolean).length,allEq:L.every(x=>eq(x,L[0])),par02:n===4&&par(0,2),par13:n===4&&par(1,3),isoc:n===3&&(eq(L[0],L[1])||eq(L[1],L[2])||eq(L[0],L[2])),area:Math.abs(area)/2};
+  pr.equi=n===3&&pr.allEq;pr.name=shapeName(pr);return pr}
+/* codage : petits carrés pour les angles droits, traits pour les côtés égaux */
+function codage(Q){const n=Q.length;let s="";
+  for(let i=0;i<n;i++){const A=Q[i],u=sub2(Q[(i-1+n)%n],A),v=sub2(Q[(i+1)%n],A),lu=len(u),lv=len(v);
+    if(Math.abs(dot(u,v))<0.03*lu*lv){const k=10,a=[A[0]+u[0]/lu*k,A[1]+u[1]/lu*k],b=[a[0]+v[0]/lv*k,a[1]+v[1]/lv*k],c=[A[0]+v[0]/lv*k,A[1]+v[1]/lv*k];s+=`<polyline class="cod" points="${ptsAttr([a,b,c].map(p=>p.map(f1)))}"/>`}}
+  const L=Q.map((p,i)=>len(sub2(Q[(i+1)%n],p))),grp=[];
+  const gi=L.map(l=>{let g=grp.findIndex(x=>Math.abs(x-l)<=0.02*x);if(g<0){grp.push(l);g=grp.length-1}return g});
+  let tick=0;const tk=grp.map((_,g)=>gi.filter(x=>x===g).length>=2?++tick:0);if(tick>3)return s;
+  Q.forEach((p,i)=>{const k=tk[gi[i]];if(!k)return;const q=Q[(i+1)%n],d=sub2(q,p),l=len(d),ux=d[0]/l,uy=d[1]/l,M=[(p[0]+q[0])/2,(p[1]+q[1])/2];
+    for(let t=0;t<k;t++){const o=(t-(k-1)/2)*5,cx=M[0]+ux*o,cy=M[1]+uy*o;s+=`<line class="cod" x1="${f1(cx-uy*6)}" y1="${f1(cy+ux*6)}" x2="${f1(cx+uy*6)}" y2="${f1(cy-ux*6)}"/>`}});
+  return s}
+const SH={
+  carre:()=>[[0,0],[1,0],[1,1],[0,1]],
+  rect:()=>{const a=pick([1.6,1.9,2.3]);return [[0,0],[a,0],[a,1],[0,1]]},
+  losange:()=>{const h=pick([.55,.7]);return [[0,0],[1,-h],[2,0],[1,h]]},
+  para:()=>{const k=pick([.6,.8]);return [[0,0],[2,0],[2+k,1],[k,1]]},
+  trapeze:()=>pick([[[0,0],[2.4,0],[1.8,1],[.6,1]],[[0,0],[2.2,0],[1.4,1],[0,1]]]),
+  tri_eq:()=>[[0,0],[1,0],[.5,Math.sqrt(3)/2]],
+  tri_iso:()=>{const h=pick([1.4,1.7]);return [[0,0],[1.2,0],[.6,h]]},
+  tri_rect:()=>{const b=pick([1.5,1.8]);return [[0,0],[b,0],[0,1]]},
+  tri_q:()=>[[0,0],[1.7,0],[.5,1.1]],
+  quad_q:()=>[[0,0],[1.8,.2],[1.5,1.3],[.3,.9]],
+  penta:()=>reg(5),hexa:()=>reg(6),octo:()=>reg(8)
+};
+function shapeItem(k,box){
+  if(k==="cercle"){const r=Math.min(box[2],box[3])/2;return {k,circle:[f1(box[0]+box[2]/2),f1(box[1]+box[3]/2),f1(r)],p:{n:0,rights:0,name:"cercle"}}}
+  const a=k==="carre"?pick([0,Math.PI/4,R(-30,30)*Math.PI/180]):R(-35,35)*Math.PI/180;const Q=place(SH[k](),a,box);return {k,Q,p:classify(Q,.006)}}
+const itemSvg=(it,cls="sh",extra="")=>it.circle?`<circle class="${cls}" cx="${it.circle[0]}" cy="${it.circle[1]}" r="${it.circle[2]}" ${extra}/><circle class="dotv" cx="${it.circle[0]}" cy="${it.circle[1]}" r="2.5"/>`:`<polygon class="${cls}" points="${ptsAttr(it.Q)}" ${extra}/>`+codage(it.Q);
+const DEF={"carré":"4 côtés égaux et 4 angles droits. C’est aussi un rectangle et un losange, mais « carré » est le nom le plus précis.","rectangle":"4 angles droits, et ses côtés opposés sont égaux. C’est aussi un parallélogramme.","losange":"4 côtés égaux, sans angle droit. C’est aussi un parallélogramme.","parallélogramme":"ses côtés opposés sont parallèles et de même longueur.","trapèze":"un quadrilatère qui a seulement deux côtés parallèles.","triangle équilatéral":"3 côtés égaux (il est donc aussi isocèle).","triangle isocèle":"2 côtés égaux.","triangle rectangle":"un angle droit (le petit carré du codage).","triangle rectangle isocèle":"un angle droit et 2 côtés égaux.","triangle quelconque":"aucun côté égal et aucun angle droit.","quadrilatère quelconque":"4 côtés, sans côtés parallèles ni égaux.","pentagone":"5 côtés.","hexagone":"6 côtés.","octogone":"8 côtés, comme un panneau STOP.","cercle":"tous ses points sont à la même distance du centre."};
+const CONF={"carré":["rectangle","losange","parallélogramme"],"rectangle":["carré","parallélogramme","trapèze"],"losange":["carré","parallélogramme","rectangle"],"parallélogramme":["rectangle","losange","trapèze"],"trapèze":["parallélogramme","rectangle","losange"],"triangle équilatéral":["triangle isocèle","triangle rectangle","triangle quelconque"],"triangle isocèle":["triangle équilatéral","triangle rectangle","triangle quelconque"],"triangle rectangle":["triangle isocèle","triangle équilatéral","triangle quelconque"],"triangle quelconque":["triangle isocèle","triangle rectangle","triangle équilatéral"],"triangle rectangle isocèle":["triangle équilatéral","triangle rectangle","triangle quelconque"],"quadrilatère quelconque":["trapèze","parallélogramme","losange"],"pentagone":["hexagone","octogone","quadrilatère quelconque"],"hexagone":["pentagone","octogone","cercle"],"octogone":["hexagone","pentagone","cercle"],"cercle":["ovale","octogone","hexagone"]};
+const NAMES={3:"triangle",4:"quadrilatère",5:"pentagone",6:"hexagone",7:"heptagone",8:"octogone",9:"ennéagone"};
+function randPoly(n){const a=[];let g=0;while(a.length<n&&g++<3000){const x=Math.random()*2*Math.PI;if(a.every(y=>{const d=Math.abs(x-y);return Math.min(d,2*Math.PI-d)>2*Math.PI/n*.55}))a.push(x)}a.sort((x,y)=>x-y);return a.map(x=>{const r=.78+Math.random()*.22;return [r*Math.cos(x),r*Math.sin(x)]})}
+function angleQ(){const v=pick([R(20,75),90,R(105,165),180]);const g=v<90?"aigu":v===90?"droit":v<180?"obtus":"plat";
+  const a0=R(-15,15)*Math.PI/180,O=[120,118],r=96,q=26,P=(t,rr)=>[f1(O[0]+rr*Math.cos(t)),f1(O[1]-rr*Math.sin(t))],t2=a0+v*Math.PI/180;
+  const svg=`<path class="arc" d="M${P(a0,q)} A${q} ${q} 0 0 0 ${P(t2,q)}"/><line class="ray" x1="${O[0]}" y1="${O[1]}" x2="${P(a0,r)[0]}" y2="${P(a0,r)[1]}"/><line class="ray" x1="${O[0]}" y1="${O[1]}" x2="${P(t2,r)[0]}" y2="${P(t2,r)[1]}"/><circle class="dotv" cx="${O[0]}" cy="${O[1]}" r="4"/>`;
+  return mcq("Cet angle est…",g,["aigu","droit","obtus","plat"],`Il mesure ${v}°. Aigu : moins de 90°. Droit : 90°, comme le coin d’une feuille. Obtus : entre 90° et 180°. Plat : 180°, les deux côtés forment une ligne droite.`,{svg:figSvg(svg,"0 0 240 180")})}
+function linesQ(){const k=R(0,2),d=R(0,179)*Math.PI/180,C=[120,90];
+  const seg=(P,a)=>{const dx=Math.cos(a)*170,dy=Math.sin(a)*170;return `<line class="ln" x1="${f1(P[0]-dx)}" y1="${f1(P[1]-dy)}" x2="${f1(P[0]+dx)}" y2="${f1(P[1]+dy)}"/>`};
+  let s;if(k===0){const n=[-Math.sin(d)*28,Math.cos(d)*28];s=seg([C[0]+n[0],C[1]+n[1]],d)+seg([C[0]-n[0],C[1]-n[1]],d)}
+  else{const t=R(-35,35),P=[C[0]+Math.cos(d)*t,C[1]+Math.sin(d)*t],e=k===1?Math.PI/2:R(25,60)*Math.PI/180*(R(0,1)?1:-1);s=seg(C,d)+seg(P,d+e)}
+  const L=["parallèles","perpendiculaires","sécantes, mais pas perpendiculaires"];
+  return mcq("Ces deux droites sont…",L[k],L.filter((_,i)=>i!==k),"Parallèles : elles ne se croisent jamais. Perpendiculaires : elles se croisent en formant un angle droit. Sécantes : elles se croisent.",{svg:figSvg(s,"0 0 240 180"),sig:"l"+k})}
+const AXES=[
+  [[[0,0],[2,0],[2,1],[0,1]],[[1,-.35],[1,1.35]],true,"La ligne coupe le rectangle en son milieu : si on plie, les deux moitiés se superposent."],
+  [[[0,0],[2,0],[2,1],[0,1]],[[-.3,.5],[2.3,.5]],true,"C’est une médiane du rectangle : en pliant, les deux moitiés se superposent."],
+  [[[0,0],[2,0],[2,1],[0,1]],[[-.2,-.1],[2.2,1.1]],false,"La diagonale d’un rectangle n’est pas un axe de symétrie : en pliant, les coins ne tombent pas les uns sur les autres."],
+  [[[0,0],[1,0],[1,1],[0,1]],[[-.2,-.2],[1.2,1.2]],true,"La diagonale d’un carré est un axe de symétrie (le carré en a 4)."],
+  [[[0,0],[2,-.6],[4,0],[2,.6]],[[-.3,0],[4.3,0]],true,"Les deux diagonales d’un losange sont des axes de symétrie."],
+  [[[0,0],[2,0],[2.7,1],[.7,1]],[[1.35,-.35],[1.35,1.35]],false,"Un parallélogramme qui n’est ni un rectangle ni un losange n’a aucun axe de symétrie."],
+  [[[0,0],[1.2,0],[.6,1.5]],[[.6,-.25],[.6,1.75]],true,"Dans un triangle isocèle, la ligne qui part du sommet principal et coupe la base en son milieu est un axe de symétrie."],
+  [[[0,0],[1.8,0],[0,1]],[[-.14,-.08],[1.17,.65]],false,"Ce triangle rectangle n’a pas deux côtés égaux : il n’a pas d’axe de symétrie."],
+  [[[0,0],[2.4,0],[1.8,1],[.6,1]],[[1.2,-.3],[1.2,1.3]],true,"Ce trapèze est isocèle : la ligne qui passe par le milieu des deux bases est un axe de symétrie."],
+  [[[0,0],[2.4,0],[1.8,1],[.6,1]],[[-.3,.5],[2.7,.5]],false,"En pliant le long de cette ligne, la grande base ne tombe pas sur la petite : ce n’est pas un axe."],
+  [reg(6),[[0,-1.25],[0,1.25]],true,"Un hexagone régulier a 6 axes de symétrie, dont les lignes qui joignent deux sommets opposés."]
+];
+function axisQ(){const i=R(0,AXES.length-1),[pts,ax,ok,e]=AXES[i];const P=place([...pts,...ax],R(-30,30)*Math.PI/180,[30,12,180,156]),Q=P.slice(0,pts.length),A=P.slice(pts.length);
+  return mcq("La ligne rouge en pointillés est-elle un axe de symétrie de la figure ?",ok?"Oui":"Non",[ok?"Non":"Oui"],e,{svg:figSvg(`<polygon class="sh" points="${ptsAttr(Q)}"/><line class="ax" x1="${A[0][0]}" y1="${A[0][1]}" x2="${A[1][0]}" y2="${A[1][1]}"/>`,"0 0 240 180"),sig:"ax"+i})}
+G.formes=()=>{const t=R(1,10);
+  if(t<=4){const k=pick([...Object.keys(SH),"cercle"]),it=shapeItem(k,[30,22,180,136]),nm=it.p.name;
+    return mcq("Quel est le nom le plus précis de cette figure ?",nm,shuffle(CONF[nm]||["carré","rectangle","triangle quelconque"]),`C’est un ${nm} : ${DEF[nm]||""}`,{svg:figSvg(itemSvg(it),"0 0 240 180")})}
+  if(t<=6){const Q=place(randPoly(R(3,9)),0,[25,18,190,144]),n=classify(Q,.001).n,w=R(0,1)?"côtés":"sommets";
+    return inp(`Combien de ${w} a cette figure ?`,n,`Elle a ${n} ${w}${NAMES[n]?` : c’est un ${NAMES[n]}`:""}. Astuce : fais une marque sur le premier pour ne pas compter deux fois.`,{svg:figSvg(`<polygon class="sh" points="${ptsAttr(Q)}"/>`+(w==="sommets"?Q.map(p=>`<circle class="dotv" cx="${p[0]}" cy="${p[1]}" r="4"/>`).join(""):""),"0 0 240 180")})}
+  if(t===7){const it=shapeItem(pick(["carre","rect","trapeze","tri_rect","losange","para","tri_iso"]),[30,22,180,136]);
+    return inp("Combien d’angles droits a cette figure ? Aide-toi du codage.",it.p.rights,`Un petit carré dans un coin indique un angle droit. Ici, il y en a ${it.p.rights}.`,{svg:figSvg(itemSvg(it),"0 0 240 180")})}
+  if(t===8)return angleQ();
+  return linesQ()};
+/* ----- colorier ----- */
+const CRAY=["#e5484d","#2f6fe4","#2fa35a","#f5b800","#8e4ec6"];
+const plural=n=>n.split(" ").map(w=>w+"s").join(" ");
+const COLKEYS=["carre","rect","losange","para","trapeze","tri_eq","tri_iso","tri_rect","tri_q","penta","hexa","octo","quad_q","cercle"];
+const COLOR_RULES=[
+  {t:"Colorie tous les triangles.",k:["tri_eq","tri_iso","tri_rect","tri_q"],f:p=>p.n===3},
+  {t:"Colorie tous les quadrilatères (les figures à 4 côtés).",k:["carre","rect","losange","para","trapeze","quad_q"],f:p=>p.n===4},
+  {t:"Colorie toutes les figures qui ont au moins un angle droit.",k:["carre","rect","tri_rect","trapeze"],f:p=>p.rights>0,e:"Le petit carré du codage montre un angle droit."},
+  {t:"Colorie tous les carrés. Attention, certains sont tournés !",k:["carre","carre","losange","rect"],f:p=>p.name==="carré",e:"Un carré tourné reste un carré : 4 côtés égaux et 4 angles droits."},
+  {t:"Colorie tous les rectangles. Attention : un carré est aussi un rectangle !",k:["carre","rect","rect","para"],f:p=>p.n===4&&p.rights===4,e:"Un carré a 4 angles droits : c’est un rectangle particulier."},
+  {t:"Colorie les figures qui ont 4 côtés de même longueur.",k:["carre","losange","rect"],f:p=>p.n===4&&p.allEq,e:"Carrés et losanges ont 4 côtés égaux."},
+  {t:"Colorie les polygones qui ont plus de 4 côtés.",k:["penta","hexa","octo"],f:p=>p.n>4},
+  {t:"Colorie les triangles qui ont au moins 2 côtés égaux.",k:["tri_eq","tri_iso","tri_iso"],f:p=>p.n===3&&p.isoc,e:"Ce sont les triangles isocèles (l’équilatéral en fait partie)."}
+];
+G.colorie=()=>{for(let g=0;g<80;g++){const rule=pick(COLOR_RULES),keys=shuffle([pick(rule.k),pick(rule.k),pick(rule.k),...Array.from({length:5},()=>pick(COLKEYS))]);
+    const items=keys.map((k,i)=>shapeItem(k,[(i%4)*120+16,Math.floor(i/4)*108+16,88,76]));
+    const targets=items.map((it,i)=>rule.f(it.p)?i:-1).filter(i=>i>=0);if(targets.length<2||targets.length>5)continue;
+    const names=[...new Set(targets.map(i=>items[i].p.name))].map(plural);
+    return {type:"color",q:rule.t,items:items.map(it=>it.circle?{circle:it.circle}:{Q:it.Q}),targets,expl:`Il fallait colorier : ${names.join(", ")}. ${rule.e||""}`.trim(),sig:keys.join("")}}
+  return G.formes()};
+function colorSvg(q,a){const w=quiz.work;let s="";
+  q.items.forEach((it,i)=>{const c=i%4,r=Math.floor(i/4),sel=w.col[i]!==undefined,tg=q.targets.includes(i);let cls="csh";
+    if(a){if(tg&&sel)cls+=" okc";else if(tg)cls+=" miss";else if(sel)cls+=" bad"}
+    const fill=sel?`style="fill:${CRAY[w.col[i]]};fill-opacity:.78"`:"";
+    s+=`<g ${a?"":`data-shp="${i}"`}><rect class="hit" x="${c*120+4}" y="${r*108+4}" width="112" height="100" rx="10"/>${itemSvg(it,cls,fill)}</g>`});
+  return figSvg(s,"0 0 480 216","wide")}
+/* ----- symétrie sur quadrillage ----- */
+G.sym=()=>{if(R(1,10)<=4)return axisQ();
+  const W=8,H=6,v=R(0,2)>0,s=new Set([v?`3,${R(1,4)}`:`${R(1,6)},2`]),n=R(6,9);let g=0;
+  while(s.size<n&&g++<400){const [c,r]=pick([...s]).split(",").map(Number),[dc,dr]=pick([[1,0],[-1,0],[0,1],[0,-1]]),c2=c+dc,r2=r+dr;
+    if(c2<0||r2<0||c2>=W||r2>=H||(v&&c2>3)||(!v&&r2>2))continue;s.add(`${c2},${r2}`)}
+  const fixed=[...s].map(k=>k.split(",").map(Number)),target=fixed.map(([c,r])=>v?`${7-c},${r}`:`${c},${5-r}`).sort();
+  return {type:"sym",axis:v?"v":"h",W,H,fixed,target,q:"Colorie les cases pour que le dessin soit symétrique par rapport à la ligne rouge.",expl:"Chaque case a sa jumelle de l’autre côté de la ligne, à la même distance. Compte les cases à partir de la ligne rouge.",sig:target.join(";")}};
+function symSvg(q,a){const cs=34,m=8,w=quiz.work,fx=new Set(q.fixed.map(c=>c.join(","))),tg=new Set(q.target);let s="";
+  for(let c=0;c<q.W;c++)for(let r=0;r<q.H;r++){const k=`${c},${r}`,free=q.axis==="v"?c>3:r>2,sel=w.col[k]!==undefined;let cls="cell";
+    if(fx.has(k))cls+=" fix";else if(a){if(tg.has(k)&&!sel)cls+=" miss";else if(sel&&!tg.has(k))cls+=" bad"}
+    s+=`<rect class="${cls}" x="${m+c*cs}" y="${m+r*cs}" width="${cs}" height="${cs}" ${sel?`style="fill:${CRAY[w.col[k]]};fill-opacity:.8"`:""} ${free&&!a?`data-cell="${k}"`:""}/>`}
+  const W=m*2+q.W*cs,H=m*2+q.H*cs;
+  s+=q.axis==="v"?`<line class="ax" x1="${m+4*cs}" y1="2" x2="${m+4*cs}" y2="${H-2}"/>`:`<line class="ax" x1="2" y1="${m+3*cs}" x2="${W-2}" y2="${m+3*cs}"/>`;
+  return figSvg(s,`0 0 ${W} ${H}`,"big")}
+/* ----- tracer sur quadrillage ----- */
+const DRAW={
+  carre:{t:"Trace un carré.",name:"un carré",ok:p=>p.n===4&&p.rights===4&&p.allEq,e:"Un carré a 4 côtés égaux et 4 angles droits."},
+  rect:{t:"Trace un rectangle qui n’est pas un carré.",name:"un rectangle (pas carré)",ok:p=>p.n===4&&p.rights===4&&!p.allEq,e:"Un rectangle a 4 angles droits ; ses côtés opposés ont la même longueur."},
+  rect42:{t:"Trace un rectangle de 4 carreaux de long et 2 carreaux de large.",name:"un rectangle de 4 sur 2",ok:p=>p.n===4&&p.rights===4&&p.L.slice().sort((a,b)=>a-b).join()==="4,4,16,16",e:"Compte les carreaux entre deux points : 4 dans un sens, 2 dans l’autre."},
+  trirect:{t:"Trace un triangle rectangle.",name:"un triangle rectangle",ok:p=>p.n===3&&p.rights===1,e:"Un triangle rectangle a un angle droit : suis les lignes du quadrillage pour en faire un."},
+  triiso:{t:"Trace un triangle isocèle.",name:"un triangle isocèle",ok:p=>p.n===3&&p.isoc,e:"Un triangle isocèle a 2 côtés de même longueur. Astuce : place le sommet juste au-dessus du milieu de la base."},
+  losange:{t:"Trace un losange qui n’est pas un carré.",name:"un losange",ok:p=>p.n===4&&p.allEq&&p.rights===0,e:"Un losange a 4 côtés égaux. Astuce : fais des pas en biais, par exemple « 2 à droite, 1 en haut », puis « 2 à droite, 1 en bas »…"},
+  carre9:{t:"Trace un carré d’aire 9 carreaux.",name:"un carré de 9 carreaux",ok:p=>p.n===4&&p.rights===4&&p.allEq&&p.area===9,e:"Aire du carré = côté × côté. 3 × 3 = 9 : le côté fait 3 carreaux."},
+  penta:{t:"Trace un pentagone (une figure à 5 côtés).",name:"un pentagone",ok:p=>p.n===5,e:"Un pentagone a 5 côtés et 5 sommets."},
+  para:{t:"Trace un parallélogramme qui n’est ni un rectangle ni un losange.",name:"un parallélogramme",ok:p=>p.n===4&&p.par02&&p.par13&&p.rights===0&&!p.allEq,e:"Ses côtés opposés sont parallèles : fais le même « pas » pour les deux côtés d’en face."},
+  trap:{t:"Trace un trapèze : exactement 2 côtés parallèles.",name:"un trapèze",ok:p=>p.n===4&&p.par02!==p.par13,e:"Un trapèze a une seule paire de côtés parallèles, de longueurs différentes."},
+  tilt:{t:"Trace un carré penché : aucun côté ne doit suivre les lignes du quadrillage.",name:"un carré penché",ok:p=>p.n===4&&p.rights===4&&p.allEq&&p.Q.every((q,i)=>{const r=p.Q[(i+1)%4];return q[0]!==r[0]&&q[1]!==r[1]}),e:"Astuce : un côté fait « 2 à droite, 1 en haut », le suivant « 1 à gauche, 2 en haut », et ainsi de suite."},
+  rect12:{t:"Trace un rectangle d’aire 12 carreaux.",name:"un rectangle de 12 carreaux",ok:p=>p.n===4&&p.rights===4&&Math.abs(p.area-12)<1e-9,e:"Aire = longueur × largeur : 6 × 2 ou 4 × 3 font 12."},
+  trirectiso:{t:"Trace un triangle rectangle isocèle.",name:"un triangle rectangle isocèle",ok:p=>p.n===3&&p.rights===1&&p.isoc,e:"Un angle droit et deux côtés égaux : c’est la moitié d’un carré coupé par sa diagonale."},
+  hexa:{t:"Trace un hexagone (une figure à 6 côtés).",name:"un hexagone",ok:p=>p.n===6,e:"Un hexagone a 6 côtés, comme une alvéole d’abeille."}
+};
+const DRAW_CM2=["carre","rect","rect42","trirect","triiso","losange","carre9","penta"],DRAW_6=["para","trap","tilt","rect12","trirectiso","hexa","losange"];
+G.trace=()=>{const k=pick(DRAW_CM2);return {type:"draw",task:k,q:DRAW[k].t,expl:DRAW[k].e}};
+G.trace2=()=>{const k=pick(DRAW_6);return {type:"draw",task:k,q:DRAW[k].t,expl:DRAW[k].e}};
+function evalDraw(q,pts){const T=DRAW[q.task];if(!Array.isArray(pts)||pts.length<3)return {ok:false,msg:"Il faut au moins 3 points."};const p=classify(pts);if(p.bad)return {ok:false,msg:p.bad};const ok=T.ok(p);
+  return {ok,msg:ok?`C’est bien ${T.name}.`:`Tu as tracé un ${p.name}${q.task==="carre9"||q.task==="rect12"||q.task==="rect42"?` (aire : ${fmt(p.area)} carreaux)`:""}, mais il fallait ${T.name}.`}}
+const DG={W:11,H:8,sp:30,m:18};
+function drawSvg(q,a){const {W,H,sp,m}=DG,X=i=>m+i*sp,Y=j=>m+j*sp,w=quiz.work,P=w.pts;let s="";
+  for(let i=0;i<W;i++)for(let j=0;j<H;j++)s+=`<circle class="gdot" cx="${X(i)}" cy="${Y(j)}" r="3"/>`;
+  if(P.length){const PP=P.map(([i,j])=>[X(i),Y(j)]);
+    s+=w.closed?`<polygon class="dpoly ${a?(quiz.lastOk?"ok":"ko"):""}" points="${ptsAttr(PP)}"/>`+(a?codage(classify(P).Q?.map(([i,j])=>[X(i),Y(j)])||[]):""):`<polyline class="dline" points="${ptsAttr(PP)}"/>`;
+    PP.forEach((p,k)=>s+=k===0&&!w.closed?`<circle class="first" cx="${p[0]}" cy="${p[1]}" r="9"/>`:`<circle class="vtx" cx="${p[0]}" cy="${p[1]}" r="5"/>`)}
+  if(!a&&!w.closed)for(let i=0;i<W;i++)for(let j=0;j<H;j++)s+=`<circle class="hitp" data-pt="${i},${j}" cx="${X(i)}" cy="${Y(j)}" r="14"/>`;
+  return figSvg(s,`0 0 ${2*m+(W-1)*sp} ${2*m+(H-1)*sp}`,"big")}
+function toolsHTML(q,a){if(a)return "";const w=quiz.work;
+  if(q.type==="draw")return `<p class="muted">Touche les points du quadrillage un par un. Pour fermer la figure, touche de nouveau le premier point (le rond).</p>
+    <div class="tools"><button class="btn ghost small" data-undo="1" ${w.pts.length?"":"disabled"}>Effacer le dernier point</button><button class="btn ghost small" data-clear="1" ${w.pts.length?"":"disabled"}>Recommencer</button></div>
+    <button class="btn" data-validate="1" ${w.closed?"":"disabled"}>${w.closed?"Valider ma figure":"Ferme la figure pour valider"}</button>`;
+  return `<p class="muted">Choisis un crayon, puis touche ${q.type==="color"?"les formes":"les cases"} pour colorier. Touche encore pour effacer.</p>
+    <div class="crayons" role="group" aria-label="Crayons">${CRAY.map((c,i)=>`<button class="crayon" data-crayon="${i}" style="background:${c}" aria-pressed="${w.crayon===i}" aria-label="Crayon ${i+1}"></button>`).join("")}</div>
+    <div class="tools"><button class="btn ghost small" data-clear="1">Tout effacer</button><button class="btn" data-validate="1">Valider</button></div>`}
+/* ----- quadrillage : aires & périmètres ----- */
+function polyo(n,W,H){for(let tries=0;tries<50;tries++){const s=new Set([`${Math.floor(W/2)},${Math.floor(H/2)}`]);let g=0;
+  while(s.size<n&&g++<600){const [c,r]=pick([...s]).split(",").map(Number),[dc,dr]=pick([[1,0],[-1,0],[0,1],[0,-1]]);if(c+dc>=0&&c+dc<W&&r+dr>=0&&r+dr<H)s.add(`${c+dc},${r+dr}`)}
+  const out=new Set(),st=["-1,-1"];while(st.length){const k=st.pop();if(out.has(k))continue;const [c,r]=k.split(",").map(Number);if(c<-1||r<-1||c>W||r>H||s.has(k))continue;out.add(k);st.push(`${c+1},${r}`,`${c-1},${r}`,`${c},${r+1}`,`${c},${r-1}`)}
+  if((W+2)*(H+2)-out.size===s.size)return [...s].map(k=>k.split(",").map(Number))}
+  return [[1,1],[2,1],[1,2],[2,2]]}
+function gridSvg(W,H,cells,cs=24,grid=true,shift=[]){const m=10;let s="";
+  if(grid){for(let i=0;i<=W;i++)s+=`<line class="gl" x1="${m+i*cs}" y1="${m}" x2="${m+i*cs}" y2="${m+H*cs}"/>`;for(let j=0;j<=H;j++)s+=`<line class="gl" x1="${m}" y1="${m+j*cs}" x2="${m+W*cs}" y2="${m+j*cs}"/>`}
+  cells.forEach(([c,r])=>s+=`<rect class="cellf" x="${m+c*cs}" y="${m+r*cs}" width="${cs}" height="${cs}"/>`);
+  shift.forEach(([t,x,y])=>s+=`<text class="lbl" x="${m+x*cs}" y="${m+y*cs}">${t}</text>`);
+  return figSvg(s,`0 0 ${W*cs+2*m} ${H*cs+2*m}`)}
+G.quad=()=>{const t=R(1,4),W=10,H=7;
+  if(t===1||t===4){const cells=polyo(R(5,13),W,H);return inp("Quelle est l’aire de cette figure, en carreaux ?",cells.length,`On compte les carreaux colorés : il y en a ${cells.length}.`,{svg:gridSvg(W,H,cells),unit:"carreaux"})}
+  if(t===2){const cells=polyo(R(4,10),W,H),set=new Set(cells.map(c=>c.join(",")));let per=0;cells.forEach(([c,r])=>[[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{if(!set.has(`${c+a},${r+b}`))per++}));
+    return inp("Quel est le périmètre de cette figure, en côtés de carreau ?",per,`On fait le tour de la figure en comptant chaque petit côté : ${per}.`,{svg:gridSvg(W,H,cells),unit:"côtés"})}
+  let A,B;do{A=polyo(R(5,11),5,6);B=polyo(R(5,11),5,6)}while(A.length===B.length);
+  const cells=[...A,...B.map(([c,r])=>[c+6,r])],good=A.length>B.length?"La figure A":"La figure B";
+  return mcq("Quelle figure a la plus grande aire ?",good,[good==="La figure A"?"La figure B":"La figure A","Elles ont la même aire"],`A : ${A.length} carreaux, B : ${B.length} carreaux. L’aire, c’est la place occupée, pas la forme.`,{svg:gridSvg(11,6,cells,24,true,[["A",.15,.75],["B",6.15,.75]]),sig:cells.join(";")})};
+/* ----- solides ----- */
+const ln=(a,b,h)=>`<line class="ed${h?" hid":""}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`;
+const pg=(P,c)=>`<polygon class="${c}" points="${ptsAttr(P)}"/>`;
+function boxSvg(x,y,w,h,dx,dy){const A=[x,y+h],B=[x+w,y+h],C=[x+w,y],D=[x,y],o=p=>[p[0]+dx,p[1]-dy],A2=o(A),B2=o(B),C2=o(C),D2=o(D);
+  return pg([A,B,C,D],"face")+pg([D,C,C2,D2],"face2")+pg([B,C,C2,B2],"face2")+ln(A,A2,1)+ln(A2,B2,1)+ln(A2,D2,1)+[[A,B],[B,C],[C,D],[D,A],[D,D2],[C,C2],[B,B2],[D2,C2],[C2,B2]].map(([p,q])=>ln(p,q)).join("")}
+const SOL={
+  cube:{name:"cube",ce:"ce",f:6,s:8,a:12,svg:()=>boxSvg(60,58,85,85,45,32),e:"6 faces carrées identiques, comme un dé.",c:"Cube : 6 faces, 8 sommets, 12 arêtes. Les pointillés montrent les arêtes cachées."},
+  pave:{name:"pavé droit",ce:"ce",f:6,s:8,a:12,svg:()=>boxSvg(32,75,130,62,48,34),e:"6 faces rectangulaires, comme une boîte à chaussures.",c:"Pavé droit : 6 faces, 8 sommets, 12 arêtes, comme le cube."},
+  prisme:{name:"prisme",ce:"ce",f:5,s:6,a:9,svg:()=>{const F1=[45,148],F2=[125,148],F3=[85,78],o=p=>[p[0]+62,p[1]-34],B1=o(F1),B2=o(F2),B3=o(F3);return pg([F1,F2,F3],"face")+pg([F3,F2,B2,B3],"face2")+ln(F1,B1,1)+ln(B1,B2,1)+ln(B1,B3,1)+[[F1,F2],[F2,F3],[F3,F1],[F3,B3],[F2,B2],[B3,B2]].map(([p,q])=>ln(p,q)).join("")},e:"deux bases identiques (ici des triangles) reliées par des rectangles.",c:"Prisme à base triangulaire : 5 faces, 6 sommets, 9 arêtes."},
+  pyr:{name:"pyramide",ce:"cette",f:5,s:5,a:8,svg:()=>{const P1=[55,148],P2=[150,148],P3=[190,112],P4=[95,112],S=[125,24];return pg([P1,P2,S],"face")+pg([P2,P3,S],"face2")+ln(P3,P4,1)+ln(P4,P1,1)+ln(P4,S,1)+[[P1,P2],[P2,P3],[S,P1],[S,P2],[S,P3]].map(([p,q])=>ln(p,q)).join("")},e:"une base et des faces triangulaires qui se rejoignent en un sommet.",c:"Pyramide à base carrée : 5 faces (1 carré + 4 triangles), 5 sommets, 8 arêtes."},
+  cyl:{name:"cylindre",ce:"ce",svg:()=>`<path class="face" d="M65 38 L65 146 A55 15 0 0 0 175 146 L175 38 Z"/><ellipse class="face2" cx="120" cy="38" rx="55" ry="15"/><path class="ed" d="M65 146 A55 15 0 0 0 175 146"/><path class="ed hid" d="M65 146 A55 15 0 0 1 175 146"/>`+ln([65,38],[65,146])+ln([175,38],[175,146])+`<ellipse class="ed" cx="120" cy="38" rx="55" ry="15"/>`,e:"deux disques reliés par une surface courbe, comme une boîte de conserve."},
+  cone:{name:"cône",ce:"ce",svg:()=>`<path class="face" d="M120 22 L58 146 A62 16 0 0 0 182 146 Z"/><path class="ed" d="M58 146 A62 16 0 0 0 182 146"/><path class="ed hid" d="M58 146 A62 16 0 0 1 182 146"/>`+ln([120,22],[58,146])+ln([120,22],[182,146]),e:"un disque et un sommet, comme un cornet de glace."},
+  boule:{name:"boule",ce:"cette",svg:()=>`<circle class="face" cx="120" cy="92" r="64"/><circle class="ed" cx="120" cy="92" r="64"/><path class="ed" d="M56 92 A64 17 0 0 0 184 92"/><path class="ed hid" d="M56 92 A64 17 0 0 1 184 92"/>`,e:"toute ronde ; sa surface s’appelle une sphère."}
+};
+function netQ(){const valid=R(0,1);let cells,ex;
+  if(valid){const v=R(0,2);cells=v===0?[[R(0,3),0],[0,1],[1,1],[2,1],[3,1],[R(0,3),2]]:v===1?[[0,0],[1,0],[1,1],[2,1],[2,2],[3,2]]:[[0,0],[1,0],[2,0],[2,1],[3,1],[4,1]];ex="Oui : en pliant, chaque carré devient une face différente du cube, sans en superposer deux."}
+  else{const I=pick([[[[0,0],[1,0],[2,0],[0,1],[1,1],[2,1]],"Non : avec deux rangées de 3, des faces se superposent quand on plie."],[[[0,0],[1,0],[0,1],[1,1],[2,1],[3,1]],"Non : les deux carrés du haut deviendraient tous les deux le dessus du cube."],[[[0,1],[1,1],[2,1],[3,1],[4,1],[2,0]],"Non : avec 5 carrés en ligne, le 5e revient sur le 1er quand on plie."],[[[0,0],[3,0],[0,1],[1,1],[2,1],[3,1]],"Non : les deux carrés du haut deviendraient tous les deux le dessus, et il manquerait le dessous."]]);cells=I[0];ex=I[1]}
+  return mcq("Cette figure est-elle un patron de cube ? (Peut-on la plier pour fabriquer un cube ?)",valid?"Oui":"Non",[valid?"Non":"Oui"],ex,{svg:gridSvg(5,3,cells,34,false),sig:cells.join(";")})}
+G.solides=()=>{const t=R(1,10),keys=Object.keys(SOL);
+  if(t<=4){const k=pick(keys);return mcq("Comment s’appelle ce solide ?",SOL[k].name,shuffle(keys.filter(x=>x!==k).map(x=>SOL[x].name)),`C’est ${SOL[k].ce==="cette"?"une":"un"} ${SOL[k].name} : ${SOL[k].e}`,{svg:figSvg(SOL[k].svg(),"0 0 240 180")})}
+  if(t<=8){const k=pick(["cube","pave","prisme","pyr"]),w=pick(["f","s","a"]),lab={f:"faces",s:"sommets",a:"arêtes"}[w];
+    return inp(`Combien de ${lab} a ${SOL[k].ce} ${SOL[k].name} ?`,SOL[k][w],SOL[k].c,{svg:figSvg(SOL[k].svg(),"0 0 240 180")})}
+  return netQ()};
+const VIS=q=>q.type==="draw"||q.type==="color"||q.type==="sym";
+const qkey=q=>q.q+(q.code||"")+(q.listen||"")+(q.sig||"")+"|"+goodText(q);
+
+/* ================= banques de questions ================= */
+const TOM="Tom is eleven. He lives in London with his mum, his dad and his little sister, Amy. Every morning he takes the bus to school. His favourite subject is science, but he doesn’t like history. After school, he plays basketball with his friends. On Sundays, the family visits Grandma in Brighton, near the sea.";
+const B={
+problemes:[
+ ["Un livre coûte 12 €. Combien coûtent 7 livres ?",84,null,"12 × 7 = 84 €.",{unit:"€"}],
+ ["Sami a 45 billes. Il en donne 18 à un copain. Combien lui en reste-t-il ?",27,null,"45 − 18 = 27 billes."],
+ ["Un car transporte 48 élèves. Combien de cars faut-il au minimum pour 200 élèves ?",5,null,"200 ÷ 48 ≈ 4,17 : 4 cars ne suffisent pas (192 places), il en faut 5. Attention au piège de l’arrondi !"],
+ ["Un film commence à 14 h 35 et dure 1 h 50. À quelle heure finit-il ?","16 h 25",["16 h 15","15 h 25","16 h 85"],"14 h 35 + 1 h = 15 h 35 ; + 50 min = 16 h 25."],
+ ["Un rectangle a un périmètre de 30 cm et une largeur de 5 cm. Quelle est sa longueur ?",10,null,"Demi-périmètre = 15 cm. 15 − 5 = 10 cm.",{unit:"cm"}],
+ ["3 cahiers coûtent 4,50 €. Combien coûte un cahier ?",1.5,null,"4,50 ÷ 3 = 1,50 €.",{unit:"€"}],
+ ["Une recette pour 4 personnes demande 200 g de farine. Combien en faut-il pour 6 personnes ?",300,null,"Pour 1 personne : 50 g. Pour 6 : 6 × 50 = 300 g.",{unit:"g"}],
+ ["Un match de foot dure 2 mi-temps de 45 minutes. Combien de minutes en tout (sans les arrêts de jeu) ?",90,null,"2 × 45 = 90 minutes."],
+ ["Ton équipe marque 3 buts par match. Combien de buts en 8 matchs ?",24,null,"3 × 8 = 24 buts."],
+ ["Un vélo roule à 15 km/h. Quelle distance parcourt-il en 3 heures ?",45,null,"15 × 3 = 45 km.",{unit:"km"}],
+ ["Léa lit 12 pages par jour. Son livre fait 156 pages. En combien de jours le finit-elle ?",13,null,"156 ÷ 12 = 13 jours."],
+ ["Un paquet de 6 bouteilles coûte 3,60 €. Prix d’une bouteille ?",0.6,null,"3,60 ÷ 6 = 0,60 €.",{unit:"€"}],
+ ["Il est 8 h 50. Le cours commence dans 25 minutes. À quelle heure commence-t-il ?","9 h 15",["9 h 25","8 h 75","9 h 05"],"8 h 50 + 10 min = 9 h 00, + 15 min = 9 h 15."],
+ ["Une classe a 28 élèves. La moitié fait du sport, et le quart de la classe fait de la musique. Combien font de la musique ?",7,null,"Le quart de 28 = 28 ÷ 4 = 7 élèves."]
+],
+geovoc:[
+ ["Combien de faces a un cube ?","6",["8","12","4"],"Un cube a 6 faces carrées (comme un dé)."],
+ ["Combien d’arêtes a un cube ?","12",["6","8","24"],"4 en haut, 4 en bas et 4 verticales : 12 arêtes."],
+ ["Combien de sommets a un pavé droit ?","8",["6","12","4"],"4 sommets en haut et 4 en bas."],
+ ["Un triangle qui a 3 côtés égaux est…","équilatéral",["isocèle","rectangle","quelconque"],"Équilatéral : 3 côtés égaux. Isocèle : 2 côtés égaux."],
+ ["Un quadrilatère avec 4 angles droits et 4 côtés égaux est un…","carré",["rectangle","losange","trapèze"],"Le carré est à la fois un rectangle et un losange."],
+ ["Un losange a toujours…","4 côtés de même longueur",["4 angles droits","2 côtés seulement","des diagonales de même longueur"],"Le losange a 4 côtés égaux ; ses diagonales se coupent en angle droit."],
+ ["Deux droites qui se coupent en formant un angle droit sont…","perpendiculaires",["parallèles","confondues","courbes"],"Perpendiculaires : elles se coupent à angle droit. Parallèles : elles ne se coupent jamais."],
+ ["Le segment qui relie le centre d’un cercle à un point du cercle s’appelle…","le rayon",["le diamètre","la corde","l’arc"],"Le diamètre traverse tout le cercle en passant par le centre : il vaut 2 rayons."],
+ ["Quel solide a une base en forme de disque et un sommet ?","le cône",["le cylindre","la pyramide","la boule"],"Le cylindre a deux disques et pas de sommet."],
+ ["Combien d’axes de symétrie a un carré ?","4",["2","1","8"],"2 médianes et 2 diagonales : 4 axes."],
+ ["Combien d’axes de symétrie a un rectangle (qui n’est pas un carré) ?","2",["4","1","0"],"Ses deux médianes. Les diagonales ne sont pas des axes de symétrie du rectangle."],
+ ["Quelle lettre majuscule a un axe de symétrie vertical ?","A",["F","G","R"],"Plie un A en deux verticalement : les deux moitiés se superposent."],
+ ["Combien de faces a une pyramide à base carrée ?","5",["4","6","8"],"1 base carrée + 4 faces triangulaires = 5 faces."]
+],
+algo:[
+ ["Dans Scratch, quel bloc permet de répéter des actions plusieurs fois ?","répéter 10 fois",["quand le drapeau vert est cliqué","dire Bonjour !","avancer de 10"],"La boucle « répéter » évite d’écrire 10 fois la même instruction."],
+ ["Un algorithme, c’est…","une suite d’instructions pour résoudre un problème",["un ordinateur très puissant","un type de robot","un jeu vidéo"],"Une recette de cuisine est aussi un algorithme !"],
+ ["Le lutin est en x = 0. Il exécute « répéter 4 fois : avancer de 10 ». Où est-il ?","x = 40",["x = 10","x = 4","x = 14"],"4 × 10 = 40 pas."],
+ ["Pour dessiner un carré, on répète 4 fois : avancer de 100, puis tourner de…","90°",["45°","180°","360°"],"Un carré a 4 angles droits : on tourne de 90° à chaque coin (4 × 90 = 360°)."],
+ ["Pour dessiner un triangle équilatéral, le lutin tourne à chaque coin de…","120°",["60°","90°","180°"],"Le lutin doit faire un tour complet (360°) en 3 virages : 360 ÷ 3 = 120°. (L’angle intérieur, lui, fait 60°.)"],
+ ["Quel bloc sert à prendre une décision ?","si … alors",["répéter","avancer de 10","attendre 1 seconde"],"« si … alors » exécute des instructions seulement si une condition est vraie."],
+ ["Une variable sert à…","mémoriser une valeur qui peut changer",["dessiner un lutin","jouer un son","arrêter le programme"],"Par exemple, la variable « score » garde les points du joueur."],
+ ["score = 0. On ajoute 5 au score, 3 fois de suite. Que vaut score ?","15",["5","8","3"],"0 + 5 + 5 + 5 = 15."],
+ ["Qu’est-ce qu’un bug ?","une erreur dans un programme",["un virus d’insecte","un nouveau langage","un ordinateur en panne de courant"],"Trouver et corriger un bug s’appelle « déboguer »."],
+ ["Dans « répéter jusqu’à ce que touche le bord : avancer de 5 », quand la boucle s’arrête-t-elle ?","quand le lutin touche le bord",["après 5 tours","jamais","au bout de 5 secondes"],"La boucle continue tant que la condition n’est pas vraie."]
+],
+python:[
+ ["Qu’affiche ce programme ?","5",["3","2","x + 2"],"x vaut 3, puis 3 + 2 = 5.",{code:"x = 3\nx = x + 2\nprint(x)"}],
+ ["Combien de fois « Bonjour » est-il affiché ?","3",["2","4","1"],"range(3) donne 0, 1, 2 : trois tours de boucle.",{code:"for i in range(3):\n    print(\"Bonjour\")"}],
+ ["Qu’affiche ce programme ?","grand",["petit","7","rien"],"7 > 5 est vrai, donc on exécute le bloc du « if ».",{code:"a = 7\nif a > 5:\n    print(\"grand\")\nelse:\n    print(\"petit\")"}],
+ ["Qu’affiche ce programme ?","10",["15","5","4"],"range(1, 5) donne 1, 2, 3, 4 : 1 + 2 + 3 + 4 = 10.",{code:"n = 0\nfor i in range(1, 5):\n    n = n + i\nprint(n)"}],
+ ["Qu’affiche ce programme ?","4",["3","5","chat"],"len() compte les lettres : c-h-a-t = 4.",{code:"mot = \"chat\"\nprint(len(mot))"}],
+ ["Qu’affiche ce programme ?","3",["3.33","1","30"],"// est la division entière : 10 = 3 × 3 + 1, le quotient est 3.",{code:"print(10 // 3)"}],
+ ["Qu’affiche ce programme ?","1",["3","0","3.33"],"% donne le reste de la division : 10 = 3 × 3 + 1, le reste est 1.",{code:"print(10 % 3)"}],
+ ["Qu’affiche ce programme ?","4",["8","15","0"],"En Python, on compte à partir de 0 : liste[0] est le premier élément.",{code:"liste = [4, 8, 15]\nprint(liste[0])"}],
+ ["Qu’affiche ce programme ?","32",["16","20","64"],"x : 2 → 4 → 8 → 16 → 32. À 32, la condition x < 20 est fausse, la boucle s’arrête.",{code:"x = 2\nwhile x < 20:\n    x = x * 2\nprint(x)"}],
+ ["Quel symbole teste l’égalité en Python ?","==",["=","===","=>"],"« = » range une valeur dans une variable, « == » compare deux valeurs."],
+ ["Qu’affiche ce programme ?","12",["6","26","double"],"La fonction renvoie n × 2, donc 6 × 2 = 12.",{code:"def double(n):\n    return n * 2\n\nprint(double(6))"}],
+ ["Qu’affiche ce programme ?","Bonjour Léa",["Bonjour nom","nom","Bonjour"],"Le + colle deux textes ensemble.",{code:"nom = \"Léa\"\nprint(\"Bonjour \" + nom)"}]
+],
+logique:[
+ ["Combien de valeurs différentes peut-on coder avec 3 bits ?","8",["6","3","9"],"2 × 2 × 2 = 2³ = 8 (de 000 à 111)."],
+ ["1 octet, c’est combien de bits ?","8",["10","4","16"],"Un octet = 8 bits, il peut coder 256 valeurs."],
+ ["VRAI ET FAUX donne…","FAUX",["VRAI"],"Avec ET, il faut que les deux soient vrais."],
+ ["VRAI OU FAUX donne…","VRAI",["FAUX"],"Avec OU, il suffit qu’un des deux soit vrai."],
+ ["NON VRAI donne…","FAUX",["VRAI"],"NON inverse la valeur."],
+ ["Un robot avance d’1 case, tourne à droite, et recommence 4 fois. Où finit-il ?","sur sa case de départ",["4 cases devant","à droite du départ","derrière le départ"],"Il dessine un petit carré et revient à son point de départ."]
+],
+prehist:[
+ ["Comment appelle-t-on la période où les humains deviennent agriculteurs et éleveurs ?","le Néolithique",["le Paléolithique","l’Antiquité","le Moyen Âge"],"Le Néolithique commence vers 10 000 av. J.-C. au Proche-Orient : les humains se sédentarisent."],
+ ["Dans quel département se trouve la grotte de Lascaux, célèbre pour ses peintures ?","la Dordogne",["le Finistère","le Bas-Rhin","les Bouches-du-Rhône"],"Lascaux, en Dordogne, a des peintures d’environ 18 000 ans."],
+ ["Quelle invention marque la fin de la Préhistoire ?","l’écriture",["la roue","le feu","l’agriculture"],"L’écriture apparaît vers 3 300 av. J.-C. en Mésopotamie : c’est le début de l’Histoire."],
+ ["Quel peuple a construit les pyramides de Gizeh ?","les Égyptiens",["les Romains","les Grecs","les Gaulois"],"Elles ont été construites il y a environ 4 500 ans, pour les pharaons."],
+ ["Quel chef gaulois a été vaincu par Jules César à Alésia en 52 av. J.-C. ?","Vercingétorix",["Clovis","Charlemagne","Hannibal"],"Après Alésia, la Gaule devient romaine."],
+ ["Dans quelle ville de Grèce sont nés les Jeux olympiques antiques ?","Olympie",["Athènes","Rome","Sparte"],"Les premiers Jeux connus datent de 776 av. J.-C., en l’honneur de Zeus."],
+ ["Lutèce est l’ancien nom de quelle ville ?","Paris",["Lyon","Marseille","Bordeaux"],"Lugdunum = Lyon, Massalia = Marseille, Burdigala = Bordeaux."],
+ ["Qui fut le premier empereur romain ?","Auguste",["Néron","Jules César","Constantin"],"Auguste devient empereur en 27 av. J.-C. Jules César n’a jamais porté le titre d’empereur."],
+ ["Chez les Grecs, qui était le roi des dieux ?","Zeus",["Apollon","Poséidon","Hadès"],"Zeus règne sur l’Olympe. Poséidon est le dieu de la mer."],
+ ["Comment s’appelle l’écriture des anciens Égyptiens ?","les hiéroglyphes",["l’alphabet latin","les runes","le braille"],"Champollion les a déchiffrés en 1822 grâce à la pierre de Rosette."]
+],
+moyenage:[
+ ["Quel roi des Francs a été baptisé vers 496 ?","Clovis",["Charlemagne","Louis XIV","Hugues Capet"],"Clovis devient chrétien, ce qui l’aide à unir les Francs."],
+ ["En quelle année Charlemagne est-il couronné empereur ?","800",["1515","1789","476"],"Le 25 décembre 800, à Rome."],
+ ["Comment s’appelle le système où un seigneur protège des paysans en échange de travail et d’impôts ?","la féodalité",["la démocratie","la république","la monarchie absolue"],"Les seigneurs sont aussi liés entre eux : vassal et suzerain."],
+ ["Quelle héroïne a aidé le roi Charles VII pendant la guerre de Cent Ans ?","Jeanne d’Arc",["Marie Curie","Aliénor d’Aquitaine","Catherine de Médicis"],"Elle délivre Orléans en 1429."],
+ ["La guerre de Cent Ans oppose la France à…","l’Angleterre",["l’Espagne","l’Allemagne","l’Italie"],"De 1337 à 1453 (elle dure en fait 116 ans !)."],
+ ["Quel style d’église a de grandes fenêtres avec des vitraux, comme Notre-Dame de Paris ?","le gothique",["le roman","le baroque","le moderne"],"Le style roman est plus ancien, avec des murs épais et de petites fenêtres."],
+ ["Hugues Capet devient roi en 987. Il fonde la dynastie des…","Capétiens",["Mérovingiens","Carolingiens","Romains"],"Les Mérovingiens viennent de Clovis, les Carolingiens de Charlemagne."],
+ ["Qu’est-ce qu’une croisade ?","une expédition militaire de chrétiens vers Jérusalem",["un tournoi de chevaliers","une fête de village","un impôt sur le sel"],"La première croisade part en 1096."],
+ ["Quelle épidémie a tué environ un tiers des Européens vers 1348 ?","la peste noire",["la grippe","le choléra","la varicelle"],"Elle était transmise par les puces des rats."],
+ ["En 1066, Guillaume le Conquérant, duc de Normandie, conquiert…","l’Angleterre",["l’Espagne","la Bretagne","la Sicile"],"La tapisserie de Bayeux raconte la bataille d’Hastings."]
+],
+modernes:[
+ ["En 1492, Christophe Colomb atteint…","l’Amérique",["l’Inde","l’Australie","la Chine"],"Il pensait arriver en Inde : c’est pourquoi on a appelé les habitants « Indiens »."],
+ ["Quel roi remporte la bataille de Marignan en 1515 ?","François Iᵉʳ",["Louis XIV","Henri IV","Napoléon"],"François Iᵉʳ accueille aussi Léonard de Vinci en France."],
+ ["Quel savant a affirmé que la Terre tourne autour du Soleil ?","Copernic",["Pasteur","Archimède","Gutenberg"],"Galilée a ensuite défendu cette idée et a été jugé pour cela en 1633."],
+ ["Vers 1450, Gutenberg met au point…","l’imprimerie à caractères mobiles",["la machine à vapeur","le télescope","la boussole"],"Les livres deviennent beaucoup moins chers et se diffusent."],
+ ["En 1598, Henri IV signe un texte qui accorde des droits aux protestants. Lequel ?","l’édit de Nantes",["la Déclaration des droits de l’homme","le traité de Versailles","le Code civil"],"Il met fin aux guerres de religion."],
+ ["Quel roi a transformé Versailles en un immense palais royal ?","Louis XIV",["Louis XVI","François Iᵉʳ","Henri IV"],"On l’appelle le Roi-Soleil. Il s’installe à Versailles en 1682."],
+ ["Quel événement du 14 juillet 1789 marque le début de la Révolution française ?","la prise de la Bastille",["le sacre de Napoléon","la mort de Louis XVI","la bataille de Waterloo"],"La Bastille était une prison, symbole du pouvoir du roi."],
+ ["Quel texte de 1789 affirme que « les hommes naissent et demeurent libres et égaux en droits » ?","la Déclaration des droits de l’homme et du citoyen",["le Code civil","l’édit de Nantes","la Constitution de 1958"],"Elle est adoptée le 26 août 1789."],
+ ["Quel roi est guillotiné en 1793 ?","Louis XVI",["Louis XIV","Charles X","Louis-Philippe"],"La monarchie avait été abolie en 1792 : la France devient une République."],
+ ["En quelle année Napoléon Bonaparte devient-il empereur ?","1804",["1789","1815","1870"],"Il est sacré à Notre-Dame de Paris. Il est battu à Waterloo en 1815."],
+ ["Quelle est la devise de la République française ?","Liberté, Égalité, Fraternité",["Travail, Famille, Patrie","Un pour tous, tous pour un","Paix et Liberté"],"Elle vient de la Révolution et est inscrite sur les mairies."]
+],
+xx:[
+ ["En quelle année l’esclavage est-il définitivement aboli en France ?","1848",["1789","1905","1945"],"Grâce notamment à Victor Schœlcher."],
+ ["Dans les années 1880, Jules Ferry rend l’école…","gratuite, laïque et obligatoire",["payante et religieuse","réservée aux garçons","facultative"],"Les lois Jules Ferry datent de 1881-1882."],
+ ["La Première Guerre mondiale a eu lieu de…","1914 à 1918",["1939 à 1945","1870 à 1871","1804 à 1815"],"Elle se termine par l’armistice du 11 novembre 1918."],
+ ["Comment surnomme-t-on les soldats français de 1914-1918 ?","les poilus",["les grognards","les sans-culottes","les mousquetaires"],"Ils vivaient dans les tranchées, souvent sans pouvoir se raser."],
+ ["Que commémore le 8 mai 1945 ?","la fin de la Seconde Guerre mondiale en Europe",["l’armistice de 1918","la prise de la Bastille","la fin de la guerre de Cent Ans"],"L’Allemagne nazie capitule."],
+ ["Quel général lance l’appel du 18 juin 1940 depuis Londres ?","Charles de Gaulle",["Philippe Pétain","Ferdinand Foch","Napoléon"],"Il appelle les Français à continuer le combat : c’est le début de la France libre."],
+ ["En quelle année les femmes votent-elles pour la première fois en France ?","1945",["1789","1918","1968"],"Le droit de vote leur est accordé en 1944, elles votent pour la première fois en avril 1945."],
+ ["En quelle année la Ve République est-elle fondée ?","1958",["1945","1870","1981"],"Sa Constitution est adoptée en 1958, Charles de Gaulle en devient président."],
+ ["En 1969, le premier homme marche sur…","la Lune",["Mars","Vénus","l’Everest"],"L’astronaute américain Neil Armstrong, mission Apollo 11."],
+ ["En quelle année tombe le mur de Berlin ?","1989",["1945","1961","2001"],"Le mur avait été construit en 1961. L’Allemagne est réunifiée en 1990."],
+ ["Le traité de 1957 qui fonde la Communauté économique européenne s’appelle…","le traité de Rome",["le traité de Versailles","le traité de Paris","le traité de Maastricht"],"C’est l’ancêtre de l’Union européenne (créée par le traité de Maastricht en 1992)."]
+],
+gfrance:[
+ ["Quel est le plus long fleuve de France ?","la Loire",["la Seine","le Rhône","la Garonne"],"La Loire mesure environ 1 000 km et se jette dans l’océan Atlantique."],
+ ["Quel fleuve traverse Paris ?","la Seine",["la Loire","le Rhône","la Garonne"],"La Seine se jette dans la Manche, au Havre."],
+ ["Quel est le plus haut sommet de France ?","le mont Blanc",["le puy de Dôme","le Vignemale","le mont Ventoux"],"Il culmine à environ 4 806 m, dans les Alpes."],
+ ["Combien de régions compte la France métropolitaine depuis 2016 ?","13",["22","18","101"],"13 en métropole + 5 en outre-mer = 18 régions (et 101 départements)."],
+ ["Quelle chaîne de montagnes sépare la France de l’Espagne ?","les Pyrénées",["les Alpes","les Vosges","le Jura"],"Les Alpes nous séparent de l’Italie et de la Suisse."],
+ ["Quelle mer borde le sud de la France ?","la mer Méditerranée",["la Manche","la mer du Nord","la mer Baltique"],"À l’ouest, c’est l’océan Atlantique ; au nord-ouest, la Manche."],
+ ["Lequel de ces territoires est un département d’outre-mer ?","La Réunion",["la Corse","la Sicile","les Baléares"],"La Réunion est dans l’océan Indien. Les autres DROM : Guadeloupe, Martinique, Guyane, Mayotte."],
+ ["Quel massif montagneux se trouve au centre de la France ?","le Massif central",["les Alpes","les Pyrénées","le Massif armoricain"],"Il contient d’anciens volcans, comme le puy de Dôme."],
+ ["Quel est le chef-lieu de la région Hauts-de-France ?","Lille",["Amiens","Rouen","Reims"],"Amiens était le chef-lieu de l’ancienne région Picardie."],
+ ["Quelle est la deuxième ville la plus peuplée de France ?","Marseille",["Lyon","Toulouse","Nice"],"Paris, puis Marseille, puis Lyon."],
+ ["Dans quelle région se trouve Paris ?","Île-de-France",["Normandie","Centre-Val de Loire","Grand Est"],"C’est la région la plus peuplée de France."]
+],
+gmonde:[
+ ["Quel est le plus grand océan du monde ?","l’océan Pacifique",["l’océan Atlantique","l’océan Indien","l’océan Arctique"],"Il couvre environ un tiers de la Terre."],
+ ["Quel est le plus long fleuve d’Afrique ?","le Nil",["le Congo","le Niger","le Zambèze"],"Le Nil traverse notamment l’Égypte."],
+ ["Quelle est la capitale du Maroc ?","Rabat",["Casablanca","Marrakech","Fès"],"Casablanca est la plus grande ville, mais la capitale est Rabat."],
+ ["Quelle est la capitale de l’Allemagne ?","Berlin",["Munich","Francfort","Hambourg"],"Berlin est redevenue capitale après la réunification de 1990."],
+ ["Quelle est la capitale du Japon ?","Tokyo",["Kyoto","Osaka","Pékin"],"Kyoto a été capitale pendant plus de 1 000 ans avant Tokyo."],
+ ["Quelle est la capitale des États-Unis ?","Washington",["New York","Los Angeles","Chicago"],"Washington D.C. abrite la Maison-Blanche."],
+ ["Quel pays est le plus peuplé du monde (depuis 2023) ?","l’Inde",["la Chine","les États-Unis","la Russie"],"L’Inde a dépassé la Chine, avec plus de 1,4 milliard d’habitants."],
+ ["Quel est le plus haut sommet du monde ?","l’Everest",["le mont Blanc","le Kilimandjaro","le K2"],"Environ 8 849 m, dans l’Himalaya, entre le Népal et la Chine."],
+ ["Combien de pays sont membres de l’Union européenne ?","27",["12","28","50"],"Le Royaume-Uni est sorti de l’UE en 2020, on est passé de 28 à 27."],
+ ["Quelle ligne imaginaire sépare les hémisphères Nord et Sud ?","l’équateur",["le méridien de Greenwich","le tropique du Cancer","le cercle polaire"],"Le méridien de Greenwich sépare l’Est et l’Ouest."],
+ ["Quel est le plus grand désert chaud du monde ?","le Sahara",["le désert de Gobi","le Kalahari","l’Atacama"],"Il couvre une grande partie du nord de l’Afrique."],
+ ["Quelle est la capitale de l’Australie ?","Canberra",["Sydney","Melbourne","Perth"],"Canberra a été construite exprès pour départager Sydney et Melbourne !"],
+ ["Quelle est la capitale du Brésil ?","Brasília",["Rio de Janeiro","São Paulo","Buenos Aires"],"Brasília est capitale depuis 1960. Buenos Aires est en Argentine."]
+],
+homophones:[
+ ["Il ___ un vélo rouge.","a",["à"],"On peut dire « il avait » : c’est le verbe avoir, sans accent."],
+ ["Je vais ___ la piscine.","à",["a"],"On ne peut pas dire « je vais avait la piscine » : c’est la préposition à."],
+ ["Le chat ___ le chien jouent ensemble.","et",["est"],"On peut dire « et puis » : c’est le mot de liaison et."],
+ ["Mon frère ___ très grand.","est",["et"],"On peut dire « était » : c’est le verbe être."],
+ ["Ils ___ partis tôt ce matin.","sont",["son"],"On peut dire « ils étaient partis » : verbe être."],
+ ["Elle range ___ cartable.","son",["sont"],"On peut dire « mon cartable » : déterminant possessif."],
+ ["Regarde ___ nuages, là-bas !","ces",["ses"],"On montre les nuages (« ceux-là ») : déterminant démonstratif ces."],
+ ["Léa a perdu ___ clés : ce sont les siennes.","ses",["ces"],"Ce sont les clés de Léa (« les siennes ») : déterminant possessif ses."],
+ ["Tu préfères le chocolat ___ la vanille ?","ou",["où"],"On peut dire « ou bien » : c’est un choix, sans accent."],
+ ["___ habites-tu ?","Où",["Ou"],"Où indique un lieu : il prend un accent."],
+ ["Ils ___ très faim.","ont",["on"],"On peut dire « ils avaient faim » : verbe avoir."],
+ ["___ part en vacances demain.","On",["Ont"],"On peut remplacer par « il » : pronom on."],
+ ["Il ___ lave les mains.","se",["ce"],"« Se laver » : se est un pronom devant un verbe."],
+ ["Je ne sais pas ___ qu’il veut.","ce",["se"],"On peut dire « cela » : ce est un pronom démonstratif."],
+ ["Le gâteau ? Paul ___ mangé.","l’a",["la","là"],"On peut dire « Paul l’avait mangé » : le + verbe avoir."],
+ ["Pose ton sac ___.","là",["la","l’a"],"Là indique un lieu (ici, là-bas) : accent grave."],
+ ["Je pense ___ viendra demain.","qu’elle",["quelle"],"On peut dire « qu’il viendra » : que + elle."],
+ ["___ heure est-il ?","Quelle",["Qu’elle"],"Quelle est un déterminant qui interroge sur l’heure."]
+],
+gram:[
+ ["Dans « Le petit chien aboie », quel mot est un nom ?","chien",["petit","aboie","le"],"« petit » est un adjectif, « aboie » un verbe, « le » un déterminant."],
+ ["Quelle est la nature du mot « rapidement » ?","un adverbe",["un adjectif","un verbe","un nom"],"Beaucoup d’adverbes se terminent par -ment ; ils sont invariables."],
+ ["Dans « Les enfants mangent une pomme », quel est le COD ?","une pomme",["les enfants","mangent","les enfants mangent"],"Ils mangent quoi ? Une pomme → COD."],
+ ["Dans « Ma sœur parle à sa voisine », « à sa voisine » est…","un COI",["un COD","le sujet","un complément de lieu"],"Elle parle à qui ? → Complément d’objet indirect (introduit par « à »)."],
+ ["Dans « Demain, nous irons à la plage », « Demain » est un complément circonstanciel de…","temps",["lieu","manière","cause"],"Quand ? Demain → temps. « à la plage » est un complément de lieu."],
+ ["Quel est le sujet dans « Dans la forêt vivent des loups » ?","des loups",["la forêt","vivent","dans la forêt"],"Qui est-ce qui vit ? Des loups. Le sujet est placé après le verbe (sujet inversé)."],
+ ["Lequel de ces mots est un déterminant ?","ces",["rouge","courir","vite"],"Un déterminant se place devant un nom : ces livres."],
+ ["Quelle phrase est à la forme négative ?","Je ne viens pas.",["Viens-tu ?","Viens !","Je viens."],"La forme négative utilise ne … pas, ne … jamais, ne … plus."],
+ ["Combien de verbes conjugués dans « Il rentre, pose son sac et goûte. » ?","3",["1","2","4"],"rentre, pose, goûte : 3 verbes, donc 3 propositions."],
+ ["Dans « Mon père est ingénieur », quelle est la fonction de « ingénieur » ?","attribut du sujet",["COD","complément de lieu","sujet"],"Après le verbe être, le mot qui dit quelque chose du sujet est attribut du sujet."],
+ ["Dans « Le chat que j’ai adopté dort », « que j’ai adopté » est…","une proposition subordonnée relative",["un COD","une phrase négative","un adjectif"],"Elle commence par le pronom relatif « que » et complète le nom « chat »."],
+ ["Quel est le type de la phrase « Range ta chambre ! » ?","injonctive",["interrogative","déclarative","négative"],"Elle donne un ordre : phrase injonctive (verbe à l’impératif)."]
+],
+vocfr:[
+ ["Quel est un synonyme de « content » ?","joyeux",["triste","fatigué","fâché"],"Synonyme = même sens."],
+ ["Quel est le contraire de « généreux » ?","avare",["gentil","riche","grand"],"Un avare n’aime pas donner."],
+ ["Quel mot est de la même famille que « terre » ?","terrain",["tête","tirer","tard"],"terre, terrain, terrestre, enterrer : même radical « terr »."],
+ ["Que signifie le préfixe « re- » dans « refaire » ?","à nouveau",["le contraire","avant","sans"],"refaire = faire à nouveau."],
+ ["Que veut dire « un aliment comestible » ?","qui peut se manger",["qui est sucré","qui est cher","qui vient de loin"],"Un champignon non comestible est dangereux !"],
+ ["« Il pleut des cordes » veut dire…","il pleut très fort",["il y a des cordes dans le ciel","il pleut un peu","il va pleuvoir"],"C’est une expression imagée."],
+ ["Quel est le contraire de « ancien » ?","moderne",["vieux","antique","usé"],"vieux, antique, usé sont des synonymes d’ancien."],
+ ["Dans « invisible », le préfixe « in- » signifie…","le contraire",["à nouveau","dedans","beaucoup"],"invisible = qui ne peut pas être vu."],
+ ["Quel mot se prononce comme « verre » mais s’écrit autrement ?","vert",["vrai","rêve","varié"],"verre, vert, vers, ver : ce sont des homophones."],
+ ["En grec, « biblio » veut dire « livre ». Qu’est-ce qu’une bibliothèque ?","un lieu où l’on range des livres",["un magasin de bijoux","une école","un musée de peinture"],"thèque = « boîte, coffre » : bibliothèque, ludothèque (jeux), discothèque (disques)."],
+ ["Que signifie « s’emporter » ?","se mettre en colère",["partir en voyage","porter un objet","s’endormir"],"Un mot peut avoir plusieurs sens : ici, c’est le sens figuré."],
+ ["Quel mot est un synonyme de « immense » ?","gigantesque",["minuscule","joli","rapide"],"immense, énorme, gigantesque, colossal…"]
+],
+engram:[
+ ["I ___ ten years old.","am",["is","are","have"],"Avec I, le verbe to be fait « am ». En anglais, on « est » son âge."],
+ ["She ___ a cat.","has got",["have got","is","are"],"À la 3e personne (he, she, it) : has got."],
+ ["They ___ from France.","are",["is","am","has"],"we, you, they → are."],
+ ["He ___ football every Saturday.","plays",["play","playing","is play"],"Présent simple, 3e personne : on ajoute -s."],
+ ["Look! The children ___ in the garden.","are playing",["play","plays","is playing"],"« Look! » : l’action se passe maintenant → présent en be + -ing."],
+ ["Quel est le pluriel de « child » ?","children",["childs","childes","child"],"Pluriel irrégulier, comme man → men, woman → women."],
+ ["Quel est le pluriel de « mouse » ?","mice",["mouses","mices","mouse"],"Pluriel irrégulier, comme foot → feet, tooth → teeth."],
+ ["My brother is ___ than me.","taller",["more tall","tallest","tall"],"Adjectif court : on ajoute -er + than."],
+ ["___ is your name?","What",["Who","Where","When"],"What = quel / quoi."],
+ ["___ do you live? — In Paris.","Where",["What","Who","How"],"Where = où."],
+ ["I don’t ___ broccoli.","like",["likes","liking","liked"],"Après don’t / doesn’t, le verbe reste à la base verbale."],
+ ["___ she speak English? — Yes, she does.","Does",["Do","Is","Has"],"Question au présent simple avec she → Does."],
+ ["There ___ two apples on the table.","are",["is","am","be"],"There are + pluriel, There is + singulier."],
+ ["This is ___ elephant.","an",["a","some"],"Devant un son voyelle, on met « an »."],
+ ["Yesterday, I ___ to the cinema.","went",["go","goes","going"],"Yesterday → passé : go devient went (verbe irrégulier)."],
+ ["She is the ___ girl in the class.","tallest",["taller","most tall","tall"],"Superlatif d’un adjectif court : the + -est."]
+],
+reading:[
+ ["How old is Tom?","eleven",["ten","twelve","seven"],"« Tom is eleven. »",{passage:TOM}],
+ ["Who is Amy?","his little sister",["his mum","his friend","his grandma"],"« his little sister, Amy »",{passage:TOM}],
+ ["How does Tom go to school?","by bus",["on foot","by car","by bike"],"« he takes the bus to school »",{passage:TOM}],
+ ["What is his favourite subject?","science",["history","maths","English"],"« His favourite subject is science, but he doesn’t like history. »",{passage:TOM}],
+ ["What does Tom do after school?","he plays basketball",["he plays football","he does his homework","he visits Grandma"],"« After school, he plays basketball with his friends. »",{passage:TOM}],
+ ["Where does Grandma live?","in Brighton",["in London","in Paris","near the mountains"],"« the family visits Grandma in Brighton, near the sea »",{passage:TOM}],
+ ["When does the family visit Grandma?","on Sundays",["every morning","after school","on Saturdays"],"« On Sundays, the family visits Grandma »",{passage:TOM}]
+]
+};
+
+/* ================= thèmes ================= */
+const THEMES=[
+ {id:"m_calc",sub:"maths",lvl:"CM2",title:"Calcul mental",desc:"Tables, additions, soustractions, × 10, × 100",gen:G.calc},
+ {id:"m_dec",sub:"maths",lvl:"CM2",title:"Nombres décimaux",desc:"Comparer, additionner, multiplier, arrondir",gen:G.decim},
+ {id:"m_frac",sub:"maths",lvl:"CM2",title:"Fractions",desc:"Simplifier, comparer, prendre une fraction d’un nombre",gen:G.fract},
+ {id:"m_pb",sub:"maths",lvl:"CM2",title:"Problèmes",desc:"Situations de la vie : prix, durées, partages",bank:B.problemes},
+ {id:"m_pct",sub:"maths",lvl:"6e",title:"Proportionnalité & pourcentages",desc:"Tableaux, soldes, vitesses, échelles",gen:G.percent},
+ {id:"m_suite",sub:"maths",lvl:"6e",title:"Suites logiques",desc:"Trouver la règle cachée",gen:G.suite},
+ {id:"m_prio",sub:"maths",lvl:"5e",title:"Priorités opératoires",desc:"Parenthèses, × avant +",gen:G.prior},
+ {id:"m_rel",sub:"maths",lvl:"5e",title:"Nombres relatifs",desc:"Les nombres négatifs",gen:G.rel},
+ {id:"m_eq",sub:"maths",lvl:"4e",title:"Équations",desc:"Trouver x",gen:G.equa},
+ {id:"m_pow",sub:"maths",lvl:"4e",title:"Puissances",desc:"2ⁿ, 10ⁿ, carrés",gen:G.pow},
+ {id:"g_formes",sub:"geom",lvl:"CM2",title:"Reconnaître les formes",desc:"Figures dessinées, codage, angles, droites",gen:G.formes},
+ {id:"g_color",sub:"geom",lvl:"CM2",title:"Colorie les bonnes formes",desc:"Touche et colorie les figures demandées",gen:G.colorie,n:8},
+ {id:"g_trace",sub:"geom",lvl:"CM2",title:"Trace la figure",desc:"Dessine au doigt sur le quadrillage",gen:G.trace,n:6},
+ {id:"g_sym",sub:"geom",lvl:"CM2",title:"Symétrie",desc:"Complète le dessin, trouve les axes",gen:G.sym,n:8},
+ {id:"g_quad",sub:"geom",lvl:"CM2",title:"Aires & périmètres sur quadrillage",desc:"Compte les carreaux et les côtés",gen:G.quad},
+ {id:"g_sol",sub:"geom",lvl:"CM2",title:"Les solides en 3D",desc:"Cube, pavé, pyramide, patrons",gen:G.solides},
+ {id:"g_voc",sub:"geom",lvl:"CM2",title:"Vocabulaire de géométrie",desc:"Les mots à connaître",bank:B.geovoc},
+ {id:"g_aire",sub:"geom",lvl:"CM2",title:"Périmètres, aires & mesures",desc:"Rectangle, carré, triangle, conversions",gen:G.aires},
+ {id:"g_trace2",sub:"geom",lvl:"6e",title:"Tracés du collège",desc:"Parallélogramme, trapèze, carré penché…",gen:G.trace2,n:6},
+ {id:"g_ang",sub:"geom",lvl:"6e",title:"Angles",desc:"Aigu, obtus, somme des angles d’un triangle",gen:G.angles},
+ {id:"g_cer",sub:"geom",lvl:"6e",title:"Le cercle",desc:"Rayon, diamètre, périmètre avec π",gen:G.cercle},
+ {id:"g_vol",sub:"geom",lvl:"6e",title:"Volumes",desc:"Pavé, cube, litres",gen:G.volumes},
+ {id:"g_pyt",sub:"geom",lvl:"4e",title:"Théorème de Pythagore",desc:"Le triangle rectangle",gen:G.pyth},
+ {id:"p_algo",sub:"prog",lvl:"CM2",title:"Algorithmes & Scratch",desc:"Boucles, conditions, variables",bank:B.algo},
+ {id:"p_py",sub:"prog",lvl:"5e",title:"Lire du Python",desc:"Prédire ce qu’affiche un programme",bank:B.python},
+ {id:"p_bin",sub:"prog",lvl:"5e",title:"Binaire & logique",desc:"Comme un ordinateur : 0 et 1, ET / OU",gen:G.bin,bank:B.logique},
+ {id:"h_pre",sub:"hg",lvl:"CM2",title:"Préhistoire & Antiquité",desc:"Lascaux, Égypte, Grèce, Rome, Gaulois",bank:B.prehist},
+ {id:"h_ma",sub:"hg",lvl:"CM2",title:"Le Moyen Âge",desc:"Clovis, Charlemagne, châteaux, Jeanne d’Arc",bank:B.moyenage},
+ {id:"h_mod",sub:"hg",lvl:"CM2",title:"Temps modernes & Révolution",desc:"1492, Louis XIV, 1789, Napoléon",bank:B.modernes},
+ {id:"h_xx",sub:"hg",lvl:"CM2",title:"XIXe et XXe siècles",desc:"École de Jules Ferry, guerres mondiales, Ve République",bank:B.xx},
+ {id:"h_fr",sub:"hg",lvl:"CM2",title:"Géographie de la France",desc:"Fleuves, montagnes, régions",bank:B.gfrance},
+ {id:"h_mo",sub:"hg",lvl:"6e",title:"Le monde & l’Europe",desc:"Océans, capitales, records",bank:B.gmonde},
+ {id:"f_conj",sub:"fr",lvl:"CM2",title:"Conjugaison",desc:"Présent, imparfait, futur, passé composé",gen:G.conj},
+ {id:"f_homo",sub:"fr",lvl:"CM2",title:"Homophones",desc:"a/à, et/est, son/sont, ces/ses, ou/où…",bank:B.homophones},
+ {id:"f_gram",sub:"fr",lvl:"CM2",title:"Grammaire",desc:"Nature et fonction des mots",bank:B.gram},
+ {id:"f_voc",sub:"fr",lvl:"CM2",title:"Vocabulaire",desc:"Synonymes, contraires, familles de mots",bank:B.vocfr},
+ {id:"f_ps",sub:"fr",lvl:"6e",title:"Passé simple",desc:"Le temps des récits",gen:G.conjPs},
+ {id:"e_voc",sub:"en",lvl:"CM2",title:"Vocabulary",desc:"Animaux, couleurs, famille, école, corps…",gen:G.vocab},
+ {id:"e_lis",sub:"en",lvl:"CM2",title:"Listening",desc:"Écoute et comprends",gen:G.listen},
+ {id:"e_num",sub:"en",lvl:"CM2",title:"Numbers & time",desc:"Les nombres et l’heure",gen:G.numbers},
+ {id:"e_gram",sub:"en",lvl:"6e",title:"Grammar",desc:"to be, have got, présent, comparatifs",bank:B.engram},
+ {id:"e_read",sub:"en",lvl:"6e",title:"Reading",desc:"Lire un texte et répondre",bank:B.reading},
+ {id:"e_irr",sub:"en",lvl:"5e",title:"Irregular verbs",desc:"go-went-gone…",gen:G.irr}
+];
+const THEME=Object.fromEntries(THEMES.map(t=>[t.id,t]));
+function buildQuestions(t,n=t.n||10){
+  const out=[],seen=new Set();const add=q=>{const k=qkey(q);if(!seen.has(k)){seen.add(k);out.push(q)}};
+  const bank=t.bank?shuffle(t.bank):[];
+  if(t.gen&&t.bank){bank.slice(0,Math.ceil(n/2)).forEach(e=>add(fromBank(e)));let g=0;while(out.length<n&&g++<200)add(t.gen())}
+  else if(t.gen){let g=0;while(out.length<n&&g++<200)add(t.gen())}
+  else bank.slice(0,n).forEach(e=>add(fromBank(e)));
+  return shuffle(out);
+}
+
+/* ================= état & stockage ================= */
+const LS="mon-academie-v1";
+function defaults(){return {v:1,name:"",classe:"CM2",pin:"",goal:2,sound:true,xp:0,themes:{},days:{},history:[],deck:[],updatedAt:0,
+  planning:[
+   {id:"a1",d:0,t:"17:30",sub:"maths",min:20},{id:"a2",d:0,t:"17:55",sub:"en",min:15},
+   {id:"a3",d:1,t:"17:30",sub:"fr",min:20},{id:"a4",d:1,t:"17:55",sub:"prog",min:15},
+   {id:"a5",d:2,t:"10:00",sub:"geom",min:20},{id:"a6",d:2,t:"10:30",sub:"hg",min:20},
+   {id:"a7",d:3,t:"17:30",sub:"en",min:20},{id:"a8",d:3,t:"17:55",sub:"maths",min:15},
+   {id:"a9",d:4,t:"17:30",sub:"rev",min:15},
+   {id:"a10",d:5,t:"10:30",sub:"defi",min:20}
+  ]}}
+let state=defaults();
+try{const s=JSON.parse(localStorage.getItem(LS)||"null");if(s&&s.v)state=Object.assign(defaults(),s)}catch(e){}
+let db=null,docRef=null,syncMode="local",writeChain=Promise.resolve(),writeTimer=null,sample=null;
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
+function save(){state.updatedAt=Date.now();saveLocal();if(docRef){clearTimeout(writeTimer);writeTimer=setTimeout(pushRemote,700)}}
+function pushRemote(){if(!docRef)return;const body=JSON.parse(JSON.stringify(state));
+  writeChain=writeChain.then(()=>docRef.set(body)).then(()=>{if(syncMode!=="cloud"){syncMode="cloud";if(!quiz)render()}}).catch(e=>{if(e&&e.code==="invalid_argument"){docRef=null;syncMode="local";if(!quiz)render()}})}
+async function initCloud(){
+  if(!window.claude||!window.claude.use)return;
+  claude.use("sample").then(s=>{sample=s;if(!quiz)render()}).catch(()=>{});
+  try{db=await claude.use("db")}catch(e){db=null}
+  if(!db)return;
+  try{docRef=db.doc("app/state");const snap=await docRef.get();
+    if(snap.exists){const r=JSON.parse(JSON.stringify(snap.data()));if((r.updatedAt||0)>=(state.updatedAt||0)){state=Object.assign(defaults(),r);saveLocal()}else pushRemote()}
+    else if(state.updatedAt)pushRemote();
+    syncMode="cloud";if(!quiz)render();
+    docRef.onSnapshot(s=>{if(!s.exists||s.metadata.hasPendingWrites)return;const r=s.data();if((r.updatedAt||0)>(state.updatedAt||0)){state=Object.assign(defaults(),JSON.parse(JSON.stringify(r)));saveLocal();if(!quiz)render()}},()=>{});
+  }catch(e){docRef=null;syncMode="local";if(!quiz)render()}
+}
+
+/* ================= calculs de suivi ================= */
+const todayKey=()=>dkey(new Date());
+const avg=a=>a&&a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const themeAvg=id=>{const t=state.themes[id];return t?avg(t.scores):null};
+function levelInfo(xp){let L=1,acc=0,need=200;while(xp>=acc+need){acc+=need;L++;need=200+100*(L-1)}return {L,into:xp-acc,need,title:TITLES[Math.min(L-1,TITLES.length-1)]}}
+function streak(){let n=0;const d=new Date();if(!state.days[dkey(d)]?.quiz)d.setDate(d.getDate()-1);while(state.days[dkey(d)]?.quiz){n++;d.setDate(d.getDate()-1)}return n}
+function subMastery(sub){const ts=THEMES.filter(t=>t.sub===sub);const played=ts.map(t=>themeAvg(t.id)).filter(x=>x!==null);return {pct:played.length?Math.round(avg(played)):null,played:played.length,total:ts.length}}
+function medal(id){const b=state.themes[id]?.best||0;return b>=100?["or","Or"]:b>=80?["argent","Argent"]:b>=60?["bronze","Bronze"]:null}
+const lvlIdx=l=>LEVELS.indexOf(l);
+function recommend(sub){const ci=lvlIdx(state.classe);const ts=THEMES.filter(t=>t.sub===sub);
+  const near=ts.filter(t=>lvlIdx(t.lvl)<=ci+1);
+  const unplayed=near.filter(t=>!state.themes[t.id]).sort((a,b)=>lvlIdx(a.lvl)-lvlIdx(b.lvl));if(unplayed.length)return unplayed[0];
+  const weak=near.slice().sort((a,b)=>(themeAvg(a.id)??0)-(themeAvg(b.id)??0));if(weak.length&&(themeAvg(weak[0].id)??0)<90)return weak[0];
+  const up=ts.filter(t=>!state.themes[t.id]);if(up.length)return up[0];
+  return ts.slice().sort((a,b)=>(themeAvg(a.id)??0)-(themeAvg(b.id)??0))[0]}
+function todaySlots(){const di=(new Date().getDay()+6)%7;const tk=todayKey();
+  const cnt={};state.history.filter(h=>dkey(new Date(h.d))===tk).forEach(h=>{const k=h.ai?"defi":h.sub;cnt[k]=(cnt[k]||0)+1});
+  return state.planning.filter(s=>s.d===di).sort((a,b)=>a.t.localeCompare(b.t)).map(s=>{const done=(cnt[s.sub]||0)>0;if(done)cnt[s.sub]--;return {...s,done}})}
+const slotMinutes=s=>{const [h,m]=s.t.split(":").map(Number);return h*60+m};
+
+/* ================= rappels ================= */
+const dismissed=new Set(),chimed=new Set();let audioCtx=null;
+function beep(notes){if(!state.sound)return;try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();const t0=audioCtx.currentTime;
+  notes.forEach(([f,dt,dur])=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t0+dt);g.gain.exponentialRampToValueAtTime(.18,t0+dt+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+dt+dur);o.connect(g).connect(audioCtx.destination);o.start(t0+dt);o.stop(t0+dt+dur+.05)})}catch(e){}}
+function activeSlot(){const now=new Date(),m=now.getHours()*60+now.getMinutes();return todaySlots().find(s=>!s.done&&!dismissed.has(s.id)&&m>=slotMinutes(s)-5&&m<=slotMinutes(s)+30)}
+function nextSlot(){const now=new Date(),m=now.getHours()*60+now.getMinutes();return todaySlots().find(s=>!s.done&&slotMinutes(s)>m)}
+setInterval(()=>{const s=activeSlot();if(s&&!chimed.has(s.id)){chimed.add(s.id);beep([[660,0,.25],[880,.25,.35]]);if(!quiz)render()}},30000);
+
+/* ================= navigation ================= */
+const ICONS={
+ home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+ subjects:'<rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/>',
+ progress:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+ planning:'<rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>',
+ parents:'<rect x="4.5" y="10.5" width="15" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>'
+};
+const NAV=[["home","Accueil"],["subjects","Matières"],["progress","Progrès"],["planning","Planning"],["parents","Parents"]];
+let view="home",curSub=null,lvlFilter="Tout",parentOK=false,pinBuf="",quiz=null,aiBusy=null;
+function go(v,sub){view=v;if(sub)curSub=sub;window.scrollTo(0,0);render()}
+function renderNav(){const base=view.startsWith("subject")?"subjects":view;
+  document.getElementById("nav").innerHTML=`<div class="brand" aria-hidden="true">Y.</div>`+NAV.map(([k,l])=>`<button class="nav-btn" data-go="${k}" ${base===k?'aria-current="page"':""}><svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>${l}</button>`).join("")}
+const glyph=k=>{const s=SUBINFO(k);return `<span class="glyph" style="--sc:${s.c}" aria-hidden="true">${s.glyph}</span>`};
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2600)}
+const syncPill=()=>`<span class="pill ${syncMode==="cloud"?"ok":""}"><span class="dot"></span>${syncMode==="cloud"?"Progrès sauvegardés en ligne":"Progrès gardés sur cette tablette"}</span>`;
+function reminderHTML(){const s=activeSlot();if(!s)return "";const si=SUBINFO(s.sub);
+  return `<div class="banner" role="status">${glyph(s.sub)}<div class="grow"><b>C’est l’heure : ${si.label}</b><p>Séance de ${s.min} min prévue à ${s.t.replace(":"," h ")}.</p></div><button class="btn small" data-slot="${s.id}">Commencer</button><button class="x" data-dismiss="${s.id}" aria-label="Plus tard">Plus tard</button></div>`}
+
+function vSetup(){return `<header class="top"><div><p class="eyebrow">Bienvenue</p><h1>Mon <span class="mark">Académie</span></h1></div></header>
+  <section class="card" style="padding:22px;display:flex;flex-direction:column;gap:16px;max-width:560px">
+   <p>Avant de commencer, un parent règle l’appli. Tout reste enregistré sur cette tablette.</p>
+   <div class="field"><label for="w-name">Prénom de l’enfant</label><input class="input" id="w-name" autocomplete="off"></div>
+   <div class="field"><label for="w-cl">Classe</label><select class="input" id="w-cl">${LEVELS.map(l=>`<option>${l}</option>`).join("")}</select></div>
+   <div class="field"><label for="w-pin">Code parent (4 chiffres)</label><input class="input" id="w-pin" inputmode="numeric" maxlength="4" autocomplete="off"></div>
+   <div><button class="btn" data-setup="1">C’est parti</button></div></section>`}
+let installEvt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;if(!quiz)render()});
+window.addEventListener("appinstalled",()=>{installEvt=null;if(!quiz)render()});
+function render(){renderNav();const m=document.getElementById("main");
+  if(!state.name||!state.pin){document.getElementById("nav").hidden=true;m.innerHTML=`<div class="wrap">${vSetup()}</div>`;return}
+  document.getElementById("nav").hidden=false;
+  m.innerHTML=`<div class="wrap">${view==="home"?vHome():view==="subjects"?vSubjects():view==="subject"?vSubject():view==="progress"?vProgress():view==="planning"?vPlanning():vParents()}</div>`}
+
+/* ---------- Accueil ---------- */
+function vHome(){const lv=levelInfo(state.xp),st=streak(),td=state.days[todayKey()]||{quiz:0,xp:0},slots=todaySlots(),nx=nextSlot();
+  const d=new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+  const goalPct=Math.min(100,Math.round(td.quiz/state.goal*100));
+  const sugg=Object.keys(SUBJECTS).map(k=>({k,m:subMastery(k)})).sort((a,b)=>(a.m.pct??-1)-(b.m.pct??-1)).slice(0,2).map(x=>recommend(x.k));
+  return `<header class="top"><div><p class="eyebrow">${d}</p><h1>Salut <span class="mark">${esc(state.name)}</span> !</h1></div>${installEvt?`<button class="btn fluo small" data-install="1">Installer l’appli</button>`:syncPill()}</header>
+  ${reminderHTML()}
+  <section class="stats">
+    <div class="card stat"><span class="eyebrow">Niveau ${lv.L} · ${lv.title}</span><span class="big num">${state.xp} <small style="font-size:16px" class="muted">XP</small></span><div class="bar" aria-label="Progression du niveau"><i style="width:${Math.round(lv.into/lv.need*100)}%"></i></div><span class="muted num" style="font-size:14px">Encore ${lv.need-lv.into} XP pour le niveau ${lv.L+1}</span></div>
+    <div class="card stat"><span class="eyebrow">Série</span><span class="big num">${st} jour${st>1?"s":""}</span><span class="muted" style="font-size:14px">${st?"Fais au moins un quiz chaque jour pour la garder.":"Fais un quiz aujourd’hui pour lancer ta série."}</span></div>
+    <div class="card stat"><span class="eyebrow">Objectif du jour</span><span class="big num">${td.quiz} / ${state.goal} <small style="font-size:16px" class="muted">quiz</small></span><div class="bar"><i style="width:${goalPct}%;background:${goalPct>=100?"var(--good)":"var(--accent)"}"></i></div><span class="muted" style="font-size:14px">${goalPct>=100?"Objectif atteint, bravo !":"+"+td.xp+" XP gagnés aujourd’hui"}</span></div>
+  </section>
+  <section class="section"><div class="section-head"><h2>Au programme aujourd’hui</h2>${nx?`<span class="muted">Prochaine séance à ${nx.t.replace(":"," h ")}</span>`:""}</div>
+    <div class="card slots">${slots.length?slots.map(s=>`<div class="slot ${s.done?"done":""}"><span class="time">${s.t.replace(":"," h ")}</span>${glyph(s.sub)}<div><div class="ttl"><b>${SUBINFO(s.sub).label}</b></div><span class="muted" style="font-size:14px">${s.min} min</span></div>${s.done?`<span class="tag good">Fait</span>`:`<button class="btn small" data-slot="${s.id}">Commencer</button>`}</div>`).join(""):`<p class="empty">Rien de prévu aujourd’hui. Profites-en pour un quiz libre ou un défi !</p>`}</div></section>
+  <section class="section"><h2>Pour progresser</h2><div class="grid">
+    <button class="tile" data-rev="1" style="--sc:var(--c-rev)"><div class="tile-head">${glyph("rev")}<div><h3>Révisions</h3><span class="muted">${state.deck.length?`${state.deck.length} question${state.deck.length>1?"s":""} à revoir`:"Aucune erreur à revoir pour l’instant"}</span></div></div></button>
+    ${sugg.map(t=>`<button class="tile" data-theme="${t.id}" style="--sc:${SUBJECTS[t.sub].c}"><div class="tile-head">${glyph(t.sub)}<div><h3>${t.title}</h3><span class="muted">${SUBJECTS[t.sub].label} · ${state.themes[t.id]?"à renforcer":"nouveau thème"}</span></div></div></button>`).join("")}
+  </div></section>`}
+
+/* ---------- Matières ---------- */
+function vSubjects(){return `<header class="top"><div><p class="eyebrow">Toutes les matières</p><h1>Choisis ta matière</h1></div>${syncPill()}</header>${reminderHTML()}
+  <div class="grid">${Object.entries(SUBJECTS).map(([k,s])=>{const m=subMastery(k);return `<button class="tile" data-sub="${k}" style="--sc:${s.c}"><div class="tile-head">${glyph(k)}<div><h3>${s.label}</h3><span class="muted">${m.played} / ${m.total} thèmes explorés</span></div></div><div class="bar"><i style="width:${m.pct??0}%;background:${s.c}"></i></div><span class="muted num" style="font-size:14px">${m.pct===null?"Pas encore commencé":"Maîtrise : "+m.pct+" %"}</span></button>`}).join("")}</div>`}
+function vSubject(){const s=SUBJECTS[curSub],ci=lvlIdx(state.classe);
+  const ts=THEMES.filter(t=>t.sub===curSub&&(lvlFilter==="Tout"||t.lvl===lvlFilter));
+  const aiDisabled=!sample;
+  return `<header class="top"><div><button class="link" data-go="subjects">← Matières</button><h1 style="display:flex;gap:14px;align-items:center">${glyph(curSub)} ${s.label}</h1></div></header>
+  <div class="chips" role="group" aria-label="Filtrer par niveau">${["Tout",...LEVELS].map(l=>`<button class="chip" data-lvl="${l}" aria-pressed="${lvlFilter===l}">${l==="Tout"?"Tous les niveaux":l}</button>`).join("")}</div>
+  <div class="card">${ts.length?ts.map(t=>{const a=themeAvg(t.id),md=medal(t.id),li=lvlIdx(t.lvl);return `<div class="theme-row"><div style="display:flex;flex-direction:column;gap:6px;min-width:0"><div class="meta"><h3>${t.title}</h3><span class="tag ${li>ci?"beyond":""}">${t.lvl}${li>ci?" · au-delà":""}</span>${md?`<span class="medal ${md[0]}">${md[1]}</span>`:""}</div><span class="muted">${t.desc}</span>${a!==null?`<div class="bar"><i style="width:${Math.round(a)}%;background:${s.c}"></i></div><span class="muted num" style="font-size:13px">Moyenne ${Math.round(a)} % · meilleur ${state.themes[t.id].best} % · ${state.themes[t.id].plays} quiz</span>`:""}</div><button class="btn small" data-theme="${t.id}" style="background:${s.c}">${a===null?"Commencer":"Rejouer"}</button></div>`}).join(""):`<p class="empty">Pas de thème à ce niveau pour cette matière.</p>`}</div>
+  ${!window.claude?"":`<section class="card ai-card" aria-labelledby="aih"><div class="tile-head">${glyph("defi")}<div><h3 id="aih">Défi Claude : des questions toutes neuves</h3><span class="muted">Claude invente un quiz sur le sujet de ton choix, à n’importe quel niveau.</span></div></div>
+   ${aiDisabled?`<p class="muted">Ce défi s’active quand l’appli est ouverte dans Claude.</p>`:`<div class="row"><div class="field"><label for="ai-topic">Sujet (facultatif)</label><input class="input" id="ai-topic" placeholder="${curSub==="hg"?"ex. les châteaux forts, les volcans":curSub==="en"?"ex. le sport, les métiers":curSub==="prog"?"ex. les boucles, Internet":"ex. les fractions, les angles"}"></div><div class="field" style="max-width:160px"><label for="ai-lvl">Niveau</label><select class="input" id="ai-lvl">${LEVELS.map(l=>`<option ${l===LEVELS[Math.min(ci+1,3)]?"selected":""}>${l}</option>`).join("")}</select></div><button class="btn fluo" data-ai="${curSub}" ${aiBusy?"disabled":""}>${aiBusy?"Claude prépare…":"Créer mon défi"}</button></div>${aiBusy?`<p class="muted" id="ai-status">Claude écrit tes questions. Ça peut prendre une minute.</p>`:""}`}
+  </section>`}`}
+
+/* ---------- Progrès ---------- */
+function vProgress(){const H=state.history;const totalQ=H.length,totalMin=Math.round(H.reduce((a,h)=>a+(h.sec||0),0)/60),succ=H.length?Math.round(H.reduce((a,h)=>a+h.c,0)/H.reduce((a,h)=>a+h.n,0)*100):null;
+  const days=[];for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push({d,v:state.days[dkey(d)]?.xp||0,today:i===0})}
+  const weak=THEMES.filter(t=>state.themes[t.id]&&themeAvg(t.id)<60);
+  return `<header class="top"><div><p class="eyebrow">Mon suivi</p><h1>Mes progrès</h1></div>${syncPill()}</header>
+  <section class="stats" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">
+   <div class="card stat"><span class="eyebrow">Quiz terminés</span><span class="big num">${totalQ}</span></div>
+   <div class="card stat"><span class="eyebrow">Temps de travail</span><span class="big num">${totalMin} <small style="font-size:16px" class="muted">min</small></span></div>
+   <div class="card stat"><span class="eyebrow">Bonnes réponses</span><span class="big num">${succ===null?"–":succ+" %"}</span></div>
+   <div class="card stat"><span class="eyebrow">Médailles</span><span class="big num">${THEMES.filter(t=>medal(t.id)).length}</span></div>
+  </section>
+  <section class="section"><h2>XP des 14 derniers jours</h2><div class="card" style="padding:14px">${chart(days)}</div></section>
+  <section class="section"><h2>Maîtrise par matière</h2><div class="card">${Object.entries(SUBJECTS).map(([k,s])=>{const m=subMastery(k);return `<div class="mastery">${glyph(k)}<div><b>${s.label}</b><div class="bar" style="margin-top:6px"><i style="width:${m.pct??0}%;background:${s.c}"></i></div></div><span class="num" style="text-align:right;font-weight:700">${m.pct===null?"–":m.pct+" %"}</span></div>`}).join("")}</div></section>
+  ${weak.length?`<section class="section"><h2>À retravailler</h2><div class="grid">${weak.map(t=>`<button class="tile" data-theme="${t.id}" style="--sc:${SUBJECTS[t.sub].c}"><div class="tile-head">${glyph(t.sub)}<div><h3>${t.title}</h3><span class="muted">Moyenne ${Math.round(themeAvg(t.id))} %</span></div></div></button>`).join("")}</div></section>`:""}
+  <section class="section"><h2>Derniers quiz</h2><div class="card tbl-wrap">${H.length?`<table><thead><tr><th>Date</th><th>Matière</th><th>Thème</th><th style="text-align:right">Score</th></tr></thead><tbody>${H.slice(-12).reverse().map(h=>`<tr><td>${new Date(h.d).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</td><td>${SUBINFO(h.sub).short}</td><td>${esc(h.title)}</td><td class="num">${h.c} / ${h.n}</td></tr>`).join("")}</tbody></table>`:`<p class="empty">Tes résultats apparaîtront ici après ton premier quiz.</p>`}</div></section>`}
+function chart(days){const W=700,Hh=190,pl=34,pb=26,pt=18,max=Math.max(100,Math.ceil(Math.max(...days.map(x=>x.v))/50)*50),bw=(W-pl-10)/days.length;
+  const y=v=>pt+(Hh-pt-pb)*(1-v/max);const L=["D","L","M","M","J","V","S"];
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="XP gagnés par jour sur 14 jours">`;
+  [0,max/2,max].forEach(v=>{s+=`<line class="g" x1="${pl}" x2="${W-6}" y1="${y(v)}" y2="${y(v)}"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`});
+  days.forEach((d,i)=>{const x=pl+i*bw+bw*.18,w=bw*.64;if(d.v>0){s+=`<rect class="b ${d.today?"today":""}" x="${x}" y="${y(d.v)}" width="${w}" height="${y(0)-y(d.v)}" rx="4"/><text class="v" x="${x+w/2}" y="${y(d.v)-5}" text-anchor="middle">${d.v}</text>`}
+    s+=`<text x="${x+w/2}" y="${Hh-8}" text-anchor="middle">${L[d.d.getDay()]}${d.d.getDate()}</text>`});
+  return s+"</svg>"}
+
+/* ---------- Planning ---------- */
+function vPlanning(){const di=(new Date().getDay()+6)%7;const td=todaySlots();
+  return `<header class="top"><div><p class="eyebrow">Ma semaine</p><h1>Planning</h1></div>${parentOK?`<span class="pill ok"><span class="dot"></span>Mode parent : modification possible</span>`:`<button class="btn ghost small" data-go="parents">Modifier (parents)</button>`}</header>${reminderHTML()}
+  <div class="week">${DAYS.map((name,d)=>{const sl=state.planning.filter(s=>s.d===d).sort((a,b)=>a.t.localeCompare(b.t));return `<div class="card day ${d===di?"today":""}"><h3>${name}${d===di?' <span class="tag">aujourd’hui</span>':""}</h3>${sl.length?sl.map(s=>{const done=d===di&&td.find(x=>x.id===s.id)?.done;return `<div class="pslot" style="--sc:${SUBINFO(s.sub).c}"><span class="muted num">${s.t.replace(":"," h ")} · ${s.min} min</span><b>${SUBINFO(s.sub).short}${done?" ✓":""}</b>${parentOK?`<button class="del" data-del="${s.id}">Retirer</button>`:""}</div>`}).join(""):`<span class="muted" style="font-size:14px">Repos</span>`}</div>`}).join("")}</div>
+  ${parentOK?`<section class="card" style="padding:18px;display:flex;flex-direction:column;gap:14px"><h2>Ajouter une séance</h2><div class="row">
+   <div class="field"><label for="p-d">Jour</label><select class="input" id="p-d">${DAYS.map((n,i)=>`<option value="${i}">${n}</option>`).join("")}</select></div>
+   <div class="field"><label for="p-t">Heure</label><input class="input" id="p-t" type="time" value="17:30"></div>
+   <div class="field"><label for="p-s">Matière</label><select class="input" id="p-s">${Object.entries({...SUBJECTS,...EXTRA}).map(([k,s])=>`<option value="${k}">${s.label}</option>`).join("")}</select></div>
+   <div class="field" style="max-width:130px"><label for="p-m">Durée (min)</label><input class="input" id="p-m" type="number" min="5" max="90" step="5" value="20"></div>
+   <button class="btn" data-addslot="1">Ajouter</button></div></section>`:""}
+  <p class="muted" style="font-size:15px">Quand l’appli est ouverte à l’heure d’une séance, un rappel s’affiche en haut de l’écran avec un petit signal sonore. Une séance est cochée dès qu’un quiz de la matière est terminé ce jour-là.</p>`}
+
+/* ---------- Parents ---------- */
+function vParents(){if(!parentOK)return `<header class="top"><div><p class="eyebrow">Espace parents</p><h1>Code parent</h1></div></header>
+  <div class="card" style="padding:26px;display:flex;flex-direction:column;gap:18px;align-items:center;max-width:420px;margin:0 auto;width:100%">
+   <p class="muted" style="text-align:center">Entre le code à 4 chiffres pour voir le bilan et modifier le planning.</p>
+   <div class="pin-dots">${[0,1,2,3].map(i=>`<i class="${i<pinBuf.length?"on":""}"></i>`).join("")}</div>
+   <div class="pin">${[1,2,3,4,5,6,7,8,9,"C",0,"←"].map(k=>`<button data-pin="${k}" aria-label="${k==="C"?"Effacer":k==="←"?"Retour":k}">${k}</button>`).join("")}</div></div>`;
+  const since=Date.now()-7*864e5,W=state.history.filter(h=>h.d>=since);
+  const rows=Object.entries({...SUBJECTS,rev:EXTRA.rev}).map(([k,s])=>{const h=W.filter(x=>x.sub===k);const n=h.reduce((a,x)=>a+x.n,0),c=h.reduce((a,x)=>a+x.c,0);return {k,s,q:h.length,min:Math.round(h.reduce((a,x)=>a+(x.sec||0),0)/60),pct:n?Math.round(c/n*100):null}});
+  const weak=THEMES.filter(t=>state.themes[t.id]&&themeAvg(t.id)<60).map(t=>t.title);
+  const beyond=THEMES.filter(t=>lvlIdx(t.lvl)>lvlIdx(state.classe)&&state.themes[t.id]).length;
+  return `<header class="top"><div><p class="eyebrow">Espace parents</p><h1>Bilan de ${esc(state.name)}</h1></div><button class="btn ghost small" data-lock="1">Verrouiller</button></header>
+  <section class="section"><h2>Les 7 derniers jours</h2><div class="card tbl-wrap"><table><thead><tr><th>Matière</th><th style="text-align:right">Quiz</th><th style="text-align:right">Minutes</th><th style="text-align:right">Réussite</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.s.label}</td><td class="num">${r.q}</td><td class="num">${r.min}</td><td class="num" style="color:${r.pct===null?"var(--muted)":r.pct>=80?"var(--good)":r.pct<60?"var(--bad)":"var(--warn)"}">${r.pct===null?"–":r.pct+" %"}</td></tr>`).join("")}</tbody></table></div>
+  <p class="muted">${weak.length?"Points faibles : "+weak.join(", ")+".":"Aucun point faible repéré pour l’instant."} ${beyond} thème${beyond>1?"s":""} au-delà du ${state.classe} déjà exploré${beyond>1?"s":""}.</p></section>
+  <section class="card" style="padding:18px;display:flex;flex-direction:column;gap:14px"><h2>Réglages</h2><div class="row">
+   <div class="field"><label for="s-name">Prénom</label><input class="input" id="s-name" value="${esc(state.name)}"></div>
+   <div class="field"><label for="s-cl">Classe actuelle</label><select class="input" id="s-cl">${LEVELS.map(l=>`<option ${l===state.classe?"selected":""}>${l}</option>`).join("")}</select></div>
+   <div class="field"><label for="s-goal">Objectif quotidien (quiz)</label><select class="input" id="s-goal">${[1,2,3,4,5].map(n=>`<option ${n===state.goal?"selected":""}>${n}</option>`).join("")}</select></div>
+   <div class="field"><label for="s-pin">Nouveau code parent</label><input class="input" id="s-pin" inputmode="numeric" maxlength="4" placeholder="4 chiffres"></div>
+   <div class="field" style="max-width:150px"><label for="s-snd">Sons</label><select class="input" id="s-snd"><option value="1" ${state.sound?"selected":""}>Activés</option><option value="0" ${!state.sound?"selected":""}>Coupés</option></select></div>
+  </div><div><button class="btn" data-savesettings="1">Enregistrer</button></div></section>
+  <section class="card" style="padding:18px;display:flex;flex-direction:column;gap:12px"><h2>Sauvegarde</h2><p class="muted">Les progrès sont gardés sur cette tablette. Fais une sauvegarde de temps en temps, ou avant de changer de tablette.</p><div class="tools"><button class="btn ghost small" data-export="1">Télécharger une sauvegarde</button><label class="btn ghost small" for="imp-file" style="cursor:pointer">Restaurer une sauvegarde</label><input type="file" id="imp-file" accept="application/json,.json" hidden></div></section>
+  <section class="card" style="padding:18px;display:flex;flex-direction:column;gap:12px"><h2>Données</h2><p class="muted">Efface les XP, les scores, l’historique et les révisions. Le planning et les réglages sont gardés.</p><div><button class="btn danger small" data-reset="1" id="reset-btn">Effacer la progression</button></div></section>`}
+
+/* ================= quiz ================= */
+function startTheme(id){const t=THEME[id];if(!t)return;openQuiz({title:t.title,sub:t.sub,th:id,qs:buildQuestions(t)})}
+function startRevision(){if(!state.deck.length){toast("Aucune question à revoir : voici un thème conseillé.");const k=Object.keys(SUBJECTS).sort((a,b)=>(subMastery(a).pct??-1)-(subMastery(b).pct??-1))[0];return startTheme(recommend(k).id)}
+  const items=shuffle(state.deck).slice(0,10);openQuiz({title:"Révisions",sub:"rev",th:"rev",qs:items.map(x=>x.q),rev:items.map(x=>x.key)})}
+function startSlot(id){const s=state.planning.find(x=>x.id===id);if(!s)return;dismissed.add(id);
+  if(SUBJECTS[s.sub])return startTheme(recommend(s.sub).id);if(s.sub==="rev")return startRevision();
+  go("subjects");toast("Choisis une matière, puis lance ton Défi Claude en bas de la page.")}
+function openQuiz(o){quiz={...o,i:0,c:0,answered:false,start:Date.now(),results:[],quitArm:false,explain:null,work:{pts:[],closed:false,col:{},crayon:0}};document.getElementById("quiz").hidden=false;document.body.style.overflow="hidden";renderQuiz();autoListen()}
+function closeQuiz(){if(window.speechSynthesis)speechSynthesis.cancel();quiz=null;document.getElementById("quiz").hidden=true;document.body.style.overflow="";render()}
+const canSpeak=()=>"speechSynthesis" in window;
+function speak(text){if(!canSpeak())return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-GB";u.rate=.88;const v=speechSynthesis.getVoices().find(v=>/^en(-|_)GB/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^en/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+function autoListen(){const q=quiz&&quiz.qs[quiz.i];if(q&&q.listen)setTimeout(()=>speak(q.listen),250)}
+const SPK='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>';
+function renderQuiz(){const el=document.getElementById("quiz");const si=SUBINFO(quiz.sub);
+  if(quiz.done)return renderResult();
+  const q=quiz.qs[quiz.i],n=quiz.qs.length,a=quiz.answered;
+  let body=`<div class="qwrap" style="--sc:${si.c}"><div class="qtop"><button class="qclose" data-qclose="1">${quiz.quitArm?"Quitter ?":"✕"}</button><div class="bar"><i style="width:${(quiz.i+(a?1:0))/n*100}%"></i></div><span class="num muted" style="font-weight:700">${quiz.i+1} / ${n}</span></div>
+   <p class="eyebrow">${esc(si.label)} · ${esc(quiz.title)}</p>`;
+  if(q.passage)body+=`<div class="card passage">${esc(q.passage)}${canSpeak()?`<div style="margin-top:10px"><button class="listen" data-say="${esc(q.passage)}">${SPK} Écouter le texte</button></div>`:""}</div>`;
+  body+=`<p class="qtext">${esc(q.q)}</p>`;
+  if(q.code)body+=`<pre class="code">${esc(q.code)}</pre>`;
+  if(q.listen){body+=canSpeak()?`<button class="listen" data-say="${esc(q.listen)}">${SPK} Écouter${q.listen.includes(" ")?" la phrase":" le mot"}</button>`:`<p class="card passage">Le son n’est pas disponible ici. Le texte : <b>${esc(q.listen)}</b></p>`}
+  if(q.say&&canSpeak())body+=`<button class="listen" data-say="${esc(q.say)}">${SPK} Écouter « ${esc(q.say)} »</button>`;
+  let ans="",media=q.svg||"";
+  if(q.type==="mcq"){ans=`<div class="choices">${q.choices.map((c,i)=>{let cls="";if(a){if(i===q.answer)cls="right";else if(i===quiz.picked)cls="wrong"}return `<button class="choice ${cls}" data-pick="${i}" ${a?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(c)}</span></button>`}).join("")}</div>`}
+  else if(q.type==="input"){ans=`<form class="answer-row" data-form="1"><input class="input ${a?(quiz.lastOk?"right":"wrong"):""}" id="q-ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${q.numeric?'inputmode="decimal"':""} placeholder="${q.numeric?"Ta réponse"+(q.unit?" (en "+q.unit+")":""):"Écris ta réponse"}" ${a?"disabled":""} value="${a?esc(quiz.typed):""}"><button class="btn" type="submit" ${a?"disabled":""}>Valider</button></form>`}
+  else{media=q.type==="draw"?drawSvg(q,a):q.type==="color"?colorSvg(q,a):symSvg(q,a);ans=toolsHTML(q,a)}
+  body+=media?`<div class="qsplit"><div class="card figbox">${media}</div><div class="qside">${ans}</div></div>`:ans;
+  if(a){const ok=quiz.lastOk;body+=`<div class="feedback ${ok?"ok":"ko"}" role="status"><span class="verdict">${ok?pick(["Bravo !","Exact !","Bien joué !","Parfait !"]):"Pas tout à fait…"}</span>${!ok&&!VIS(q)?`<p>La bonne réponse : <b>${esc(goodText(q))}</b></p>`:""}${q.type==="draw"?`<p><b>${esc(quiz.drawMsg||"")}</b></p>`:""}${!ok&&(q.type==="color"||q.type==="sym")?`<p>En pointillés verts : ce qu’il fallait colorier. En rouge : les erreurs.</p>`:""}<p>${esc(q.expl||"")}</p>${quiz.explain!==null?`<p class="ai">${esc(quiz.explain||"Claude réfléchit…")}</p>`:""}</div>
+   <div class="qnext">${!ok&&sample&&!VIS(q)&&quiz.explain===null?`<button class="btn ghost" data-explain="1">Claude, explique-moi</button>`:""}<button class="btn" data-next="1" id="q-next">${quiz.i+1<n?"Question suivante":"Voir mon score"}</button></div>`}
+  el.innerHTML=body+"</div>";
+  if(!a&&q.type==="input")setTimeout(()=>document.getElementById("q-ans")?.focus(),60);
+  if(a)setTimeout(()=>document.getElementById("q-next")?.scrollIntoView({block:"nearest",behavior:"smooth"}),60)}
+function answer(val){const q=quiz.qs[quiz.i];if(quiz.answered)return;const ok=isRight(q,val);if(q.type==="draw")quiz.drawMsg=evalDraw(q,val).msg;
+  quiz.answered=true;quiz.lastOk=ok;quiz.picked=val;quiz.typed=typeof val==="string"?val:"";if(ok)quiz.c++;quiz.results.push(ok);
+  beep(ok?[[740,0,.12],[988,.1,.18]]:[[300,0,.22]]);
+  renderQuiz();if(q.sayAfter&&canSpeak())setTimeout(()=>speak(q.sayAfter),300)}
+function nextQ(){quiz.i++;quiz.answered=false;quiz.explain=null;quiz.quitArm=false;quiz.work={pts:[],closed:false,col:{},crayon:quiz.work.crayon};if(quiz.i>=quiz.qs.length)return finishQuiz();renderQuiz();autoListen()}
+function finishQuiz(){const n=quiz.qs.length,c=quiz.c,pct=Math.round(c/n*100),sec=Math.round((Date.now()-quiz.start)/1000);
+  const gain=c*10+(c===n?20:0);const before=levelInfo(state.xp).L;state.xp+=gain;
+  const tk=todayKey();const d=state.days[tk]||(state.days[tk]={xp:0,quiz:0,sec:0});d.xp+=gain;d.quiz++;d.sec=(d.sec||0)+sec;
+  if(quiz.th!=="rev"){const t=state.themes[quiz.th]||(state.themes[quiz.th]={scores:[],best:0,plays:0});t.scores=[...t.scores,pct].slice(-5);t.best=Math.max(t.best,pct);t.plays++}
+  // révisions : ajouter les erreurs, retirer les questions réussies 2 fois
+  quiz.qs.forEach((q,i)=>{const key=qkey(q);const ex=state.deck.find(x=>x.key===key);
+    if(!quiz.results[i]){if(ex)ex.ok=0;else if(JSON.stringify(q).length<2500)state.deck.push({key,q,ok:0,sub:quiz.sub})}
+    else if(ex){ex.ok++;}});
+  state.deck=state.deck.filter(x=>x.ok<2).slice(-80);
+  state.history=[...state.history,{d:Date.now(),th:quiz.th,sub:quiz.sub==="rev"?"rev":quiz.sub,ai:!!quiz.ai,title:quiz.title,c,n,sec}].slice(-300);
+  save();quiz.done={pct,gain,lvlUp:levelInfo(state.xp).L>before};if(pct>=80)beep([[523,0,.15],[659,.15,.15],[784,.3,.3]]);renderQuiz()}
+function renderResult(){const r=quiz.done,si=SUBINFO(quiz.sub),lv=levelInfo(state.xp);
+  const msg=r.pct===100?"Sans faute ! Tu peux tenter le niveau au-dessus.":r.pct>=80?"Très beau travail !":r.pct>=60?"Pas mal ! Encore un essai pour viser la médaille d’argent.":"Courage, tes erreurs sont dans les Révisions pour t’entraîner.";
+  const md=quiz.th!=="rev"&&!quiz.ai?medal(quiz.th):null;
+  document.getElementById("quiz").innerHTML=`<div class="qwrap" style="--sc:${si.c}"><div class="result"><p class="eyebrow">${esc(si.label)} · ${esc(quiz.title)}</p><div class="score num">${quiz.c}<span class="muted" style="font-size:44px"> / ${quiz.qs.length}</span></div><h2><span class="mark">${msg}</span></h2>
+   <p class="num">+${r.gain} XP ${r.lvlUp?`· <b>Niveau ${lv.L} atteint : ${lv.title} !</b>`:""}</p>${md?`<span class="medal ${md[0]}" style="font-size:15px;padding:6px 14px">Médaille ${md[1]}</span>`:""}
+   <div class="qnext" style="justify-content:center;margin-top:10px">${quiz.th!=="rev"&&!quiz.ai?`<button class="btn ghost" data-replay="${quiz.th}">Rejouer</button>`:""}<button class="btn" data-qclose="force">Terminer</button></div></div></div>`}
+
+/* ================= Claude ================= */
+async function aiQuiz(sub){if(!sample||aiBusy)return;const topic=(document.getElementById("ai-topic")?.value||"").trim(),lvl=document.getElementById("ai-lvl")?.value||"6e";
+  aiBusy=new AbortController();render();
+  const prompt=`Tu es un professeur bienveillant et rigoureux. Prépare un quiz pour ${state.name}, élève français de ${state.classe} (environ 10 ans) qui veut aller plus loin que son programme.
+Matière : ${SUBJECTS[sub].label}. Niveau visé : ${lvl} (programmes officiels de l’Éducation nationale). Sujet : ${topic||"au choix, varié dans la matière"}.
+Écris 8 questions à choix multiples, de difficulté progressive. Chaque fait doit être exact et vérifié ; une seule bonne réponse par question ; mauvaises réponses plausibles.
+${sub==="en"?"Les questions testent l’anglais : consignes en français, réponses en anglais quand c’est pertinent.":"Tout en français."}
+Réponds uniquement par un tableau JSON : [{"q":"question","choices":["A","B","C","D"],"answer":0,"expl":"explication courte et claire (1 à 2 phrases)"}] où "answer" est l’indice (0 à 3) de la bonne réponse dans "choices".`;
+  try{const data=await sample.json(prompt,{signal:aiBusy.signal,cache:false});
+    const qs=(Array.isArray(data)?data:[]).filter(x=>x&&typeof x.q==="string"&&Array.isArray(x.choices)&&x.choices.length>=2&&x.choices.length<=4&&Number.isInteger(x.answer)&&x.answer>=0&&x.answer<x.choices.length)
+      .map(x=>{const good=String(x.choices[x.answer]);return mcq(x.q,good,x.choices.filter((_,i)=>i!==x.answer).map(String),String(x.expl||""))});
+    aiBusy=null;if(qs.length<3){render();return toast("Claude n’a pas réussi ce quiz. Réessaie avec un autre sujet.")}
+    openQuiz({title:"Défi "+(topic||SUBJECTS[sub].short)+" ("+lvl+")",sub,th:"ai_"+sub,ai:true,qs});
+  }catch(e){aiBusy=null;render();if(e&&e.code==="not_granted"||e&&e.code==="sampling_disabled"){sample=null;render();toast("Le défi Claude n’est pas autorisé sur cet appareil.")}else if(e&&e.code==="rate_limited")toast("Trop de défis d’un coup. Réessaie dans un moment.");else if(e&&e.code!=="cancelled")toast("Le défi n’a pas pu être créé. Réessaie.")}}
+async function aiExplain(){const q=quiz.qs[quiz.i];quiz.explain="";renderQuiz();
+  const given=q.type==="mcq"?q.choices[quiz.picked]:quiz.typed;
+  try{await sample(`Explique simplement à un enfant de 10 ans pourquoi la bonne réponse à la question « ${q.q}${q.code?"\n"+q.code:""} » est « ${goodText(q)} ». Il a répondu « ${given} ». Montre où est son erreur, sans le gronder. 3 phrases maximum, en français, sans mise en forme.`,{modelTier:"quick",onText:({text})=>{if(quiz){quiz.explain=text;renderQuiz()}}})}
+  catch(e){if(quiz){quiz.explain="Claude n’a pas pu répondre cette fois.";renderQuiz()}}}
+
+/* ================= événements ================= */
+document.addEventListener("click",e=>{
+  const tg=e.target.closest("[data-pt],[data-shp],[data-cell]");
+  if(tg&&quiz&&!quiz.answered){const w=quiz.work;
+    if(tg.dataset.pt){const p=tg.dataset.pt.split(",").map(Number),P=w.pts;
+      if(P.length>=3&&P[0][0]===p[0]&&P[0][1]===p[1])w.closed=true;else if(!P.some(x=>x[0]===p[0]&&x[1]===p[1]))P.push(p)}
+    else{const k=tg.dataset.shp??tg.dataset.cell;if(w.col[k]===w.crayon)delete w.col[k];else w.col[k]=w.crayon}
+    return renderQuiz()}
+  const b=e.target.closest("button");if(!b)return;const D=b.dataset;
+  if(quiz&&!quiz.answered){const w=quiz.work,q=quiz.qs[quiz.i];
+    if(D.crayon){w.crayon=Number(D.crayon);return renderQuiz()}
+    if(D.undo){if(w.closed)w.closed=false;else w.pts.pop();return renderQuiz()}
+    if(D.clear){w.pts=[];w.closed=false;w.col={};return renderQuiz()}
+    if(D.validate)return answer(q.type==="draw"?w.pts.map(p=>p.slice()):Object.keys(w.col))}
+  if(D.go)return go(D.go);
+  if(D.install&&installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;render()});return}
+  if(D.setup){const nm=document.getElementById("w-name").value.trim(),pn=document.getElementById("w-pin").value.trim();if(!nm)return toast("Écris le prénom de l’enfant.");if(!/^\d{4}$/.test(pn))return toast("Le code parent doit faire 4 chiffres.");state.name=nm;state.pin=pn;state.classe=document.getElementById("w-cl").value;save();return go("home")}
+  if(D.export){const blob=new Blob([JSON.stringify(state,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`academie-sauvegarde-${todayKey()}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);return toast("Sauvegarde téléchargée.")}
+  if(D.sub){lvlFilter="Tout";return go("subject",D.sub)}
+  if(D.lvl){lvlFilter=D.lvl;return render()}
+  if(D.theme)return startTheme(D.theme);
+  if(D.rev)return startRevision();
+  if(D.slot)return startSlot(D.slot);
+  if(D.dismiss){dismissed.add(D.dismiss);return render()}
+  if(D.ai)return aiQuiz(D.ai);
+  if(D.pick!==undefined)return answer(Number(D.pick));
+  if(D.next)return nextQ();
+  if(D.explain)return aiExplain();
+  if(D.say)return speak(D.say);
+  if(D.replay)return startTheme(D.replay);
+  if(D.qclose){if(D.qclose==="force"||quiz.done||quiz.quitArm)return closeQuiz();quiz.quitArm=true;renderQuiz();setTimeout(()=>{if(quiz&&quiz.quitArm){quiz.quitArm=false;renderQuiz()}},3000);return}
+  if(D.pin!==undefined){const k=D.pin;if(k==="C")pinBuf="";else if(k==="←")pinBuf=pinBuf.slice(0,-1);else if(pinBuf.length<4)pinBuf+=k;
+    if(pinBuf.length===4){if(pinBuf===state.pin){parentOK=true;pinBuf=""}else{pinBuf="";toast("Code incorrect.")}}return render()}
+  if(D.lock){parentOK=false;return go("home")}
+  if(D.del){state.planning=state.planning.filter(s=>s.id!==D.del);save();return render()}
+  if(D.addslot){const d=Number(document.getElementById("p-d").value),t=document.getElementById("p-t").value||"17:30",sub=document.getElementById("p-s").value,min=Math.max(5,Math.min(90,Number(document.getElementById("p-m").value)||20));
+    state.planning.push({id:"s"+Date.now().toString(36),d,t,sub,min});save();toast("Séance ajoutée le "+DAYS[d].toLowerCase()+".");return render()}
+  if(D.savesettings){const nm=document.getElementById("s-name").value.trim(),pn=document.getElementById("s-pin").value.trim();
+    if(pn&&!/^\d{4}$/.test(pn))return toast("Le code doit faire 4 chiffres.");
+    state.name=nm||state.name;state.classe=document.getElementById("s-cl").value;state.goal=Number(document.getElementById("s-goal").value);state.sound=document.getElementById("s-snd").value==="1";if(pn)state.pin=pn;save();toast("Réglages enregistrés.");return render()}
+  if(D.reset){if(b.dataset.armed){Object.assign(state,{xp:0,themes:{},days:{},history:[],deck:[]});save();toast("Progression effacée.");return render()}
+    b.dataset.armed="1";b.textContent="Confirmer : tout effacer";setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent="Effacer la progression"}},4000);return}
+});
+document.addEventListener("change",e=>{if(e.target.id!=="imp-file"||!e.target.files[0])return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||d.v!==1||!Array.isArray(d.planning))throw 0;state=Object.assign(defaults(),d);state.updatedAt=Date.now();saveLocal();toast("Sauvegarde restaurée.");render()}catch(err){toast("Ce fichier n’est pas une sauvegarde de l’appli.")}};r.readAsText(e.target.files[0])});
+document.addEventListener("submit",e=>{if(e.target.dataset.form){e.preventDefault();const v=document.getElementById("q-ans").value;if(v.trim())answer(v)}});
+document.addEventListener("keydown",e=>{if(!quiz||quiz.done)return;if(quiz.answered&&e.key==="Enter"&&document.activeElement?.id!=="q-ans"){e.preventDefault();nextQ()}
+  const q=quiz.qs[quiz.i];if(!quiz.answered&&q&&q.type==="mcq"){const i="abcd".indexOf(e.key.toLowerCase());if(i>=0&&i<q.choices.length)answer(i)}});
+if(canSpeak())speechSynthesis.onvoiceschanged=()=>{};
+
+render();
+initCloud();
+if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("sw.js").catch(()=>{});
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+</script>
+</body>
+</html>
