@@ -20,7 +20,7 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   --rule:rgba(39,71,216,.055); --rule-strong:rgba(39,71,216,.11); --margin:#e7718d;
   --accent:#2747d8; --accent-ink:#ffffff; --fluo:#ffe14d; --fluo-ink:#2a2300;
   --good:#16884f; --good-bg:#e3f5ea; --bad:#c8392f; --bad-bg:#fbe7e5; --warn:#b26b00;
-  --c-maths:#2747d8; --c-geom:#0c8f81; --c-prog:#7438cc; --c-hg:#9a5424; --c-fr:#c92a62; --c-en:#0b7fb3; --c-rev:#5b6782; --c-defi:#b07a00;
+  --c-maths:#2747d8; --c-geom:#0c8f81; --c-prog:#7438cc; --c-hg:#9a5424; --c-fr:#c92a62; --c-en:#0b7fb3; --c-rev:#5b6782; --c-defi:#b07a00; --c-elec:#d9480f;
   --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --f-body:"Atkinson Hyperlegible", "Segoe UI", Roboto, system-ui, sans-serif;
   --f-mono:"JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
@@ -31,14 +31,14 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   --rule:rgba(237,243,238,.035); --rule-strong:rgba(237,243,238,.06); --margin:#c25a74;
   --accent:#8eaaff; --accent-ink:#0d1a3d; --fluo:#ffe14d; --fluo-ink:#2a2300;
   --good:#5fd396; --good-bg:#173a2a; --bad:#ff8a7f; --bad-bg:#43211f; --warn:#f0b65a;
-  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d;
+  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d; --c-elec:#ff9a5c;
   --shadow:0 1px 0 rgba(0,0,0,.2), 0 8px 20px -12px rgba(0,0,0,.6); color-scheme:dark }}
 :root[data-theme="dark"]{
   --paper:#132024; --card:#1b2c31; --ink:#edf3ee; --muted:#9db0ad; --line:#2c4247;
   --rule:rgba(237,243,238,.035); --rule-strong:rgba(237,243,238,.06); --margin:#c25a74;
   --accent:#8eaaff; --accent-ink:#0d1a3d; --fluo:#ffe14d; --fluo-ink:#2a2300;
   --good:#5fd396; --good-bg:#173a2a; --bad:#ff8a7f; --bad-bg:#43211f; --warn:#f0b65a;
-  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d;
+  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d; --c-elec:#ff9a5c;
   --shadow:0 1px 0 rgba(0,0,0,.2), 0 8px 20px -12px rgba(0,0,0,.6); color-scheme:dark }
 
 html,body{height:100%}
@@ -289,6 +289,105 @@ pre.calc{margin:0;padding:14px 16px;border-radius:12px;background:var(--card);bo
 .lesson .listen{background:var(--accent);color:var(--accent-ink)}
 .autov{display:flex;gap:8px;align-items:center;font-weight:700;color:var(--muted)}.autov input{width:22px;height:22px}
 .tag.warnt{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}.tag.badt{background:var(--bad-bg);color:var(--bad)}
+.efig{display:block;width:100%;max-width:560px;height:auto;max-height:min(46vh,340px);margin:0 auto}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
+.stage-tools{justify-content:center}
+.efig .wire{fill:none;stroke:var(--ink);stroke-width:3;stroke-linejoin:round}
+.efig .flow{fill:none;stroke:var(--c-elec);stroke-width:6;stroke-linecap:round;stroke-dasharray:2 16;opacity:0;transition:opacity .3s;animation:eflow var(--dur,.9s) linear infinite}
+@keyframes eflow{from{stroke-dashoffset:36}to{stroke-dashoffset:0}}
+.efig .cover{fill:var(--card)}
+.efig .plate{stroke:var(--ink);stroke-width:3}.efig .plate.thick{stroke-width:7}
+.efig .sgn{fill:var(--ink);font:800 15px var(--f-display)}
+.efig .cap{fill:var(--muted);font:700 12px var(--f-body)}
+.efig .bulb{fill:var(--card);stroke:var(--ink);stroke-width:2.5;transition:fill .3s}
+.efig .sym{stroke:var(--ink);stroke-width:2;fill:none}
+.efig .glow{fill:var(--fluo);opacity:0;transition:opacity .3s}
+.efig .pin{fill:var(--ink)}
+.efig .lever{stroke:var(--ink);stroke-width:4;stroke-linecap:round;transform:rotate(-35deg);transition:transform .35s}
+.efig .res{fill:var(--card);stroke:var(--ink);stroke-width:2.5}
+.efig .meter{fill:var(--card);stroke:var(--ink);stroke-width:2.5}
+.efig .obj{opacity:0;transition:opacity .25s}
+.efig .mlab{opacity:0}
+.efig .hot,.efig .hotxt,.efig .shortw,.efig .fS{opacity:0;transition:opacity .3s}
+.efig .warnt{fill:var(--bad);font:800 14px var(--f-display)}
+.efig .hot{fill:var(--bad)}
+@keyframes hot{from{opacity:.25}to{opacity:.7}}
+@keyframes pulse{from{opacity:.65}to{opacity:.95}}
+.stage[data-sw="on"] .lever{transform:rotate(0)}
+.stage[data-sw="on"] .flow,.stage[data-mat="trombone"] .flow,.stage[data-mat="piece"] .flow{opacity:1}
+.stage[data-sw="on"] .glow,.stage[data-mat="trombone"] .glow,.stage[data-mat="piece"] .glow{opacity:.9;animation:pulse 1.2s ease-in-out infinite alternate}
+.stage[data-sw="on"] .bulb,.stage[data-mat="trombone"] .bulb,.stage[data-mat="piece"] .bulb{fill:#fff6b0}
+.stage:not([data-mat="none"]) .obj{opacity:1}
+.stage[data-mat="trombone"] .obj{fill:#9aa5b1}.stage[data-mat="piece"] .obj{fill:#c9a227}.stage[data-mat="regle"] .obj{fill:#3fa7ff}.stage[data-mat="bois"] .obj{fill:#a0522d}.stage[data-mat="gomme"] .obj{fill:#ff7aa8}
+.stage[data-mat="trombone"] .ml-trombone,.stage[data-mat="piece"] .ml-piece,.stage[data-mat="regle"] .ml-regle,.stage[data-mat="bois"] .ml-bois,.stage[data-mat="gomme"] .ml-gomme{opacity:1}
+.stage[data-kind="series"][data-b2="on"] .flow,.stage[data-kind="par"] .fA,.stage[data-kind="par"][data-b2="on"] .fB{opacity:1}
+.stage[data-kind="series"][data-b2="on"] .glow,.stage[data-kind="par"] .b1 .glow,.stage[data-kind="par"][data-b2="on"] .b2 .glow{opacity:.9;animation:pulse 1.2s ease-in-out infinite alternate}
+.stage[data-kind="series"][data-b2="on"] .bulb,.stage[data-kind="par"] .b1 .bulb,.stage[data-kind="par"][data-b2="on"] .b2 .bulb{fill:#fff6b0}
+.efig .b2{transition:transform .35s,opacity .35s}
+.efig .gap2{opacity:0}.stage[data-b2="off"] .gap2{opacity:1}
+.stage[data-b2="off"] .b2{transform:translateY(-14px);opacity:.3}
+.stage[data-short="off"] .fN{opacity:1}
+.stage[data-short="off"] .glow{opacity:.9;animation:pulse 1.2s ease-in-out infinite alternate}
+.stage[data-short="off"] .bulb{fill:#fff6b0}
+.stage[data-short="on"] .fS{opacity:1;animation-duration:.3s}
+.stage[data-short="on"] .shortw,.stage[data-short="on"] .hotxt{opacity:1}
+.stage[data-short="on"] .hot{animation:hot .7s ease-in-out infinite alternate}
+.efig .flow.on{opacity:1}
+.efig .lglow{fill:#ff3b3b;opacity:0;transition:opacity .3s}
+.efig .ledt{fill:var(--card);stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round}
+.efig .ledg{transform-origin:210px 40px;transition:transform .45s}
+.stage[data-led="ok"] .flow{opacity:1}.stage[data-led="ok"] .lglow{opacity:.75;animation:pulse 1s ease-in-out infinite alternate}.stage[data-led="ok"] .ledt{fill:#ff8080}
+.stage[data-led="rev"] .ledg{transform:rotate(180deg)}
+.efig .tank{fill:none;stroke:var(--ink);stroke-width:3}
+.efig .water{fill:#4aa3ff;opacity:.75;transform-origin:60px 89px;transform:scaleY(.3);transition:transform .6s}
+.stage[data-h="high"] .water{transform:scaleY(1)}
+.efig .pipe{fill:none;stroke:var(--line);stroke-width:14;stroke-linejoin:round}
+.efig .wflow{fill:none;stroke:#4aa3ff;stroke-width:6;stroke-dasharray:6 12;animation:eflow 1.6s linear infinite}
+.stage[data-h="high"] .wflow{animation-duration:.5s}
+.efig .wh{fill:var(--card);stroke:var(--ink);stroke-width:3}
+.efig .wheel{transform-origin:272px 160px;animation:spin 3s linear infinite}
+.stage[data-h="high"] .wheel{animation-duration:.8s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.efig .hight{opacity:0}.stage[data-h="high"] .hight{opacity:1}.stage[data-h="high"] .lowt{opacity:0}
+.ohm-ctl{display:flex;flex-direction:column;gap:8px;max-width:520px;margin:0 auto;width:100%}
+.ohm-ctl input{width:100%;accent-color:var(--c-elec);height:32px}
+.ohm-out{font-size:18px}
+.demo{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:640px){.demo{grid-template-columns:minmax(0,1fr)}}
+.rwrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
+.rfig{display:block;width:100%;height:auto;max-height:min(46vh,320px)}
+.rfig .rcell{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+.rfig .rwall{fill:color-mix(in srgb,var(--ink) 65%,transparent);stroke:var(--line)}
+.rfig .rbody{fill:var(--c-prog);stroke:var(--card);stroke-width:3;transition:fill .3s}
+.rfig .reye{fill:#fff}
+.rfig .robot{transition:transform .45s ease}
+.rfig .trail{fill:none;stroke:var(--c-prog);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;opacity:.45}
+.rfig .flag{fill:var(--bad)}.rfig .pole{stroke:var(--ink);stroke-width:3}
+.rfig .rlab{fill:var(--ink);font:800 20px var(--f-display);opacity:.75}
+.demo.done .rbody{fill:var(--good)}
+.prog{margin:0;padding:10px 0;list-style:none;background:#0f1730;border-radius:12px;font-family:var(--f-mono);font-size:16px;color:#e7ecff;counter-reset:ln}
+.prog li{padding:5px 12px;border-left:4px solid transparent;transition:background .2s}
+.prog li.cur{background:rgba(255,225,77,.22);border-left-color:var(--fluo)}
+.trace{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:640px){.trace{grid-template-columns:minmax(0,1fr)}}
+.tcode{margin:0;padding:12px 0;border-radius:12px;background:#0f1730;color:#e7ecff;font-family:var(--f-mono);font-size:16px;line-height:1.7;overflow-x:auto}
+.tl{display:block;padding:0 14px;border-left:4px solid transparent;white-space:pre}
+.tl.cur{background:rgba(255,225,77,.22);border-left-color:var(--fluo)}
+.tside{display:flex;flex-direction:column;gap:10px}
+.tvars{display:flex;gap:10px;flex-wrap:wrap;min-height:64px}
+.tvar{display:flex;flex-direction:column;align-items:center;min-width:72px;padding:6px 10px;border-radius:10px;border:2px solid var(--c-prog);background:var(--card)}
+.tvar span{font:700 13px var(--f-mono);color:var(--muted)}.tvar b{font:800 20px var(--f-display);word-break:break-all}
+.tvar.pop{animation:popv .5s ease}
+@keyframes popv{0%{transform:scale(1.18);background:var(--fluo);color:var(--fluo-ink)}100%{transform:none}}
+.tnote{font-size:15px;min-height:1.4em}
+.tout{background:#111;color:#7CFC9A;border-radius:10px;padding:10px 12px;font-family:var(--f-mono);font-size:15px;min-height:70px}
+.tout b{color:#bbb;font:700 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px}
+.bits{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;max-width:640px;margin:0 auto;width:100%}
+.bit{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 2px;border-radius:12px;border:1.5px solid var(--line);background:var(--card)}
+.bit i{width:28px;height:28px;border-radius:50%;background:color-mix(in srgb,var(--ink) 12%,transparent);transition:background .2s,box-shadow .2s}
+.bit[aria-pressed="true"] i{background:var(--fluo);box-shadow:0 0 14px var(--fluo)}
+.bit b{font:800 20px var(--f-mono)}.bit span{font:700 12px var(--f-body);color:var(--muted)}
+.bitout{text-align:center;font-size:18px}
 .code{font-family:var(--f-mono);font-weight:700;letter-spacing:.04em}.code.big{font-size:clamp(20px,3.6vw,28px);user-select:all;word-break:break-all;margin:4px 0}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 @keyframes pop{from{transform:scale(.96);opacity:.6}to{transform:none;opacity:1}}
@@ -347,6 +446,7 @@ const SUBJECTS={
   maths:{label:"Mathématiques",short:"Maths",glyph:"+−",c:"var(--c-maths)"},
   geom:{label:"Géométrie",short:"Géométrie",glyph:"△",c:"var(--c-geom)"},
   prog:{label:"Programmation",short:"Code",glyph:"{ }",c:"var(--c-prog)"},
+  elec:{label:"Électronique",short:"Électronique",glyph:"Ω",c:"var(--c-elec)"},
   hg:{label:"Histoire-Géographie",short:"Histoire-Géo",glyph:"1789",c:"var(--c-hg)"},
   fr:{label:"Français",short:"Français",glyph:"Aa",c:"var(--c-fr)"},
   en:{label:"Anglais",short:"Anglais",glyph:"EN",c:"var(--c-en)"}
@@ -866,17 +966,17 @@ function stopSpeak(){try{speechSynthesis.cancel()}catch(e){}if(lesson){lesson.sp
 function updSpeakBtn(){const b=document.getElementById("l-say");if(b&&lesson)b.innerHTML=lesson.speaking?"■ Arrêter":`${SPK} Écouter l’explication`}
 function openLesson(id){const L=LESSON[id];if(!L)return;lesson={id,i:0,speaking:false};state.lessons=state.lessons||{};if(!state.lessons[id]){state.lessons[id]={seen:Date.now(),best:null,last:null,tries:0};save()}
   document.getElementById("quiz").hidden=false;document.body.style.overflow="hidden";renderLesson();if(state.voiceAuto!==false)setTimeout(()=>{if(lesson&&lesson.i===0)speakFr(L.steps[0].say)},300)}
-function closeLesson(){stopSpeak();lesson=null;document.getElementById("quiz").hidden=true;document.body.style.overflow="";render()}
+function closeLesson(){stopSpeak();clearDemos();lesson=null;document.getElementById("quiz").hidden=true;document.body.style.overflow="";render()}
 function lessonGo(d){const L=LESSON[lesson.id];lesson.i=Math.max(0,Math.min(L.steps.length-1,lesson.i+d));stopSpeak();renderLesson();document.getElementById("quiz").scrollTop=0;if(state.voiceAuto!==false){const i=lesson.i;setTimeout(()=>{if(lesson&&lesson.i===i)speakFr(L.steps[i].say)},250)}}
-function renderLesson(){const L=LESSON[lesson.id],st=L.steps[lesson.i],n=L.steps.length,last=lesson.i===n-1;
-  document.getElementById("quiz").innerHTML=`<div class="qwrap lesson" style="--sc:var(--c-maths)"><div class="qtop"><button class="qclose" data-lclose="1" aria-label="Fermer le cours">✕</button><div class="steps" aria-label="Étape ${lesson.i+1} sur ${n}">${L.steps.map((_,k)=>`<i class="${k<lesson.i?"done":k===lesson.i?"on":""}"></i>`).join("")}</div><span class="num muted" style="font-weight:700">${lesson.i+1} / ${n}</span></div>
-   <p class="eyebrow">Cours de maths · ${L.lvl} · ${esc(L.title)}</p><h2 class="ltitle">${st.t}</h2>
+function renderLesson(){clearDemos();setTimeout(initStep,0);const L=LESSON[lesson.id],st=L.steps[lesson.i],n=L.steps.length,last=lesson.i===n-1;
+  document.getElementById("quiz").innerHTML=`<div class="qwrap lesson" style="--sc:${SUBINFO(L.sub).c}"><div class="qtop"><button class="qclose" data-lclose="1" aria-label="Fermer le cours">✕</button><div class="steps" aria-label="Étape ${lesson.i+1} sur ${n}">${L.steps.map((_,k)=>`<i class="${k<lesson.i?"done":k===lesson.i?"on":""}"></i>`).join("")}</div><span class="num muted" style="font-weight:700">${lesson.i+1} / ${n}</span></div>
+   <p class="eyebrow">Cours · ${SUBINFO(L.sub).short} · ${L.lvl} · ${esc(L.title)}</p><h2 class="ltitle">${st.t}</h2>
    <div class="lbody">${st.h}</div>
    <div class="lctl">${canSpeak()?`<button class="listen" id="l-say" data-lsay="1">${lesson.speaking?"■ Arrêter":`${SPK} Écouter l’explication`}</button><label class="autov"><input type="checkbox" id="l-auto" ${state.voiceAuto!==false?"checked":""}> Lecture automatique</label>`:`<p class="muted">La lecture à voix haute n’est pas disponible sur cet appareil.</p>`}</div>
    <div class="qnext"><button class="btn ghost" data-lprev="1" ${lesson.i===0?"disabled":""}>← Précédent</button>${last?`<button class="btn fluo" data-lex="${L.id}">Faire l’exercice</button>`:`<button class="btn" data-lnext="1">Suivant →</button>`}</div></div>`}
-function startLessonEx(id){const L=LESSON[id];stopSpeak();lesson=null;openQuiz({title:"Exercice : "+L.title,sub:"maths",th:"les_"+id,lesson:id,qs:buildQuestions(L,8)})}
+function startLessonEx(id){const L=LESSON[id];stopSpeak();lesson=null;openQuiz({title:"Exercice : "+L.title,sub:L.sub,th:"les_"+id,lesson:id,qs:buildQuestions(L,8)})}
 function lessonsSection(sub){const ls=LESSONS.filter(L=>L.sub===sub&&(lvlFilter==="Tout"||L.lvl===lvlFilter));if(!ls.length)return "";const ci=lvlIdx(state.classe);
-  return `<section class="section"><div class="section-head"><h2>Cours avec explications audio</h2><span class="muted">Le cours, puis un exercice pour vérifier que tu as compris</span></div><div class="grid">${ls.map(L=>{const s=lessonStatus(L.id),li=lvlIdx(L.lvl);return `<div class="card tile" style="--sc:var(--c-maths)"><div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="tag ${li>ci?"beyond":""}">${L.lvl}${li>ci?" · au-delà":""}</span>${s?`<span class="tag ${s.cls}">${s.txt}</span>`:""}</div><div><h3>${L.title}</h3><span class="muted">${L.desc} · ${L.steps.length} étapes</span></div><div class="tools"><button class="btn small" data-lesson="${L.id}">${s?"Revoir le cours":"Commencer le cours"}</button>${s?`<button class="btn ghost small" data-lex="${L.id}">Exercice</button>`:""}</div></div>`}).join("")}</div></section>`}
+  return `<section class="section"><div class="section-head"><h2>Cours avec explications audio</h2><span class="muted">Le cours, puis un exercice pour vérifier que tu as compris</span></div><div class="grid">${ls.map(L=>{const s=lessonStatus(L.id),li=lvlIdx(L.lvl);return `<div class="card tile" style="--sc:${SUBINFO(sub).c}"><div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="tag ${li>ci?"beyond":""}">${L.lvl}${li>ci?" · au-delà":""}</span>${s?`<span class="tag ${s.cls}">${s.txt}</span>`:""}</div><div><h3>${L.title}</h3><span class="muted">${L.desc} · ${L.steps.length} étapes</span></div><div class="tools"><button class="btn small" data-lesson="${L.id}">${s?"Revoir le cours":"Commencer le cours"}</button>${s?`<button class="btn ghost small" data-lex="${L.id}">Exercice</button>`:""}</div></div>`}).join("")}</div></section>`}
 
 /* ================= banques de questions ================= */
 const TOM="Tom is eleven. He lives in London with his mum, his dad and his little sister, Amy. Every morning he takes the bus to school. His favourite subject is science, but he doesn’t like history. After school, he plays basketball with his friends. On Sundays, the family visits Grandma in Brighton, near the sea.";
@@ -1148,6 +1248,189 @@ const THEMES=[
  {id:"e_irr",sub:"en",lvl:"5e",title:"Irregular verbs",desc:"go-went-gone…",gen:G.irr}
 ];
 const THEME=Object.fromEntries(THEMES.map(t=>[t.id,t]));
+/* ================= cours animés : électronique & programmation ================= */
+/* ---------- briques de circuits (SVG) ---------- */
+const WR=(d,cls="wire")=>`<path class="${cls}" d="${d}"/>`;
+const batt=(x,y)=>`<rect class="cover" x="${x-22}" y="${y-9}" width="44" height="18"/><rect class="hot" x="${x-26}" y="${y-14}" width="52" height="28" rx="6"/><line class="plate" x1="${x-18}" y1="${y-8}" x2="${x+18}" y2="${y-8}"/><line class="plate thick" x1="${x-9}" y1="${y+8}" x2="${x+9}" y2="${y+8}"/><text class="sgn" x="${x+24}" y="${y-5}">+</text><text class="sgn" x="${x+24}" y="${y+17}">−</text>`;
+const bulb=(x,y,cls="")=>`<g class="${cls}"><circle class="glow" cx="${x}" cy="${y}" r="30"/><circle class="bulb" cx="${x}" cy="${y}" r="15"/><path class="sym" d="M${x-10.6},${y-10.6} L${x+10.6},${y+10.6} M${x+10.6},${y-10.6} L${x-10.6},${y+10.6}"/></g>`;
+const swt=(x1,x2,y)=>`<rect class="cover" x="${x1+1}" y="${y-10}" width="${x2-x1-2}" height="20"/><line class="lever" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" style="transform-origin:${x1}px ${y}px"/><circle class="pin" cx="${x1}" cy="${y}" r="4"/><circle class="pin" cx="${x2}" cy="${y}" r="4"/>`;
+const resi=(x,y,v="")=>`<rect class="cover" x="${x-20}" y="${y-9}" width="40" height="18"/><rect class="res" x="${x-18}" y="${y-8}" width="36" height="16" rx="2"/>${v?`<text class="cap" x="${x}" y="${y-16}" text-anchor="middle">${v}</text>`:""}`;
+const amp=(x,y)=>`<circle class="meter" cx="${x}" cy="${y}" r="16"/><text class="sgn" x="${x}" y="${y+6}" text-anchor="middle">A</text>`;
+const cap=(x,y,t,a="middle")=>`<text class="cap" x="${x}" y="${y}" text-anchor="${a}">${t}</text>`;
+const efig=(inner,h=200)=>`<svg class="efig" viewBox="0 0 320 ${h}" role="img" aria-label="Circuit électrique">${inner}</svg>`;
+const LOOP="M40,91 V40 H280 V160 H40 V109";
+const stage=(id,attrs,svg,buttons)=>`<div class="stage" id="${id}" ${attrs}>${svg}</div>${buttons?`<div class="tools stage-tools">${buttons}</div>`:""}`;
+const sbtn=(id,key,label,val)=>`<button class="btn small ${val?"ghost":""}" data-stgt="${id}" ${val?`data-stgset="${key}:${val}"`:`data-stg="${key}"`}>${label}</button>`;
+function circuitSimple(id){return stage(id,'data-sw="off"',efig(WR(LOOP)+WR(LOOP,"flow")+batt(40,100)+bulb(160,40)+swt(140,180,160)+cap(160,86,"lampe")+cap(160,140,"interrupteur")+cap(78,128,"pile","start")),sbtn(id,"sw","Appuyer sur l’interrupteur"))}
+const MATS=[["trombone","trombone (métal)"],["piece","pièce (métal)"],["regle","règle (plastique)"],["bois","bâton (bois sec)"],["gomme","gomme (caoutchouc)"]];
+function circuitTest(id){return stage(id,'data-mat="none"',efig(WR(LOOP)+WR(LOOP,"flow")+batt(40,100)+bulb(160,40)+`<rect class="cover" x="141" y="150" width="38" height="20"/><circle class="pin" cx="140" cy="160" r="4"/><circle class="pin" cx="180" cy="160" r="4"/><rect class="obj" x="138" y="152" width="44" height="16" rx="4"/>`+MATS.map(([k,l])=>`<text class="cap mlab ml-${k}" x="160" y="192" text-anchor="middle">${l}</text>`).join("")+cap(160,86,"lampe")+cap(160,140,"pince : pose un objet")),MATS.map(([k,l])=>sbtn(id,"mat",l.split(" (")[0],k)).join(""))}
+function circuitSeries(id){return stage(id,'data-b2="on" data-kind="series"',efig(WR(LOOP)+WR(LOOP,"flow")+batt(40,100)+bulb(120,40,"b1")+`<g class="gap2"><rect class="cover" x="193" y="33" width="34" height="14"/><circle class="pin" cx="193" cy="40" r="4"/><circle class="pin" cx="227" cy="40" r="4"/></g>`+bulb(210,40,"b2")+cap(160,110,"en série : une seule boucle")),sbtn(id,"b2","Dévisser / revisser la lampe 2"))}
+function circuitPar(id){const fA="M40,91 V40 H160 V160 H40 V109",fB="M40,91 V40 H260 V160 H40 V109";
+  return stage(id,'data-b2="on" data-kind="par"',efig(WR("M40,91 V40 H260")+WR("M40,109 V160 H260")+WR("M160,40 V160")+WR("M260,40 V160")+WR(fA,"flow fA")+WR(fB,"flow fB")+batt(40,100)+bulb(160,100,"b1")+`<g class="gap2"><rect class="cover" x="253" y="83" width="14" height="34"/><circle class="pin" cx="260" cy="83" r="4"/><circle class="pin" cx="260" cy="117" r="4"/></g>`+bulb(260,100,"b2")+cap(100,185,"en dérivation : deux boucles")),sbtn(id,"b2","Dévisser / revisser la lampe 2"))}
+function circuitShort(id){const fS="M40,91 V40 H120 C120,0 200,0 200,40 H280 V160 H40 V109";
+  return stage(id,'data-short="off"',efig(WR(LOOP)+WR("M120,40 C120,0 200,0 200,40","wire shortw")+WR(LOOP,"flow fN")+WR(fS,"flow fS")+batt(40,100)+bulb(160,40)+cap(160,86,"lampe")+`<text class="warnt hotxt" x="70" y="140">La pile chauffe !</text>`),sbtn(id,"short","Ajouter / enlever un fil sur la lampe"))}
+function waterStage(id){return stage(id,'data-h="low"',efig(`<rect class="tank" x="20" y="18" width="80" height="74" rx="6"/><rect class="water" x="23" y="21" width="74" height="68" rx="4"/><path class="pipe" d="M60,92 V160 H246"/><path class="wflow" d="M60,92 V160 H246"/><g class="wheel"><circle class="wh" cx="272" cy="160" r="24"/><path class="sym" d="M272,136 V184 M248,160 H296 M255,143 L289,177 M289,143 L255,177"/></g>`+`<text class="cap lowt" x="110" y="40">eau basse = petite tension (1,5 V)</text><text class="cap hight" x="110" y="40">eau haute = grande tension (9 V)</text>`+cap(150,150,"le débit d’eau = l’intensité")),sbtn(id,"h","Remplir / vider le réservoir"))}
+function ohmStage(id){return `<div class="stage" id="${id}" style="--dur:1s">${efig(WR(LOOP)+WR(LOOP,"flow on")+batt(40,100)+resi(160,40,"R")+`<rect class="cover" x="270" y="82" width="20" height="36"/>`+amp(280,100)+cap(78,128,"pile 6 V","start"))}</div>
+  <div class="ohm-ctl"><label for="ohm-r"><b>Résistance R</b></label><input type="range" id="ohm-r" min="10" max="100" step="10" value="30"><p class="ohm-out" id="ohm-out">R = 30 Ω → I = U ÷ R = 6 ÷ 30 = <b>0,2 A</b></p></div>`}
+function ledStage(id){return stage(id,'data-led="ok"',efig(WR(LOOP)+WR(LOOP,"flow")+batt(40,100)+resi(110,40,"résistance")+`<rect class="cover" x="188" y="24" width="44" height="32"/><circle class="lglow" cx="210" cy="40" r="26"/><g class="ledg"><polygon class="ledt" points="198,28 198,52 220,40"/><line class="plate" x1="221" y1="27" x2="221" y2="53"/><path class="sym" d="M214,24 l8,-10 M219,27 l8,-10"/></g>`+cap(210,86,"LED")+cap(150,140,"patte longue (+) à gauche")),sbtn(id,"led","Retourner la LED"))}
+/* ---------- robot ---------- */
+const DIRS=[[0,-1],[1,0],[0,1],[-1,0]],OPL={F:"avancer",L:"tourner à gauche",R:"tourner à droite"};
+const DEMOS={};let demoTimers=[];
+function clearDemos(){demoTimers.forEach(clearTimeout);demoTimers=[]}
+function robotCompile(cfg){const lines=[],exec=[];let s={x:cfg.start[0],y:cfg.start[1],d:cfg.start[2]};const walls=new Set((cfg.walls||[]).map(w=>w.join(",")));
+  const ahead=()=>{const [dx,dy]=DIRS[s.d],nx=s.x+dx,ny=s.y+dy;return nx<0||ny<0||nx>=cfg.w||ny>=cfg.h||walls.has(nx+","+ny)},atGoal=()=>cfg.goal&&s.x===cfg.goal[0]&&s.y===cfg.goal[1];
+  (function emit(ns,ind){for(const n of ns){n._l=lines.length;if(n.op)lines.push({t:OPL[n.op],ind});else if(n.rep){lines.push({t:`répéter ${n.rep} fois :`,ind});emit(n.body,ind+1)}else if(n.until){lines.push({t:"tant que pas sur le drapeau :",ind});emit(n.body,ind+1)}else if(n.ifw){lines.push({t:"si mur devant :",ind});emit(n.then,ind+1);n._le=lines.length;lines.push({t:"sinon :",ind});emit(n.else,ind+1)}}})(cfg.prog,0);
+  (function run(ns){for(const n of ns){if(exec.length>150)return;
+    if(n.op){if(n.op==="F"&&!ahead()){s.x+=DIRS[s.d][0];s.y+=DIRS[s.d][1]}else if(n.op==="L")s.d=(s.d+3)%4;else if(n.op==="R")s.d=(s.d+1)%4;exec.push({l:n._l,...s})}
+    else if(n.rep){for(let k=0;k<n.rep;k++){exec.push({l:n._l,...s});run(n.body)}}
+    else if(n.until){while(!atGoal()&&exec.length<150){exec.push({l:n._l,...s});run(n.body)}exec.push({l:n._l,...s})}
+    else if(n.ifw){exec.push({l:n._l,...s});if(ahead())run(n.then);else{exec.push({l:n._le,...s});run(n.else)}}}})(cfg.prog);
+  return {lines,exec}}
+const CS=44;
+function robotSvg(w,h,s,opts={}){const m=6;let g="";
+  for(let x=0;x<w;x++)for(let y=0;y<h;y++){const wall=(opts.walls||[]).some(c=>c[0]===x&&c[1]===y);g+=`<rect class="${wall?"rwall":"rcell"}" x="${m+x*CS}" y="${m+y*CS}" width="${CS}" height="${CS}"/>`}
+  if(opts.goal){const [gx,gy]=opts.goal,X=m+gx*CS,Y=m+gy*CS;g+=`<line class="pole" x1="${X+14}" y1="${Y+8}" x2="${X+14}" y2="${Y+38}"/><polygon class="flag" points="${X+15},${Y+8} ${X+34},${Y+15} ${X+15},${Y+22}"/>`}
+  (opts.labels||[]).forEach(([x,y,t])=>g+=`<text class="rlab" x="${m+x*CS+CS/2}" y="${m+y*CS+CS/2+8}" text-anchor="middle">${t}</text>`);
+  g+=`<polyline class="trail" points=""/>`;
+  g+=`<g class="robot" style="transform:translate(${m+s.x*CS+CS/2}px,${m+s.y*CS+CS/2}px) rotate(${s.d*90}deg)"><circle r="15" class="rbody"/><polygon class="reye" points="0,-13 7,-1 -7,-1"/></g>`;
+  return `<svg class="rfig" viewBox="0 0 ${w*CS+2*m} ${h*CS+2*m}" role="img" aria-label="Grille du robot">${g}</svg>`}
+function robotDemo(id,cfg){const c=robotCompile(cfg);DEMOS[id]={...cfg,...c};
+  return `<div class="demo" id="demo-${id}"><div class="rwrap">${robotSvg(cfg.w,cfg.h,{x:cfg.start[0],y:cfg.start[1],d:cfg.start[2]},cfg)}</div><ol class="prog">${c.lines.map((l,i)=>`<li data-l="${i}" style="padding-left:${10+l.ind*24}px">${l.t}</li>`).join("")}</ol></div><div class="tools stage-tools"><button class="btn small" data-runrobot="${id}">▶ Lancer le programme</button></div>`}
+function runRobot(id){const D=DEMOS[id],root=document.getElementById("demo-"+id);if(!D||!root)return;clearDemos();
+  const rob=root.querySelector(".robot"),trail=root.querySelector(".trail"),lis=[...root.querySelectorAll(".prog li")],m=6,pos=s=>`translate(${m+s.x*CS+CS/2}px,${m+s.y*CS+CS/2}px) rotate(${s.dd??s.d*90}deg)`;
+  let rot=D.start[2]*90,prevD=D.start[2];const pts=[`${m+D.start[0]*CS+CS/2},${m+D.start[1]*CS+CS/2}`];
+  rob.style.transition="none";rob.style.transform=pos({x:D.start[0],y:D.start[1],d:D.start[2]});trail.setAttribute("points",D.trail?pts.join(" "):"");root.classList.remove("done");void rob.getBoundingClientRect();rob.style.transition="";
+  D.exec.forEach((e,i)=>demoTimers.push(setTimeout(()=>{let diff=e.d-prevD;if(diff===3)diff=-1;if(diff===-3)diff=1;rot+=diff*90;prevD=e.d;
+    rob.style.transform=pos({x:e.x,y:e.y,dd:rot});lis.forEach(li=>li.classList.toggle("cur",+li.dataset.l===e.l));
+    const p=`${m+e.x*CS+CS/2},${m+e.y*CS+CS/2}`;if(D.trail&&pts[pts.length-1]!==p){pts.push(p);trail.setAttribute("points",pts.join(" "))}
+    if(i===D.exec.length-1){root.classList.add("done");beep([[660,0,.12],[880,.12,.2]])}},500+i*650)))}
+/* ---------- trace de code (variables, Python) ---------- */
+function traceDemo(id,cfg){DEMOS[id]={...cfg,i:-1};
+  return `<div class="trace" id="demo-${id}"><pre class="tcode ${cfg.py?"py":""}">${cfg.lines.map((l,i)=>`<span class="tl" data-l="${i}">${esc(l)||" "}</span>`).join("")}</pre><div class="tside"><div class="tvars" aria-label="Variables"></div><p class="tnote muted"></p><div class="tout" aria-label="Affichage"><b>Écran</b><div class="touts"></div></div></div></div>
+  <div class="tools stage-tools"><button class="btn small" data-tstep="${id}">▶ Instruction suivante</button><button class="btn ghost small" data-tplay="${id}">Tout jouer</button><button class="btn ghost small" data-treset="${id}">Recommencer</button></div>`}
+function traceShow(id){const D=DEMOS[id],root=document.getElementById("demo-"+id);if(!D||!root)return;const st=D.steps[D.i],prev=D.steps[D.i-1];
+  root.querySelectorAll(".tl").forEach(el=>el.classList.toggle("cur",!!st&&+el.dataset.l===st.l));
+  const vars=st?st.vars:{};root.querySelector(".tvars").innerHTML=Object.keys(vars).length?Object.entries(vars).map(([k,v])=>`<div class="tvar ${prev&&prev.vars[k]===v?"":"pop"}"><span>${esc(k)}</span><b>${esc(String(v))}</b></div>`).join(""):`<span class="muted">Pas encore de variable</span>`;
+  root.querySelector(".tnote").textContent=st&&st.note?st.note:"";
+  root.querySelector(".touts").innerHTML=D.steps.slice(0,D.i+1).filter(s=>s.out!=null).map(s=>`<div>${esc(s.out)}</div>`).join("")||`<span class="muted">rien pour l’instant</span>`;
+  const btn=document.querySelector(`[data-tstep="${id}"]`);if(btn){btn.disabled=D.i>=D.steps.length-1;btn.textContent=D.i>=D.steps.length-1?"Programme terminé":"▶ Instruction suivante"}}
+function traceStep(id){const D=DEMOS[id];if(!D||D.i>=D.steps.length-1)return;D.i++;traceShow(id)}
+function tracePlay(id){const D=DEMOS[id];if(!D)return;clearDemos();D.i=-1;traceShow(id);D.steps.forEach((_,k)=>demoTimers.push(setTimeout(()=>traceStep(id),600+k*1100)))}
+/* ---------- binaire ---------- */
+function bitsDemo(id){DEMOS[id]={v:0};const V=[128,64,32,16,8,4,2,1];
+  return `<div class="bits" id="demo-${id}">${V.map((v,i)=>`<button class="bit" data-bit="${id}:${i}" aria-pressed="false"><i></i><b>0</b><span>${v}</span></button>`).join("")}</div><p class="bitout" id="bitout-${id}">Allume des lampes : <b>0</b></p>`}
+function bitToggle(id,i){const D=DEMOS[id],root=document.getElementById("demo-"+id);if(!D||!root)return;D.v^=(128>>i);
+  [...root.querySelectorAll(".bit")].forEach((b,k)=>{const on=!!(D.v&(128>>k));b.setAttribute("aria-pressed",on);b.querySelector("b").textContent=on?1:0});
+  const parts=[128,64,32,16,8,4,2,1].filter(x=>D.v&x);document.getElementById("bitout-"+id).innerHTML=`${D.v.toString(2).padStart(8,"0")} en binaire = ${parts.length?parts.join(" + ")+" = ":""}<b>${D.v}</b>${D.v===13?" : bravo, c’est 13 !":""}`;beep([[440+D.v*2,0,.08]])}
+/* init des démos à l’affichage d’une étape */
+function initStep(){const box=document.querySelector(".lesson .lbody");if(!box)return;
+  box.querySelectorAll(".trace").forEach(t=>{const id=t.id.slice(5);DEMOS[id].i=-1;traceShow(id)});
+  const r=box.querySelector(".demo");if(r)demoTimers.push(setTimeout(()=>runRobot(r.id.slice(5)),900))}
+document.addEventListener("input",e=>{if(e.target.id!=="ohm-r")return;const R_=+e.target.value,I=6/R_,st=e.target.closest(".lbody").querySelector(".stage");
+  if(st)st.style.setProperty("--dur",(R_/30).toFixed(2)+"s");document.getElementById("ohm-out").innerHTML=`R = ${R_} Ω → I = U ÷ R = 6 ÷ ${R_} = <b>${fmt(r3(I))} A</b>${R_>=80?" : le courant passe difficilement":R_<=20?" : le courant passe facilement":""}`});
+
+/* ---------- générateurs d’exercices ---------- */
+function robotStaticQ(w,h,sx,sy,sd,labels){return robotSvg(w,h,{x:sx,y:sy,d:sd},{labels})}
+G.robot=()=>{for(let g=0;g<300;g++){const W=5,H=5;let x=R(0,4),y=R(0,4),d=R(0,3);const sx=x,sy=y,sd=d,ops=[],n=R(4,7);let ok=true;
+    for(let i=0;i<n;i++){const op=pick(["F","F","F","L","R"]);if(op==="F"){const nx=x+DIRS[d][0],ny=y+DIRS[d][1];if(nx<0||ny<0||nx>=W||ny>=H){ok=false;break}x=nx;y=ny}else d=op==="L"?(d+3)%4:(d+1)%4;ops.push(op)}
+    if(!ok||(x===sx&&y===sy)||ops.filter(o=>o==="F").length<2)continue;
+    const cands=[[x,y]];while(cands.length<4){const c=[R(0,4),R(0,4)];if(!cands.some(z=>z[0]===c[0]&&z[1]===c[1])&&!(c[0]===sx&&c[1]===sy))cands.push(c)}
+    const sh=shuffle(cands),L="ABCD",good="Case "+L[sh.findIndex(c=>c[0]===x&&c[1]===y)];
+    return mcq("Le robot (le rond avec la flèche) exécute ce programme. Sur quelle case arrive-t-il ?",good,["Case A","Case B","Case C","Case D"].filter(z=>z!==good),`Pas à pas : ${ops.map(o=>OPL[o]).join(", ")}. Attention : « tourner » se fait sur place, dans le sens de la flèche du robot.`,{svg:robotStaticQ(W,H,sx,sy,sd,sh.map((c,i)=>[c[0],c[1],L[i]])),code:ops.map(o=>OPL[o]).join("\n"),sig:ops.join("")+sx+sy+sd})}
+  return G.pseudo()};
+G.pseudo=()=>{const a=R(1,9),b=R(2,9),c=R(2,3),t=R(1,2);
+  if(t===1)return inp("Que vaut score à la fin ?",(a+b)*c,`score vaut ${a}, puis ${a} + ${b} = ${a+b}, puis ${a+b} × ${c} = ${(a+b)*c}.`,{code:`score ← ${a}\nscore ← score + ${b}\nscore ← score × ${c}`});
+  const v=R(3,6),k=R(1,2);return inp("Que vaut vies à la fin ?",v-2*k,`vies part de ${v}, et on enlève ${k} deux fois : ${v} − ${k} − ${k} = ${v-2*k}.`,{code:`vies ← ${v}\nvies ← vies − ${k}\nvies ← vies − ${k}`})};
+G.py=()=>{const t=R(1,4);
+  if(t===1){const a=R(2,9),b=R(2,9);return inp("Qu’affiche ce programme ?",(a+b)*2,`x vaut ${a}, puis ${a} + ${b} = ${a+b}. On affiche ${a+b} × 2 = ${(a+b)*2}.`,{code:`x = ${a}\ny = ${b}\nx = x + y\nprint(x * 2)`})}
+  if(t===2){const n=R(2,6),k=R(2,9);return inp("Qu’affiche ce programme ?",n*k,`La boucle tourne ${n} fois et ajoute ${k} à chaque tour : ${n} × ${k} = ${n*k}.`,{code:`s = 0\nfor i in range(${n}):\n    s = s + ${k}\nprint(s)`})}
+  if(t===3){const a=R(1,5),b=a+R(2,5);return inp("Combien de nombres ce programme affiche-t-il ?",b-a,`range(${a}, ${b}) donne ${Array.from({length:b-a},(_,i)=>a+i).join(", ")} : ${b-a} nombres, on s’arrête avant ${b}.`,{code:`for i in range(${a}, ${b}):\n    print(i)`})}
+  const a=R(1,20),lim=R(5,15),g=a>lim?"grand":"petit";return mcq("Qu’affiche ce programme ?",g,["grand","petit",String(a),"rien"],`${a} > ${lim} est ${a>lim?"vrai":"faux"}, donc on exécute ${a>lim?"le bloc du if":"le bloc du else"}.`,{code:`n = ${a}\nif n > ${lim}:\n    print("grand")\nelse:\n    print("petit")`})};
+G.ohm=()=>{const t=R(1,3),Rv=pick([10,20,30,50,100,200]),I=pick([.05,.1,.2,.3,.5]),U=r3(Rv*I);
+  if(t===1)return inp(`Une résistance de ${Rv} Ω est traversée par un courant de ${fmt(I)} A. Quelle est la tension à ses bornes (en V) ?`,U,`U = R × I = ${Rv} × ${fmt(I)} = ${fmt(U)} V.`,{unit:"V",tol:.01});
+  if(t===2)return inp(`On applique ${fmt(U)} V à une résistance de ${Rv} Ω. Quelle est l’intensité du courant (en A) ?`,I,`I = U ÷ R = ${fmt(U)} ÷ ${Rv} = ${fmt(I)} A.`,{unit:"A",tol:.001});
+  return inp(`Une tension de ${fmt(U)} V fait passer ${fmt(I)} A dans une résistance. Quelle est sa valeur (en Ω) ?`,Rv,`R = U ÷ I = ${fmt(U)} ÷ ${fmt(I)} = ${Rv} Ω.`,{unit:"Ω",tol:.01})};
+
+/* ---------- banques ---------- */
+const EB={
+ circ:[["Que faut-il pour qu’une lampe s’allume ?","un circuit fermé avec une pile",["seulement une lampe","un circuit ouvert","deux fils sans pile"],"Le courant ne circule que si la boucle est complète, de la borne + à la borne − de la pile."],["Quand l’interrupteur est ouvert, le circuit est…","ouvert : le courant ne passe pas",["fermé : le courant passe","en court-circuit","plus puissant"],"Ouvrir l’interrupteur coupe la boucle."],["Combien de bornes a une pile ?","2",["1","3","4"],"Une borne + et une borne −."],["Dans un schéma, quel symbole représente une lampe ?","un cercle avec une croix",["deux traits parallèles","un rectangle","un triangle"],"Deux traits de longueurs différentes représentent la pile."],["À l’extérieur de la pile, le courant va…","de la borne + vers la borne −",["de la borne − vers la borne +","dans les deux sens","nulle part"],"C’est le sens conventionnel du courant."]],
+ cond:[["Lequel de ces objets laisse passer le courant ?","un trombone en métal",["une règle en plastique","une gomme","un bâton de bois sec"],"Les métaux sont de bons conducteurs."],["Un matériau qui ne laisse pas passer le courant est un…","isolant",["conducteur","générateur","récepteur"],"Plastique, caoutchouc, verre, bois sec : isolants."],["Pourquoi les fils électriques sont-ils entourés de plastique ?","pour nous protéger : le plastique est isolant",["pour faire joli","pour que le courant aille plus vite","pour qu’ils soient plus lourds"],"Le cuivre conduit, la gaine en plastique isole."],["L’eau du robinet est…","conductrice : danger avec l’électricité !",["isolante","sans effet","magnétique"],"C’est pour ça qu’on ne touche jamais un appareil électrique avec les mains mouillées."],["De quel métal est fait l’intérieur d’un fil électrique ?","du cuivre",["du plastique","du bois","du verre"],"Le cuivre est un très bon conducteur."]],
+ serie:[["Dans un circuit en série, si une lampe est dévissée…","toutes les lampes s’éteignent",["les autres brillent plus","rien ne change","seule celle-là s’éteint"],"En série, il n’y a qu’un seul chemin : s’il est coupé, tout s’arrête."],["Dans un circuit en dérivation, si une lampe est dévissée…","les autres restent allumées",["tout s’éteint","la pile explose","les autres clignotent"],"Chaque lampe a sa propre boucle."],["Les prises de la maison sont branchées…","en dérivation",["en série","sans fil","au hasard"],"Ainsi, éteindre la télé n’éteint pas le frigo."],["Combien de boucles y a-t-il dans un circuit en série ?","une seule",["deux","autant que de lampes","aucune"],"Un seul chemin pour le courant."]],
+ court:[["Qu’est-ce qu’un court-circuit ?","le courant passe par un fil au lieu de passer par la lampe",["une lampe qui grille","un circuit très long","un interrupteur ouvert"],"Le courant prend le chemin le plus facile : la lampe s’éteint et la pile chauffe."],["Que risque-t-on avec un court-circuit ?","que les fils ou la pile chauffent : risque d’incendie",["rien du tout","que la lampe brille plus","que le courant s’arrête tout seul"],"À la maison, le disjoncteur coupe le courant pour nous protéger."],["Quelle tension délivre une prise de courant en France ?","230 volts",["4,5 volts","1,5 volt","12 volts"],"230 V, c’est très dangereux, voire mortel."],["Peut-on faire des expériences avec une prise de courant ?","Non, jamais",["Oui, avec des gants","Oui, si un adulte regarde de loin","Oui, avec un fil court"],"Les expériences se font uniquement avec des piles de 1,5 V ou 4,5 V."],["Quel appareil coupe le courant en cas de problème à la maison ?","le disjoncteur",["l’ampoule","la prise","l’interrupteur du salon"],"Il se déclenche en cas de court-circuit ou de fuite de courant."]],
+ unit:[["En quelle unité mesure-t-on la tension ?","le volt (V)",["l’ampère (A)","l’ohm (Ω)","le mètre (m)"],"La tension se mesure en volts, avec un voltmètre."],["En quelle unité mesure-t-on l’intensité du courant ?","l’ampère (A)",["le volt (V)","le mètre (m)","le kilogramme (kg)"],"L’intensité se mesure en ampères, avec un ampèremètre."],["Comment branche-t-on un voltmètre ?","en dérivation, aux bornes de l’appareil",["en série, dans la boucle","à la place de la pile","sans fil"],"Voltmètre en dérivation, ampèremètre en série."],["Dans l’image du réservoir d’eau, la tension ressemble à…","la hauteur de l’eau qui pousse",["le nombre de tuyaux","la couleur de l’eau","la taille de la roue"],"Plus l’eau est haute, plus elle pousse fort."],["Une pile ronde classique (type AA) délivre…","1,5 V",["230 V","15 V","0 V"],"Une pile plate de lampe de poche fait 4,5 V."]],
+ ohm:[["Que dit la loi d’Ohm U = R × I ?","la tension égale la résistance fois l’intensité",["l’intensité égale la tension fois la résistance","la résistance égale la tension plus l’intensité","la tension ne dépend de rien"],"U en volts, R en ohms, I en ampères."],["Avec la même pile, si la résistance augmente, l’intensité…","diminue",["augmente","ne change pas","double toujours"],"I = U ÷ R : plus R est grand, plus I est petit."],["Dans quelle unité s’exprime une résistance ?","l’ohm (Ω)",["le volt (V)","l’ampère (A)","le hertz (Hz)"],"Le symbole Ω est la lettre grecque oméga."]],
+ led:[["Une LED s’allume…","dans un seul sens de branchement",["dans les deux sens","jamais avec une pile","seulement avec 230 V"],"La LED est une diode : elle laisse passer le courant dans un seul sens."],["La patte la plus longue d’une LED se branche du côté…","+ de la pile",["− de la pile","peu importe","de la terre"],"Patte longue = anode (+), patte courte = cathode (−)."],["Pourquoi ajoute-t-on une résistance avec une LED ?","pour limiter le courant et ne pas la griller",["pour qu’elle change de couleur","pour qu’elle clignote","pour augmenter la tension"],"Sans résistance, trop de courant traverse la LED."],["Que veut dire DEL (LED en anglais) ?","diode électroluminescente",["lampe électrique durable","lumière extra douce","ligne électrique directe"],"Une diode qui produit de la lumière."]],
+ algo:[["Un algorithme, c’est…","une suite d’instructions précises, dans l’ordre",["un robot","un ordinateur","un jeu vidéo"],"Comme une recette de cuisine."],["Si on inverse deux instructions, le résultat…","peut changer",["ne change jamais","efface le programme","va plus vite"],"L’ordre des instructions compte."],["« Tourner à droite » fait…","pivoter le robot sur place",["avancer le robot d’une case","reculer le robot","arrêter le programme"],"Le robot change de direction sans changer de case."]],
+ loop:[["À quoi sert une boucle « répéter » ?","à refaire plusieurs fois les mêmes instructions",["à arrêter le programme","à choisir entre deux actions","à effacer le dessin"],"Elle évite d’écrire 10 fois la même chose."],["« répéter 4 fois : avancer, tourner à droite » dessine…","un carré",["un triangle","une ligne droite","un cercle"],"4 côtés et 4 virages d’un quart de tour."],["Dans « répéter 3 fois : avancer, avancer », combien de fois le robot avance-t-il ?","6",["3","2","5"],"3 tours × 2 = 6."]],
+ cond2:[["Quel bloc permet au programme de choisir ?","si … sinon",["répéter 5 fois","avancer","afficher"],"La condition teste une situation et choisit quoi faire."],["« si il pleut : prendre un parapluie, sinon : prendre une casquette ». Il fait beau. Je prends…","une casquette",["un parapluie","les deux","rien"],"La condition « il pleut » est fausse : on fait la partie « sinon »."],["Une condition est toujours…","vraie ou fausse",["un nombre","une couleur","un mot au hasard"],"En informatique, on appelle ça un booléen."]],
+ vars:[["Une variable, c’est…","une boîte avec un nom qui garde une valeur",["un nombre qui ne change jamais","un robot","une couleur"],"Sa valeur peut changer pendant le programme."],["score ← 5 puis score ← score + 3. Que vaut score ?","8",["5","3","53"],"On prend l’ancienne valeur (5) et on ajoute 3."],["Que fait « afficher score » ?","il montre la valeur de score à l’écran",["il efface score","il met score à 0","il double score"],"Afficher ne change pas la variable."]],
+ py1:[["En Python, quelle instruction affiche un texte à l’écran ?","print",["show","echo","display"],"print(\"Bonjour\") affiche Bonjour."],["En Python, que fait age = 10 ?","il range 10 dans la variable age",["il compare age et 10","il affiche 10","il efface age"],"Le signe = range une valeur ; pour comparer, on écrit ==."],["Qu’affiche print(\"2 + 3\") ?","2 + 3",["5","23","rien"],"Entre guillemets, c’est un texte : Python ne calcule pas."]],
+ py2:[["Combien de tours fait for i in range(5) ?","5",["4","6","1"],"range(5) donne 0, 1, 2, 3, 4."],["Pourquoi certaines lignes sont-elles décalées (indentées) en Python ?","elles font partie du bloc de la boucle ou du if",["pour faire joli","pour aller plus vite","c’est une erreur"],"Python utilise le décalage pour savoir ce qui est dans la boucle."]]
+};
+const ELESS=[
+ {id:"e_circ",sub:"elec",lvl:"CM2",title:"Le circuit électrique",desc:"Pile, lampe, interrupteur, boucle fermée",bank:EB.circ,steps:[
+  {t:"Allumer une lampe",h:`<p>Appuie sur l’interrupteur et regarde le courant circuler dans les fils.</p>`+circuitSimple("st1"),say:"Voici un circuit électrique. Il y a une pile, une lampe, un interrupteur et des fils. Appuie sur le bouton pour fermer l’interrupteur. Le courant se met à circuler dans la boucle, et la lampe s’allume. Appuie encore : le circuit s’ouvre, le courant s’arrête, la lampe s’éteint."},
+  {t:"Les éléments du circuit",h:ltab([["Élément","Rôle","Symbole"],["la pile","donne l’énergie (le générateur)","un grand trait + et un petit trait −"],["la lampe","transforme l’énergie en lumière","un cercle avec une croix"],["l’interrupteur","ouvre ou ferme le circuit","un trait qui se lève"],["les fils","relient les éléments","des traits"]]),say:"Chaque élément a un rôle. La pile est le générateur : elle fournit l’énergie. La lampe est un récepteur : elle transforme l’énergie en lumière. L’interrupteur permet d’ouvrir ou de fermer le circuit. Et les fils relient le tout. Les ingénieurs dessinent les circuits avec des symboles : c’est un schéma électrique."},
+  {t:"Circuit ouvert, circuit fermé",h:circuitSimple("st1b")+KEY("Le courant ne circule que dans une boucle <b>fermée</b>, qui part d’une borne de la pile et revient à l’autre."),say:"Retiens bien : pour que le courant circule, il faut une boucle fermée, sans interruption, qui part de la borne plus de la pile et revient à la borne moins. Si un fil est débranché, ou si l’interrupteur est ouvert, le circuit est ouvert : plus rien ne marche."},
+  {t:"Le sens du courant",h:`<p>À l’extérieur de la pile, le courant va de la borne <b>+</b> vers la borne <b>−</b>. C’est le sens que montrent les petits points qui avancent.</p>`+KEY("Une pile a deux bornes : + et −. Le courant sort par le + et rentre par le −."),say:"Le courant a un sens. À l’extérieur de la pile, il part de la borne plus, traverse la lampe, et revient par la borne moins. Les petits points qui avancent dans l’animation montrent ce sens."}]},
+ {id:"e_cond",sub:"elec",lvl:"CM2",title:"Conducteurs et isolants",desc:"Teste des objets dans le circuit",bank:EB.cond,steps:[
+  {t:"Le testeur de conducteurs",h:`<p>Pose un objet dans la pince : si la lampe s’allume, l’objet laisse passer le courant.</p>`+circuitTest("st2"),say:"Ce circuit est un testeur. On pose un objet entre les deux pinces. Si la lampe s’allume, c’est que l’objet laisse passer le courant : c’est un conducteur. Essaie le trombone, la pièce, la règle en plastique, le bâton de bois et la gomme."},
+  {t:"Conducteurs et isolants",h:ltab([["Conducteurs (le courant passe)","Isolants (le courant ne passe pas)"],["fer, cuivre, aluminium, or…","plastique, caoutchouc, verre, bois sec, air"],["l’eau, le corps humain !","papier, tissu sec"]])+KEY("Les métaux sont conducteurs. Le plastique et le caoutchouc sont isolants."),say:"Les métaux, comme le fer, le cuivre ou l’aluminium, sont des conducteurs. Le plastique, le caoutchouc, le verre ou le bois sec sont des isolants. Attention : l’eau et le corps humain sont conducteurs. C’est pour cela que l’électricité est dangereuse avec de l’eau."},
+  {t:"À quoi servent les isolants ?",h:`<p>Un fil électrique a un cœur en <b>cuivre</b> (conducteur) entouré d’une gaine en <b>plastique</b> (isolant).</p>`+KEY("La gaine isolante nous protège : on ne touche jamais un fil dénudé ni un appareil avec les mains mouillées."),say:"Un fil électrique a un cœur en cuivre, qui conduit le courant, entouré d’une gaine en plastique, qui est isolante. Cette gaine nous protège. Ne touche jamais un fil dont le cuivre est visible, et jamais un appareil électrique avec les mains mouillées."}]},
+ {id:"e_serie",sub:"elec",lvl:"5e",title:"Série ou dérivation",desc:"Deux façons de brancher deux lampes",bank:EB.serie,steps:[
+  {t:"Le circuit en série",h:`<p>Les deux lampes sont l’une après l’autre, dans <b>une seule boucle</b>.</p>`+circuitSeries("st3"),say:"Dans un circuit en série, les lampes sont branchées l’une après l’autre, dans une seule boucle. Dévisse la lampe numéro deux : la boucle est coupée, et les deux lampes s’éteignent."},
+  {t:"Le circuit en dérivation",h:`<p>Chaque lampe a <b>sa propre boucle</b> avec la pile.</p>`+circuitPar("st3b"),say:"Dans un circuit en dérivation, chaque lampe a sa propre boucle avec la pile. Dévisse la lampe numéro deux : la première lampe reste allumée, car sa boucle n’est pas coupée."},
+  {t:"Et dans la maison ?",h:KEY("Toutes les prises et les lampes de la maison sont branchées <b>en dérivation</b> : on peut éteindre une lampe sans éteindre le frigo.")+`<p>Les guirlandes de Noël anciennes étaient en série : une ampoule grillée, et toute la guirlande s’éteignait !</p>`,say:"Dans une maison, tout est branché en dérivation. C’est pratique : quand tu éteins ta lampe, le frigo continue de fonctionner. Les vieilles guirlandes de Noël étaient en série : une seule ampoule grillée, et toute la guirlande s’éteignait !"}]},
+ {id:"e_court",sub:"elec",lvl:"CM2",title:"Court-circuit et sécurité",desc:"Les dangers de l’électricité",bank:EB.court,steps:[
+  {t:"Le court-circuit",h:`<p>Ajoute un fil qui relie les deux côtés de la lampe.</p>`+circuitShort("st4"),say:"Ajoute un fil qui relie les deux côtés de la lampe. Le courant prend le chemin le plus facile : il passe par le fil au lieu de la lampe. La lampe s’éteint, le courant devient très fort, et la pile chauffe. C’est un court-circuit. Avec de gros courants, cela peut provoquer un incendie."},
+  {t:"La prise de courant : danger !",h:`<p class="warn">Une prise de courant délivre 230 volts. C’est 150 fois plus qu’une pile de 1,5 V, et cela peut tuer.</p>`+KEY("Jamais d’objet dans une prise. Jamais d’appareil électrique près de l’eau. Jamais de fil abîmé. Les expériences se font uniquement avec des piles."),say:"Attention, c’est très important. Une prise de courant délivre deux cent trente volts. C’est cent cinquante fois plus qu’une petite pile, et cela peut tuer. On ne met jamais d’objet dans une prise. On n’utilise jamais un appareil électrique près de l’eau. On ne touche jamais un fil abîmé. Les expériences se font seulement avec des piles."},
+  {t:"Les protections de la maison",h:ltab([["Protection","À quoi ça sert"],["le disjoncteur","coupe le courant en cas de court-circuit ou de surcharge"],["le différentiel 30 mA","coupe le courant si une personne touche un fil sous tension"],["la prise de terre","évacue le courant de fuite vers le sol"]]),say:"Dans le tableau électrique de la maison, il y a des protections. Le disjoncteur coupe le courant en cas de court-circuit. Le différentiel trente milliampères coupe le courant très vite si une personne touche un fil sous tension. Et la prise de terre évacue les fuites de courant vers le sol. Les électriciens et les ingénieurs dimensionnent ces protections pour que tout le monde soit en sécurité."}]},
+ {id:"e_unit",sub:"elec",lvl:"4e",title:"Tension et intensité",desc:"Volts, ampères et le réservoir d’eau",bank:EB.unit,steps:[
+  {t:"Comme de l’eau dans des tuyaux",h:`<p>Remplis le réservoir : l’eau pousse plus fort et la roue tourne plus vite.</p>`+waterStage("st5"),say:"Pour comprendre l’électricité, imagine de l’eau dans des tuyaux. La hauteur de l’eau dans le réservoir, c’est la tension : plus elle est haute, plus elle pousse fort. La quantité d’eau qui passe chaque seconde, c’est l’intensité. Remplis le réservoir : l’eau pousse plus fort, et la roue tourne plus vite."},
+  {t:"Les deux grandeurs",h:ltab([["Grandeur","Lettre","Unité","Appareil de mesure","Branchement"],["la tension","U","le volt (V)","le voltmètre","en dérivation"],["l’intensité","I","l’ampère (A)","l’ampèremètre","en série"]])+KEY("Pile ronde : 1,5 V. Pile plate : 4,5 V. Prise de la maison : 230 V."),say:"La tension se note U et se mesure en volts, avec un voltmètre branché en dérivation, c’est-à-dire à côté de l’appareil. L’intensité se note I et se mesure en ampères, avec un ampèremètre branché en série, dans la boucle. Une pile ronde fait un virgule cinq volt, une pile plate quatre virgule cinq volts, et la prise de la maison deux cent trente volts."},
+  {t:"Le multimètre",h:`<p>Le multimètre est un appareil qui mesure à la fois la tension (position V) et l’intensité (position A). C’est l’outil favori des électriciens !</p>`+KEY("On choisit toujours le bon calibre avant de mesurer, et on commence par le plus grand."),say:"Le multimètre est l’outil préféré des électriciens. Il peut mesurer la tension, en position V, et l’intensité, en position A. Avant de mesurer, on choisit toujours le bon calibre, en commençant par le plus grand pour ne pas abîmer l’appareil."}]},
+ {id:"e_ohm",sub:"elec",lvl:"4e",title:"La loi d’Ohm",desc:"U = R × I, avec un curseur à manipuler",gen:G.ohm,bank:EB.ohm,steps:[
+  {t:"La résistance freine le courant",h:`<p>Fais glisser le curseur : plus la résistance est grande, plus le courant ralentit.</p>`+ohmStage("st6"),say:"Une résistance est un composant qui freine le courant. Fais glisser le curseur. Plus la résistance est grande, plus le courant est faible : les points avancent plus lentement. La pile, elle, donne toujours six volts."},
+  {t:"La formule",h:`<p class="bignum small">U = R × I</p>`+ltab([["U","R","I"],["tension en volts (V)","résistance en ohms (Ω)","intensité en ampères (A)"]])+KEY("On peut aussi écrire I = U ÷ R et R = U ÷ I."),say:"La loi d’Ohm s’écrit U égale R fois I. U est la tension en volts, R la résistance en ohms, et I l’intensité en ampères. On peut la retourner : I égale U divisé par R, et R égale U divisé par I."},
+  {t:"Un exemple",h:EX(CALC("Pile : U = 6 V   Résistance : R = 30 Ω\nI = U ÷ R = 6 ÷ 30 = 0,2 A"))+`<p>Si on double la résistance (60 Ω), l’intensité est divisée par deux : 0,1 A.</p>`,say:"Prenons un exemple. Une pile de six volts et une résistance de trente ohms. L’intensité vaut six divisé par trente, soit zéro virgule deux ampère. Si on double la résistance, l’intensité est divisée par deux : zéro virgule un ampère."}]},
+ {id:"e_led",sub:"elec",lvl:"5e",title:"La LED",desc:"Une lampe qui n’aime qu’un seul sens",bank:EB.led,steps:[
+  {t:"Une diode qui éclaire",h:`<p>Retourne la LED : elle ne s’allume que dans un sens.</p>`+ledStage("st7"),say:"Une LED, ou diode électroluminescente, est une petite lampe très économe. Mais elle a une particularité : elle ne laisse passer le courant que dans un seul sens. Retourne-la : le courant est bloqué et elle s’éteint."},
+  {t:"Les pattes de la LED",h:ltab([["Patte","Nom","Se branche vers"],["longue","anode","le + de la pile"],["courte","cathode","le − de la pile"]])+KEY("Avec une LED, on met toujours une résistance pour limiter le courant."),say:"Une LED a deux pattes. La patte longue s’appelle l’anode : elle se branche du côté plus. La patte courte, la cathode, se branche du côté moins. Et on ajoute toujours une résistance, sinon trop de courant la traverse et elle grille."},
+  {t:"Partout autour de toi",h:`<p>Écrans, feux de circulation, phares de voiture, lampes de la maison : les LED consomment environ 5 fois moins qu’une ampoule classique et durent beaucoup plus longtemps.</p>`,say:"Les LED sont partout : dans les écrans, les feux de circulation, les phares de voiture et les lampes de la maison. Elles consomment environ cinq fois moins d’énergie qu’une vieille ampoule, et durent beaucoup plus longtemps."}]}
+];
+const PLESS=[
+ {id:"p_algo",sub:"prog",lvl:"CM2",title:"Qu’est-ce qu’un algorithme ?",desc:"Guider un robot pas à pas",gen:G.robot,bank:EB.algo,steps:[
+  {t:"Un robot qui obéit",h:`<p>Le robot suit les instructions <b>une par une, dans l’ordre</b>. Regarde-le aller jusqu’au drapeau.</p>`+robotDemo("rb1",{w:6,h:4,start:[0,3,1],goal:[4,0],prog:[{op:"F"},{op:"F"},{op:"L"},{op:"F"},{op:"F"},{op:"F"},{op:"R"},{op:"F"},{op:"F"}]}),say:"Un ordinateur ne réfléchit pas tout seul : il suit exactement les instructions qu’on lui donne, une par une, dans l’ordre. Regarde le robot : il avance, il tourne, et il arrive au drapeau. La liste d’instructions s’appelle un algorithme."},
+  {t:"Un algorithme, c’est une recette",h:KEY("Un algorithme est une suite d’instructions précises, dans un ordre précis, pour résoudre un problème.")+EX(`<p>Recette de la pâte à crêpes : 1. verser la farine, 2. ajouter les œufs, 3. mélanger, 4. ajouter le lait petit à petit.</p>`),say:"Un algorithme, c’est comme une recette de cuisine : des instructions précises, dans un ordre précis. Si tu mets le lait avant la farine, la pâte rate. En programmation, c’est pareil : l’ordre compte."},
+  {t:"Tourner, c’est sur place",h:`<p>« tourner à gauche » et « tourner à droite » font pivoter le robot <b>sans changer de case</b>. La flèche montre où il regarde.</p>`,say:"Attention à un piège : quand le robot tourne, il pivote sur place, sans changer de case. Seule l’instruction avancer le fait bouger. Pour ne pas te tromper, regarde la flèche du robot : elle montre la direction dans laquelle il va avancer."}]},
+ {id:"p_loop",sub:"prog",lvl:"CM2",title:"Les boucles",desc:"Répéter sans tout réécrire",gen:G.robot,bank:EB.loop,steps:[
+  {t:"Dessiner un carré",h:`<p>Au lieu d’écrire 16 instructions, on utilise une <b>boucle</b>.</p>`+robotDemo("rb2",{w:5,h:5,start:[1,4,0],trail:true,prog:[{rep:4,body:[{op:"F"},{op:"F"},{op:"F"},{op:"R"}]}]}),say:"Le robot doit dessiner un carré. Sans boucle, il faudrait écrire seize instructions. Avec une boucle répéter quatre fois, on écrit seulement quatre instructions, et l’ordinateur les répète. Regarde le robot tracer son carré."},
+  {t:"Compter les tours",h:EX(CALC("répéter 3 fois :\n    avancer\n    avancer\n\n→ le robot avance 3 × 2 = 6 fois"))+KEY("Une boucle répète un bloc d’instructions un nombre de fois choisi."),say:"Pour savoir ce que fait une boucle, on multiplie. Répéter trois fois avancer, avancer : le robot avance trois fois deux, soit six fois. Les instructions décalées vers la droite font partie de la boucle."}]},
+ {id:"p_cond",sub:"prog",lvl:"6e",title:"Les conditions",desc:"Si… sinon : le robot décide",gen:G.robot,bank:EB.cond2,steps:[
+  {t:"Le robot dans le labyrinthe",h:`<p>Le robot ne connaît pas le chemin. À chaque pas, il <b>teste</b> s’il y a un mur devant lui.</p>`+robotDemo("rb3",{w:5,h:5,start:[0,4,1],goal:[1,1],walls:[[0,0],[1,0],[2,0],[3,0],[4,0],[0,1],[0,2],[1,2],[2,2],[3,2],[0,3],[1,3],[2,3],[3,3]],prog:[{until:true,body:[{ifw:true,then:[{op:"L"}],else:[{op:"F"}]}]}]}),say:"Cette fois, le robot ne connaît pas le chemin. Son programme est très court : tant qu’il n’est pas sur le drapeau, s’il y a un mur devant lui, il tourne à gauche, sinon, il avance. Regarde : il trouve son chemin tout seul. C’est la force des conditions."},
+  {t:"Si… sinon",h:CALC("si il pleut :\n    prendre un parapluie\nsinon :\n    prendre une casquette")+KEY("Une condition est vraie ou fausse. Si elle est vraie, on fait le premier bloc, sinon le second."),say:"Une condition, c’est une question dont la réponse est vrai ou faux. Si il pleut, je prends un parapluie, sinon, je prends une casquette. L’ordinateur exécute un seul des deux blocs, selon la réponse."}]},
+ {id:"p_vars",sub:"prog",lvl:"6e",title:"Les variables",desc:"Des boîtes qui gardent des valeurs",gen:G.pseudo,bank:EB.vars,steps:[
+  {t:"Une boîte avec une étiquette",h:`<p>Avance instruction par instruction et regarde les boîtes changer.</p>`+traceDemo("tv1",{lines:["score ← 0","vies ← 3","score ← score + 10","vies ← vies − 1","score ← score × 2","afficher score"],steps:[{l:0,vars:{score:0}},{l:1,vars:{score:0,vies:3}},{l:2,vars:{score:10,vies:3},note:"On prend l’ancienne valeur 0 et on ajoute 10."},{l:3,vars:{score:10,vies:2},note:"3 − 1 = 2 vies."},{l:4,vars:{score:20,vies:2},note:"10 × 2 = 20."},{l:5,vars:{score:20,vies:2},out:"20"}]}),say:"Une variable est comme une boîte avec une étiquette. On y range une valeur, qui peut changer pendant le programme. Dans un jeu vidéo, le score et le nombre de vies sont des variables. Appuie sur instruction suivante, et regarde les boîtes changer."},
+  {t:"Lire une affectation",h:CALC("score ← score + 10")+`<p>On lit de droite à gauche : on calcule <b>score + 10</b> avec l’ancienne valeur, puis on range le résultat dans <b>score</b>.</p>`,say:"Comment lire score reçoit score plus dix ? On calcule d’abord la partie de droite, avec l’ancienne valeur du score. Puis on range le résultat dans la boîte score. L’ancienne valeur est remplacée."}]},
+ {id:"p_py1",sub:"prog",lvl:"5e",title:"Premiers pas en Python",desc:"print, variables et if",gen:G.py,bank:[...EB.py1,...B.python.slice(0,3)],steps:[
+  {t:"Le langage Python",h:`<p>Python est un vrai langage de programmation, utilisé par les ingénieurs, les scientifiques… et par les élèves de collège !</p>`+traceDemo("tp1",{py:true,lines:["age = 10","age = age + 1",'message = "J’ai " + str(age) + " ans"',"print(message)","if age > 10:",'    print("Bienvenue au collège !")'],steps:[{l:0,vars:{age:10},note:"= range 10 dans la variable age."},{l:1,vars:{age:11}},{l:2,vars:{age:11,message:"\"J’ai 11 ans\""},note:"str() transforme le nombre en texte pour le coller."},{l:3,vars:{age:11,message:"\"J’ai 11 ans\""},out:"J’ai 11 ans"},{l:4,vars:{age:11,message:"\"J’ai 11 ans\""},note:"11 > 10 est vrai : on entre dans le bloc."},{l:5,vars:{age:11,message:"\"J’ai 11 ans\""},out:"Bienvenue au collège !"}]}),say:"Python est un vrai langage, utilisé par les ingénieurs et les scientifiques. En Python, le signe égal range une valeur dans une variable. print affiche à l’écran. Et if permet de tester une condition. Avance ligne par ligne pour voir ce que fait l’ordinateur."},
+  {t:"Les règles de Python",h:ltab([["Écriture","Sens"],["x = 5","range 5 dans x"],["x == 5","teste si x vaut 5"],['print("Bonjour")',"affiche Bonjour"],["if … :","condition, avec un bloc décalé dessous"]])+KEY("Les lignes décalées (4 espaces) appartiennent au bloc du if ou de la boucle."),say:"Retiens quelques règles. Un seul signe égal range une valeur. Deux signes égal comparent. Les textes s’écrivent entre guillemets. Et les lignes décalées de quatre espaces appartiennent au bloc juste au-dessus."}]},
+ {id:"p_py2",sub:"prog",lvl:"5e",title:"Les boucles en Python",desc:"for et range",gen:G.py,bank:[...EB.py2,...B.python.slice(3,7)],steps:[
+  {t:"La boucle for",h:traceDemo("tp2",{py:true,lines:["total = 0","for i in range(1, 4):","    total = total + i","    print(i, total)",'print("Fin :", total)'],steps:[{l:0,vars:{total:0}},{l:1,vars:{total:0,i:1},note:"i prend la valeur 1."},{l:2,vars:{total:1,i:1}},{l:3,vars:{total:1,i:1},out:"1 1"},{l:1,vars:{total:1,i:2},note:"Tour suivant : i vaut 2."},{l:2,vars:{total:3,i:2}},{l:3,vars:{total:3,i:2},out:"2 3"},{l:1,vars:{total:3,i:3},note:"Dernier tour : i vaut 3."},{l:2,vars:{total:6,i:3}},{l:3,vars:{total:6,i:3},out:"3 6"},{l:1,vars:{total:6,i:3},note:"range(1, 4) s’arrête avant 4 : la boucle est finie."},{l:4,vars:{total:6,i:3},out:"Fin : 6"}]}),say:"La boucle for répète un bloc pour chaque valeur. range un virgule quatre donne les nombres un, deux et trois : on s’arrête toujours avant le deuxième nombre. Suis la variable i et la variable total, tour après tour."},
+  {t:"range, le piège",h:ltab([["Code","Valeurs de i"],["range(5)","0, 1, 2, 3, 4"],["range(1, 4)","1, 2, 3"],["range(0, 10, 2)","0, 2, 4, 6, 8"]])+KEY("range s’arrête toujours juste avant le nombre de fin."),say:"Attention au piège : range cinq donne zéro, un, deux, trois, quatre. Cela fait bien cinq tours, mais on commence à zéro et on s’arrête avant cinq. Avec un troisième nombre, on choisit le pas : range zéro, dix, deux donne les nombres pairs."}]},
+ {id:"p_bin",sub:"prog",lvl:"5e",title:"Le binaire",desc:"Compter comme un ordinateur",gen:G.bin,bank:B.logique,steps:[
+  {t:"Des lampes allumées ou éteintes",h:`<p>Un ordinateur ne connaît que <b>0</b> (éteint) et <b>1</b> (allumé). Touche les lampes : chacune a une valeur. Essaie de faire 13 !</p>`+bitsDemo("bt1"),say:"Un ordinateur ne connaît que deux états : éteint, qui vaut zéro, et allumé, qui vaut un. Chaque lampe a une valeur : un, deux, quatre, huit, et ainsi de suite, en doublant à chaque fois. Allume des lampes et additionne leurs valeurs. Essaie de fabriquer le nombre treize !"},
+  {t:"Lire un nombre binaire",h:EX(CALC("1101 en binaire\n= 8 + 4 + 0 + 1\n= 13"))+KEY("Un chiffre binaire s’appelle un bit. 8 bits font un octet, qui peut coder 256 valeurs (de 0 à 255)."),say:"Pour lire un nombre binaire, on additionne les valeurs des chiffres un. Un, un, zéro, un, c’est huit plus quatre plus un, soit treize. Un chiffre binaire s’appelle un bit. Huit bits forment un octet, qui peut représenter deux cent cinquante-six valeurs différentes."}]}
+];
+for(const L of [...ELESS,...PLESS]){LESSONS.push(L);LESSON[L.id]=L}
+
+for(const t of [
+ {id:"el_circ",sub:"elec",lvl:"CM2",title:"Circuits & sécurité",desc:"Circuit, conducteurs, court-circuit",bank:[...EB.circ,...EB.cond,...EB.court]},
+ {id:"el_cour",sub:"elec",lvl:"5e",title:"Série, dérivation & LED",desc:"Montages, unités, diodes",bank:[...EB.serie,...EB.led,...EB.unit]},
+ {id:"el_ohm",sub:"elec",lvl:"4e",title:"La loi d’Ohm",desc:"U = R × I",gen:G.ohm,bank:EB.ohm},
+ {id:"p_robot",sub:"prog",lvl:"CM2",title:"Le robot : où arrive-t-il ?",desc:"Suivre un programme pas à pas",gen:G.robot},
+ {id:"p_var",sub:"prog",lvl:"6e",title:"Variables & Python",desc:"Lire un programme et prédire le résultat",gen:G.py,bank:EB.vars}]){THEMES.push(t);THEME[t.id]=t}
+
 function buildQuestions(t,n=t.n||10){
   const out=[],seen=new Set();const add=q=>{const k=qkey(q);if(!seen.has(k)){seen.add(k);out.push(q)}};
   const bank=t.bank?shuffle(t.bank):[];
@@ -1270,7 +1553,7 @@ function vHome(){const lv=levelInfo(state.xp),st=streak(),td=state.days[todayKey
     <div class="card slots">${slots.length?slots.map(s=>`<div class="slot ${s.done?"done":""}"><span class="time">${s.t.replace(":"," h ")}</span>${glyph(s.sub)}<div><div class="ttl"><b>${SUBINFO(s.sub).label}</b></div><span class="muted" style="font-size:14px">${s.min} min</span></div>${s.done?`<span class="tag good">Fait</span>`:`<button class="btn small" data-slot="${s.id}">Commencer</button>`}</div>`).join(""):`<p class="empty">Rien de prévu aujourd’hui. Profites-en pour un quiz libre ou un défi !</p>`}</div></section>
   <section class="section"><h2>Pour progresser</h2><div class="grid">
     <button class="tile" data-rev="1" style="--sc:var(--c-rev)"><div class="tile-head">${glyph("rev")}<div><h3>Révisions</h3><span class="muted">${state.deck.length?`${state.deck.length} question${state.deck.length>1?"s":""} à revoir`:"Aucune erreur à revoir pour l’instant"}</span></div></div></button>
-    ${(()=>{const L=nextLesson();return L?`<button class="tile" data-lesson="${L.id}" style="--sc:var(--c-maths)"><div class="tile-head">${glyph("maths")}<div><h3>Cours : ${L.title}</h3><span class="muted">${L.lvl} · avec explications audio</span></div></div></button>`:""})()}
+    ${(()=>{const L=nextLesson();return L?`<button class="tile" data-lesson="${L.id}" style="--sc:${SUBINFO(L.sub).c}"><div class="tile-head">${glyph(L.sub)}<div><h3>Cours : ${L.title}</h3><span class="muted">${L.lvl} · avec explications audio</span></div></div></button>`:""})()}
     ${sugg.map(t=>`<button class="tile" data-theme="${t.id}" style="--sc:${SUBJECTS[t.sub].c}"><div class="tile-head">${glyph(t.sub)}<div><h3>${t.title}</h3><span class="muted">${SUBJECTS[t.sub].label} · ${state.themes[t.id]?"à renforcer":"nouveau thème"}</span></div></div></button>`).join("")}
   </div></section>`}
 
@@ -1336,7 +1619,7 @@ function vParents(){if(!parentOK)return `<header class="top"><div><p class="eyeb
   return `<header class="top"><div><p class="eyebrow">Espace parents</p><h1>Bilan de ${esc(state.name)}</h1></div><button class="btn ghost small" data-lock="1">Verrouiller</button></header>
   <section class="section"><h2>Les 7 derniers jours</h2><div class="card tbl-wrap"><table><thead><tr><th>Matière</th><th style="text-align:right">Quiz</th><th style="text-align:right">Minutes</th><th style="text-align:right">Réussite</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.s.label}</td><td class="num">${r.q}</td><td class="num">${r.min}</td><td class="num" style="color:${r.pct===null?"var(--muted)":r.pct>=80?"var(--good)":r.pct<60?"var(--bad)":"var(--warn)"}">${r.pct===null?"–":r.pct+" %"}</td></tr>`).join("")}</tbody></table></div>
   <p class="muted">${weak.length?"Points faibles : "+weak.join(", ")+".":"Aucun point faible repéré pour l’instant."} ${beyond} thème${beyond>1?"s":""} au-delà du ${state.classe} déjà exploré${beyond>1?"s":""}.</p></section>
-  <section class="section"><h2>Cours de maths</h2><div class="card tbl-wrap"><table><thead><tr><th>Cours</th><th>Niveau</th><th style="text-align:right">Meilleur score</th><th style="text-align:right">Essais</th></tr></thead><tbody>${LESSONS.map(L=>{const s=state.lessons?.[L.id];return `<tr><td>${L.title}</td><td>${L.lvl}</td><td class="num" style="color:${s?.best==null?"var(--muted)":s.best>=80?"var(--good)":s.best<50?"var(--bad)":"var(--warn)"}">${s?.best==null?(s?"cours lu":"–"):s.best+" %"}</td><td class="num">${s?.tries||0}</td></tr>`}).join("")}</tbody></table></div></section>
+  <section class="section"><h2>Cours</h2><div class="card tbl-wrap"><table><thead><tr><th>Cours</th><th>Matière</th><th>Niveau</th><th style="text-align:right">Meilleur score</th><th style="text-align:right">Essais</th></tr></thead><tbody>${LESSONS.map(L=>{const s=state.lessons?.[L.id];return `<tr><td>${L.title}</td><td>${SUBINFO(L.sub).short}</td><td>${L.lvl}</td><td class="num" style="color:${s?.best==null?"var(--muted)":s.best>=80?"var(--good)":s.best<50?"var(--bad)":"var(--warn)"}">${s?.best==null?(s?"cours lu":"–"):s.best+" %"}</td><td class="num">${s?.tries||0}</td></tr>`}).join("")}</tbody></table></div></section>
   <section class="card" style="padding:18px;display:flex;flex-direction:column;gap:14px"><h2>Réglages</h2><div class="row">
    <div class="field"><label for="s-name">Prénom</label><input class="input" id="s-name" value="${esc(state.name)}"></div>
    <div class="field"><label for="s-cl">Classe actuelle</label><select class="input" id="s-cl">${LEVELS.map(l=>`<option ${l===state.classe?"selected":""}>${l}</option>`).join("")}</select></div>
@@ -1446,6 +1729,13 @@ document.addEventListener("click",e=>{
   if(D.install&&installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;render()});return}
   if(D.setup){const nm=document.getElementById("w-name").value.trim(),pn=document.getElementById("w-pin").value.trim();if(!nm)return toast("Écris le prénom de l’enfant.");if(!/^\d{4}$/.test(pn))return toast("Le code parent doit faire 4 chiffres.");state.name=nm;state.pin=pn;state.classe=document.getElementById("w-cl").value;save();return go("home")}
   if(D.export){const blob=new Blob([JSON.stringify(state,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`academie-sauvegarde-${todayKey()}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);return toast("Sauvegarde téléchargée.")}
+  if(D.stgt){const st=document.getElementById(D.stgt);if(!st)return;const TOG={sw:["off","on"],b2:["on","off"],short:["off","on"],h:["low","high"],led:["ok","rev"]};
+    if(D.stgset){const [k,v]=D.stgset.split(":");st.dataset[k]=v}else{const [a,b2]=TOG[D.stg];st.dataset[D.stg]=st.dataset[D.stg]===a?b2:a}beep([[520,0,.06]]);return}
+  if(D.runrobot)return runRobot(D.runrobot);
+  if(D.tstep)return traceStep(D.tstep);
+  if(D.tplay)return tracePlay(D.tplay);
+  if(D.treset){clearDemos();DEMOS[D.treset].i=-1;return traceShow(D.treset)}
+  if(D.bit){const [id,i]=D.bit.split(":");return bitToggle(id,+i)}
   if(D.reload)return location.reload();
   if(D.lesson){if(quiz){quiz=null}return openLesson(D.lesson)}
   if(D.lex)return startLessonEx(D.lex);
