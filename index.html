@@ -436,6 +436,19 @@ pre.calc{margin:0;padding:14px 16px;border-radius:12px;background:var(--card);bo
 @keyframes tfade{from{opacity:0}to{opacity:1}}
 .tacnote{min-height:3em;margin:8px 4px 2px;font-size:16px}
 @media (prefers-reduced-motion:reduce){.tac .pl,.tac .tball{transition-duration:.2s}}
+.tac .pl text{font-size:11px}
+.tac .net{stroke:#ffe14d;stroke-opacity:.75;stroke-linecap:round;animation:tfade .5s}
+.xgw{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
+.xgsvg{width:100%;height:auto;display:block;border-radius:10px;max-height:58vh;cursor:crosshair;touch-action:manipulation}
+.xgt{fill:#fff;font:800 14px var(--f-display);paint-order:stroke;stroke:rgba(0,0,0,.6);stroke-width:4px}
+.xgout{margin:8px 4px 2px;min-height:3em}
+.poi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:12px}
+.pl-sl{display:flex;flex-direction:column;gap:4px}.pl-sl span{display:flex;justify-content:space-between}.pl-sl input{width:100%}
+.pbar{display:grid;grid-template-columns:120px 1fr 52px;gap:8px;align-items:center;font-size:15px}
+.pbar i{height:14px;border-radius:7px;background:var(--line);overflow:hidden;display:block}.pbar i b{display:block;height:100%;transition:width .4s}
+.pbar em{font-style:normal;font-weight:700;text-align:right}
+.poitab .ltab{font-size:13px}.poitab td,.poitab th{white-space:nowrap;padding:4px 6px}
+.poisim{text-align:center}.poiscore{font:900 44px var(--f-display);letter-spacing:.05em}
 </style>
 </head>
 <body>
@@ -495,7 +508,7 @@ const SUBJECTS={
   hg:{label:"Histoire-Géographie",short:"Histoire-Géo",glyph:"1789",c:"var(--c-hg)"},
   fr:{label:"Français",short:"Français",glyph:"Aa",c:"var(--c-fr)"},
   en:{label:"Anglais",short:"Anglais",glyph:"EN",c:"var(--c-en)"},
-  foot:{label:"Football : la tactique",short:"Foot",glyph:"⚽",c:"var(--c-foot)"}
+  foot:{label:"Football : tactique & data",short:"Foot",glyph:"⚽",c:"var(--c-foot)"}
 };
 const EXTRA={rev:{label:"Révisions",short:"Révisions",glyph:"↺",c:"var(--c-rev)"},defi:{label:"Défi Claude",short:"Défi Claude",glyph:"★",c:"var(--c-defi)"}};
 const SUBINFO=k=>SUBJECTS[k]||EXTRA[k]||EXTRA.rev;
@@ -1675,250 +1688,332 @@ for(const t of [
  {id:"m3_quiz",sub:"m3d",lvl:"CM2",title:"Quiz de modélisation 3D",desc:"Formes, perçages, impression, sécurité",bank:[...B3.espace,...B3.formes,...B3.trous,...B3.couches,...B3.flux,...B3.secu]},
  {id:"m3_regles",sub:"m3d",lvl:"6e",title:"Les règles de l’impression 3D",desc:"Porte-à-faux, supports, épaisseurs",bank:[...B3.impr,...B3.couches]}]){THEMES.push(t);THEME[t.id]=t}
 
-/* ================= football : tactique animée ================= */
-/* terrain de foot à 8 vu du ciel : 60 m × 40 m, 10 px par mètre. Les bleus (a) attaquent vers la droite. */
-const TPX=x=>20+x*10,TPY=y=>20+y*10;
-const F331={a1:[2.5,20],a2:[13,8],a3:[11,20],a4:[13,32],a5:[23,9],a6:[21,20],a7:[23,31],a8:[29,20]};
-const mirror=o=>Object.fromEntries(Object.entries(o).map(([k,[x,y]])=>["b"+k.slice(1),[60-x,40-y]]));
+/* ================= football à 11 : tactique, histoire et maths ================= */
+/* terrain 105 m × 68 m vu du ciel, 5,7 px par mètre. Les bleus (a) attaquent vers la droite. */
+const S11=5.7,TPX=x=>20+x*S11,TPY=y=>20+y*S11;
+const mir11=o=>Object.fromEntries(Object.entries(o).map(([k,[x,y]])=>["b"+k.slice(1),[105-x,68-y]]));
 const OFF=ids=>Object.fromEntries(ids.map(k=>[k,null]));
-function tacPitch(id){let s="";for(let i=0;i<6;i++)s+=`<rect x="${20+i*100}" y="20" width="100" height="400" fill="${i%2?"#2f9e44":"#37b24d"}"/>`;
-  const L=`stroke="#fff" stroke-width="2.5" fill="none" opacity=".9"`;
-  s+=`<rect x="20" y="20" width="600" height="400" ${L}/><line x1="320" y1="20" x2="320" y2="420" ${L}/><circle cx="320" cy="220" r="60" ${L}/><circle cx="320" cy="220" r="3" fill="#fff"/>`;
-  s+=`<rect x="20" y="90" width="130" height="260" ${L}/><rect x="490" y="90" width="130" height="260" ${L}/><circle cx="110" cy="220" r="3" fill="#fff"/><circle cx="530" cy="220" r="3" fill="#fff"/>`;
-  s+=`<line x1="150" y1="20" x2="150" y2="420" stroke="#fff" stroke-width="1.5" stroke-dasharray="6 8" opacity=".55"/><line x1="490" y1="20" x2="490" y2="420" stroke="#fff" stroke-width="1.5" stroke-dasharray="6 8" opacity=".55"/>`;
-  s+=`<rect x="8" y="190" width="12" height="60" fill="#fff" opacity=".85"/><rect x="620" y="190" width="12" height="60" fill="#fff" opacity=".85"/>`;
+const T433={a1:[4,34],a3:[22,8],a5:[17,25],a4:[17,43],a2:[22,60],a6:[30,34],a8:[40,23],a10:[40,45],a11:[50,8],a9:[52,34],a7:[50,60]};
+const B442={b1:[101,34],b2:[84,10],b5:[86,26],b4:[86,42],b3:[84,58],b7:[72,12],b8:[71,27],b6:[71,41],b11:[72,56],b10:[60,29],b9:[60,39]};
+const P235={a1:[12,34],a5:[42,25],a4:[42,43],a3:[53,24],a6:[52,34],a2:[53,44],a11:[78,4],a8:[79,19],a9:[84,34],a10:[79,49],a7:[78,64]};
+const LANES=[[0,13.84,"couloir"],[13.84,11,"demi-espace"],[24.84,18.32,"axe"],[43.16,11,"demi-espace"],[54.16,13.84,"couloir"]];
+const laneZ=(hs)=>LANES.map(([y,h,t],i)=>({r:[0,y,105,h],k:(i===1||i===3)?"good":"info",t:hs&&!(i===1||i===3)?"":t}));
+function tacPitch(id){let s="";const W=105*S11,H=68*S11;for(let i=0;i<7;i++)s+=`<rect x="${20+i*W/7}" y="20" width="${W/7+.5}" height="${H}" fill="${i%2?"#2f9e44":"#37b24d"}"/>`;
+  const L=`stroke="#fff" stroke-width="2.2" fill="none" opacity=".9"`,X=TPX,Y=TPY;
+  s+=`<rect x="20" y="20" width="${W}" height="${H}" ${L}/><line x1="${X(52.5)}" y1="20" x2="${X(52.5)}" y2="${20+H}" ${L}/><circle cx="${X(52.5)}" cy="${Y(34)}" r="${9.15*S11}" ${L}/><circle cx="${X(52.5)}" cy="${Y(34)}" r="3" fill="#fff"/>`;
+  for(const [g,d] of [[0,1],[105,-1]]){s+=`<path d="M${X(g)},${Y(13.84)} H${X(g+d*16.5)} V${Y(54.16)} H${X(g)}" ${L}/><path d="M${X(g)},${Y(24.84)} H${X(g+d*5.5)} V${Y(43.16)} H${X(g)}" ${L}/><circle cx="${X(g+d*11)}" cy="${Y(34)}" r="2.6" fill="#fff"/>`;
+    s+=`<path d="M${X(g+d*16.5)},${Y(26.69)} A${9.15*S11},${9.15*S11} 0 0 ${d>0?1:0} ${X(g+d*16.5)},${Y(41.31)}" ${L}/>`;
+    s+=`<rect x="${d>0?X(g)-11:X(g)}" y="${Y(30.34)}" width="11" height="${7.32*S11}" fill="#fff" opacity=".85"/>`}
   s+=`<defs>${[["p","#ffe14d"],["r","#ffffff"],["x","#ff6b6b"]].map(([k,c])=>`<marker id="tm${k}-${id}" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`).join("")}</defs>`;
   return s}
-function tacBoard(id,cfg){const ids=[...new Set(cfg.frames.flatMap(f=>Object.keys(f.p||{})))];let cur=OFF(ids),ball=[30,20];
+function tacBoard(id,cfg){const ids=[...new Set(cfg.frames.flatMap(f=>Object.keys(f.p||{})))];let cur=OFF(ids),ball=[52.5,34];
   const frames=cfg.frames.map(f=>{cur={...cur,...(f.p||{})};if(f.b!==undefined)ball=f.b;return {...f,P:{...cur},B:ball}});
   DEMOS[id]={...cfg,frames,ids,i:-1};
-  const pl=ids.map(k=>`<g class="pl ${k[0]} ${k.slice(1)==="1"?"gk":""}" data-pl="${k}"><circle r="13"/><text>${(cfg.lab&&cfg.lab[k])||k.slice(1)}</text></g>`).join("");
+  const pl=ids.map(k=>`<g class="pl ${k[0]} ${k.slice(1)==="1"?"gk":""}" data-pl="${k}"><circle r="11"/><text>${(cfg.lab&&cfg.lab[k])||k.slice(1)}</text></g>`).join("");
   const btns=cfg.btns?cfg.btns.map(([k,l])=>`<button class="btn small ${k?"ghost":""}" data-tacgo="${id}:${k}">${l}</button>`).join(""):
     `<button class="btn small" data-tacplay="${id}">▶ Jouer l’action</button><button class="btn ghost small" data-tacnext="${id}">Image suivante</button>`;
-  return `<div class="tac inst" id="tac-${id}"><svg class="tfig" viewBox="0 0 640 440" role="img" aria-label="${esc(cfg.alt||"Terrain de football vu du ciel")}">${tacPitch(id)}<g class="tz"></g><g class="ta"></g>${pl}<g class="tball"><circle r="6.5"/></g><text class="tgoal" x="320" y="232" text-anchor="middle">BUT !</text></svg><p class="tacnote" aria-live="polite"></p></div><div class="tools stage-tools">${btns}</div>`}
+  return `<div class="tac inst" id="tac-${id}"><svg class="tfig" viewBox="0 0 639 428" role="img" aria-label="${esc(cfg.alt||"Terrain de football vu du ciel")}">${tacPitch(id)}<g class="tz"></g><g class="ta"></g>${pl}<g class="tball"><circle r="5.5"/></g><text class="tgoal" x="320" y="226" text-anchor="middle">BUT !</text></svg><p class="tacnote" aria-live="polite"></p></div><div class="tools stage-tools">${btns}</div>`}
 function tacPos(F,r){if(typeof r==="string"){const p=F.P[r];return p?[p[0],p[1]]:null}return r}
-function tacBallPos(F){if(typeof F.B==="string"){const p=F.P[F.B];return p?[p[0]+1.3,p[1]+.9]:[30,20]}return F.B}
+function tacBallPos(F){if(typeof F.B==="string"){const p=F.P[F.B];return p?[p[0]+1.6,p[1]+1.3]:[52.5,34]}return F.B}
 function tacShow(id,k,inst){const D=DEMOS[id],root=document.getElementById("tac-"+id);if(!D||!root)return;const F=D.frames[k];if(!F)return;D.i=k;
   root.classList.toggle("inst",!!inst);root.style.setProperty("--td",(F.d||900)+"ms");
   root.querySelectorAll(".pl").forEach(g=>{const p=F.P[g.dataset.pl];g.classList.toggle("off",!p);g.classList.toggle("hi",(F.h||[]).includes(g.dataset.pl));if(p)g.style.transform=`translate(${TPX(p[0])}px,${TPY(p[1])}px)`});
-  const bp=tacBallPos(F);root.querySelector(".tball").style.transform=`translate(${TPX(bp[0])}px,${TPY(bp[1])}px)`;root.querySelector(".tball").classList.toggle("off",!!F.nob);
+  const bp=tacBallPos(F),tb=root.querySelector(".tball");tb.style.transform=`translate(${TPX(bp[0])}px,${TPY(bp[1])}px)`;tb.classList.toggle("off",!!F.nob);
   let z="";for(const o of F.z||[]){
-    if(o.r){const [x,y,w,h]=o.r;z+=`<rect class="zn ${o.k||"info"}" x="${TPX(x)}" y="${TPY(y)}" width="${w*10}" height="${h*10}" rx="8"/>`;if(o.t)z+=`<text class="zt" x="${TPX(x+w/2)}" y="${TPY(y+h/2)+6}" text-anchor="middle">${o.t}</text>`}
-    if(o.vl){z+=`<line class="vl ${o.k||""}" x1="${TPX(o.vl)}" y1="20" x2="${TPX(o.vl)}" y2="420"/>`;if(o.t)z+=`<text class="zt sm" x="${TPX(o.vl)}" y="${TPY(o.ty??2)}" text-anchor="middle">${o.t}</text>`}
+    if(o.r){const [x,y,w,h]=o.r;z+=`<rect class="zn ${o.k||"info"}" x="${TPX(x)}" y="${TPY(y)}" width="${w*S11}" height="${h*S11}" rx="6"/>`;if(o.t)z+=`<text class="zt ${o.sm?"sm":""}" x="${TPX(x+w/2)}" y="${TPY(y+h/2)+6}" text-anchor="middle">${o.t}</text>`}
+    if(o.vl!=null){z+=`<line class="vl ${o.k||""}" x1="${TPX(o.vl)}" y1="20" x2="${TPX(o.vl)}" y2="${TPY(68)}"/>`;if(o.t)z+=`<text class="zt sm" x="${TPX(o.vl)}" y="${TPY(o.ty??3)}" text-anchor="middle">${o.t}</text>`}
     if(o.tri){const pts=o.tri.map(r=>tacPos(F,r)).filter(Boolean);z+=`<polygon class="tri" points="${pts.map(p=>TPX(p[0])+","+TPY(p[1])).join(" ")}"/>`}
+    if(o.ln){const [r1,r2,w]=o.ln,p=tacPos(F,r1),q=tacPos(F,r2);if(p&&q)z+=`<line class="net" x1="${TPX(p[0])}" y1="${TPY(p[1])}" x2="${TPX(q[0])}" y2="${TPY(q[1])}" style="stroke-width:${w}px"/>`}
     if(o.lab){const [r,dx,dy,t,c]=o.lab,p=tacPos(F,r);if(p)z+=`<text class="zt sm ${c||""}" x="${TPX(p[0]+dx)}" y="${TPY(p[1]+dy)}" text-anchor="middle">${t}</text>`}}
   root.querySelector(".tz").innerHTML=z;
-  let a="";for(const [f,t,kind] of F.a||[]){const p=tacPos(F,f),q=tacPos(F,t);if(!p||!q)continue;const x1=TPX(p[0]),y1=TPY(p[1]),x2=TPX(q[0]),y2=TPY(q[1]),L=Math.hypot(x2-x1,y2-y1)||1,s1=16/L,s2=(typeof t==="string"?18:4)/L;
+  let a="";for(const [f,t,kind] of F.a||[]){const p=tacPos(F,f),q=tacPos(F,t);if(!p||!q)continue;const x1=TPX(p[0]),y1=TPY(p[1]),x2=TPX(q[0]),y2=TPY(q[1]),L=Math.hypot(x2-x1,y2-y1)||1,s1=14/L,s2=(typeof t==="string"?16:4)/L;
     const ax=x1+(x2-x1)*s1,ay=y1+(y2-y1)*s1,bx=x2-(x2-x1)*s2,by=y2-(y2-y1)*s2,k=kind||"pass",m=k==="run"?"r":k==="block"?"x":"p";
     a+=`<line class="ar ${k}" x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" marker-end="url(#tm${m}-${id})"/>`;
-    if(k==="block"){const mx=(x1+x2)/2,my=(y1+y2)/2;a+=`<path class="ar blockx" d="M${mx-9},${my-9} L${mx+9},${my+9} M${mx+9},${my-9} L${mx-9},${my+9}"/>`}}
+    if(k==="block"){const mx=(x1+x2)/2,my=(y1+y2)/2;a+=`<path class="ar blockx" d="M${mx-8},${my-8} L${mx+8},${my+8} M${mx+8},${my-8} L${mx-8},${my+8}"/>`}}
   root.querySelector(".ta").innerHTML=a;
   root.querySelector(".tacnote").innerHTML=F.n?`<b>${k+1}/${D.frames.length}</b> ${F.n}`:"";
   const g=root.querySelector(".tgoal");g.classList.remove("on");if(F.goal&&!inst){void g.getBoundingClientRect();g.classList.add("on");beep([[523,0,.12],[659,.12,.12],[784,.24,.3]])}
-  const nb=document.querySelector(`[data-tacnext="${id}"]`);if(nb){const end=k>=D.frames.length-1;nb.textContent=end?"Revoir depuis le début":"Image suivante"}
+  const nb=document.querySelector(`[data-tacnext="${id}"]`);if(nb)nb.textContent=k>=D.frames.length-1?"Revoir depuis le début":"Image suivante";
   document.querySelectorAll(`[data-tacgo^="${id}:"]`).forEach(b=>b.classList.toggle("ghost",+b.dataset.tacgo.split(":")[1]!==k))}
-function tacPlay(id){const D=DEMOS[id];if(!D)return;clearDemos();tacShow(id,0,true);let t=1700;
-  D.frames.forEach((F,k)=>{if(!k)return;demoTimers.push(setTimeout(()=>tacShow(id,k),t));t+=(F.d||900)+(F.w||1900)})}
+function tacPlay(id){const D=DEMOS[id];if(!D)return;clearDemos();tacShow(id,0,true);let t=1800;
+  D.frames.forEach((F,k)=>{if(!k)return;demoTimers.push(setTimeout(()=>tacShow(id,k),t));t+=(F.d||900)+(F.w||2100)})}
 function tacNext(id){const D=DEMOS[id];if(!D)return;clearDemos();if(D.i>=D.frames.length-1)return tacShow(id,0,true);tacShow(id,D.i+1)}
-{const _is=initStep;initStep=function(){_is();document.querySelectorAll(".lesson .tac").forEach(el=>{const id=el.id.slice(4),D=DEMOS[id];if(!D)return;tacShow(id,0,true);if(!D.btns)demoTimers.push(setTimeout(()=>tacPlay(id),700))})}}
 
+/* ---------- xG : carte des tirs interactive ---------- */
+/* modèle simplifié : logistique sur l’angle de tir (vers les poteaux) et la distance au centre du but */
+function shotAngle(lat,d){return Math.abs(Math.atan2(lat+3.66,d)-Math.atan2(lat-3.66,d))}
+function xgOf(lat,d){if(d<=0)return 0;const z=-3.43+4.2*shotAngle(lat,d)-.0384*Math.hypot(lat,d);return Math.min(.75,1/(1+Math.exp(-z)))}
+const XS=8,XX=l=>20+l*XS,XY=d=>24+d*XS;
+const XGS={};
+function xgMap(id){XGS[id]=[];const L=`stroke="#fff" stroke-width="2.2" fill="none" opacity=".9"`;
+  let s=`<rect x="20" y="24" width="${68*XS}" height="${40*XS}" fill="#37b24d"/>`;for(let i=0;i<5;i++)if(i%2)s+=`<rect x="20" y="${24+i*8*XS}" width="${68*XS}" height="${8*XS}" fill="#2f9e44"/>`;
+  s+=`<line x1="20" y1="24" x2="${XX(68)}" y2="24" ${L}/><path d="M${XX(13.84)},24 V${XY(16.5)} H${XX(54.16)} V24" ${L}/><path d="M${XX(24.84)},24 V${XY(5.5)} H${XX(43.16)} V24" ${L}/><circle cx="${XX(34)}" cy="${XY(11)}" r="3" fill="#fff"/><path d="M${XX(26.69)},${XY(16.5)} A${9.15*XS},${9.15*XS} 0 0 0 ${XX(41.31)},${XY(16.5)}" ${L}/><rect x="${XX(30.34)}" y="8" width="${7.32*XS}" height="16" fill="#fff" opacity=".9"/>`;
+  return `<div class="xgw" id="xg-${id}"><svg class="xgsvg" data-xg="${id}" viewBox="0 0 584 368" role="img" aria-label="Moitié de terrain : touche pour placer un tir">${s}<g class="xgshots"></g><g class="xgcur"></g></svg>
+  <p class="xgout" id="xgout-${id}"><b>Touche le terrain</b> pour placer un tir : je calcule ses chances de but.</p></div>
+  <div class="tools stage-tools"><button class="btn ghost small" data-xgreset="${id}">Effacer les tirs</button></div>`}
+function xgColor(x){return x>=.3?"#ffe14d":x>=.1?"#ffa94d":"#ff6b6b"}
+function xgTap(svg,e){const id=svg.dataset.xg,pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());
+  const lat=(q.x-20)/XS,d=(q.y-24)/XS;if(lat<0||lat>68||d<.5||d>40)return;const off=lat-34,x=xgOf(off,d),dist=Math.hypot(off,d),ang=shotAngle(off,d)*180/Math.PI;
+  XGS[id].push(x);const tot=XGS[id].reduce((a,b)=>a+b,0);
+  svg.querySelector(".xgcur").innerHTML=`<polygon points="${XX(lat)},${XY(d)} ${XX(30.34)},24 ${XX(37.66)},24" fill="rgba(255,225,77,.28)" stroke="#ffe14d" stroke-width="1.5"/>`;
+  svg.querySelector(".xgshots").insertAdjacentHTML("beforeend",`<g><circle cx="${XX(lat)}" cy="${XY(d)}" r="${6+x*26}" fill="${xgColor(x)}" fill-opacity=".8" stroke="#1b1b1b" stroke-width="1.5"/><text class="xgt" x="${XX(lat)}" y="${XY(d)-10-x*26}" text-anchor="middle">${fmt(Math.round(x*100)/100)}</text></g>`);
+  document.getElementById("xgout-"+id).innerHTML=`Distance <b>${Math.round(dist)} m</b> · angle de tir <b>${Math.round(ang)}°</b> · xG <b>${fmt(Math.round(x*100)/100)}</b> : environ <b>${Math.round(x*100)} buts sur 100</b> tirs comme celui-là.<br><span class="muted">Tes ${XGS[id].length} tir${XGS[id].length>1?"s":""} : xG total = <b>${fmt(Math.round(tot*100)/100)}</b> but${tot>=2?"s":""} attendu${tot>=2?"s":""}.</span>`;
+  beep([[300+x*900,0,.08]])}
+
+/* ---------- probabilités : loi de Poisson et simulation de matchs ---------- */
+const POI={};
+const fact=n=>n<2?1:n*fact(n-1);
+const poisP=(l,k)=>Math.exp(-l)*l**k/fact(k);
+function poisSample(l){const L=Math.exp(-l);let k=0,p=1;do{k++;p*=Math.random()}while(p>L);return k-1}
+function poisOutcome(a,b){let w=0,dr=0,lo=0;for(let i=0;i<=10;i++)for(let j=0;j<=10;j++){const p=poisP(a,i)*poisP(b,j);if(i>j)w+=p;else if(i===j)dr+=p;else lo+=p}return [w,dr,lo]}
+function poisWidget(id,a,b){POI[id]={a,b,tally:[0,0,0],n:0};
+  const sl=(k,v,c)=>`<label class="pl-sl"><span><b style="color:${c}">xG ${k==="a"?"bleus":"rouges"}</b> <span id="pv-${id}-${k}">${fmt(v)}</span></span><input type="range" min="0.2" max="3.5" step="0.1" value="${v}" data-pois="${id}:${k}"></label>`;
+  return `<div class="poi" id="poi-${id}">${sl("a",a,"#1c7ed6")}${sl("b",b,"#e03131")}
+   <div class="poibars" id="pb-${id}"></div>
+   <div class="poitab" id="pt-${id}"></div>
+   <div class="poisim"><div class="poiscore" id="ps-${id}">– : –</div><p class="muted" id="pn-${id}">Lance des matchs pour voir le hasard en action.</p></div></div>
+  <div class="tools stage-tools"><button class="btn small" data-poisim="${id}:1">Jouer 1 match</button><button class="btn ghost small" data-poisim="${id}:100">Jouer 100 matchs</button><button class="btn ghost small" data-poisim="${id}:1000">Jouer 1000 matchs</button></div>`}
+function poisRender(id){const S=POI[id];if(!S||!document.getElementById("poi-"+id))return;const [w,d,l]=poisOutcome(S.a,S.b),pc=x=>Math.round(x*100);
+  document.getElementById("pb-"+id).innerHTML=[["Victoire bleue",w,"#1c7ed6"],["Match nul",d,"#868e96"],["Victoire rouge",l,"#e03131"]].map(([t,p,c])=>`<div class="pbar"><span>${t}</span><i><b style="width:${pc(p)}%;background:${c}"></b></i><em>${pc(p)} %</em></div>`).join("");
+  document.getElementById("pt-"+id).innerHTML=`<table class="ltab"><tr><th>Buts</th>${[0,1,2,3,4].map(k=>`<th>${k}</th>`).join("")}</tr><tr><td>bleus</td>${[0,1,2,3,4].map(k=>`<td>${pc(poisP(S.a,k))} %</td>`).join("")}</tr><tr><td>rouges</td>${[0,1,2,3,4].map(k=>`<td>${pc(poisP(S.b,k))} %</td>`).join("")}</tr></table>`}
+function poisSim(id,n){const S=POI[id];if(!S)return;let last;for(let i=0;i<n;i++){const x=poisSample(S.a),y=poisSample(S.b);last=[x,y];S.tally[x>y?0:x===y?1:2]++;S.n++}
+  document.getElementById("ps-"+id).innerHTML=`<span style="color:#1c7ed6">${last[0]}</span> : <span style="color:#e03131">${last[1]}</span>`;
+  const [v,d,l]=S.tally,pc=x=>Math.round(x/S.n*100);
+  document.getElementById("pn-"+id).innerHTML=`Sur <b>${S.n}</b> match${S.n>1?"s":""} : bleus gagnent <b>${v}</b> (${pc(v)} %), nuls <b>${d}</b> (${pc(d)} %), rouges gagnent <b>${l}</b> (${pc(l)} %).`;
+  beep([[n>1?700:500,0,.08]])}
+
+document.addEventListener("click",e=>{const sv=e.target.closest&&e.target.closest(".xgsvg");if(sv)return xgTap(sv,e);
+  const r=e.target.closest&&e.target.closest("[data-xgreset]");if(r){const id=r.dataset.xgreset;XGS[id]=[];const w=document.getElementById("xg-"+id);w.querySelector(".xgshots").innerHTML="";w.querySelector(".xgcur").innerHTML="";document.getElementById("xgout-"+id).innerHTML="<b>Touche le terrain</b> pour placer un tir.";return}
+  const s=e.target.closest&&e.target.closest("[data-poisim]");if(s){const [id,n]=s.dataset.poisim.split(":");return poisSim(id,+n)}});
+document.addEventListener("input",e=>{const d=e.target.dataset&&e.target.dataset.pois;if(!d)return;const [id,k]=d.split(":"),S=POI[id];if(!S)return;S[k]=+e.target.value;S.tally=[0,0,0];S.n=0;
+  document.getElementById(`pv-${id}-${k}`).textContent=fmt(S[k]);document.getElementById("pn-"+id).textContent="Nouveaux réglages : relance des matchs.";poisRender(id)});
+{const _is=initStep;initStep=function(){_is();document.querySelectorAll(".lesson .tac").forEach(el=>{const id=el.id.slice(4),D=DEMOS[id];if(!D)return;tacShow(id,0,true);if(!D.btns)demoTimers.push(setTimeout(()=>tacPlay(id),700))});
+  document.querySelectorAll(".lesson .poi").forEach(el=>{const id=el.id.slice(4);const S=POI[id];if(S){S.tally=[0,0,0];S.n=0}poisRender(id)});
+  document.querySelectorAll(".lesson .xgw").forEach(el=>{XGS[el.id.slice(3)]=[]})}}
+
+/* ---------- banques de questions ---------- */
 const FTB={
- postes:[["En foot à 8, combien de joueurs sont sur le terrain pour une équipe ?","8, dont 1 gardien",["11, dont 1 gardien","7, sans gardien","8, dont 2 gardiens"],"Foot à 8 : 1 gardien et 7 joueurs de champ."],
-  ["Comment s’appelle la zone près de notre propre but ?","la zone défensive",["la zone offensive","le rond central","le couloir droit"],"On y protège notre but."],
-  ["Le terrain est découpé en 3 couloirs. Lesquels ?","gauche, axe, droit",["avant, milieu, arrière","haut, bas, centre","rouge, bleu, vert"],"Les couloirs se voient dans la longueur du terrain."],
-  ["Que veut dire le système 1-3-3-1 ?","1 gardien, 3 défenseurs, 3 milieux, 1 attaquant",["1 défenseur, 3 milieux, 3 attaquants, 1 gardien","13 joueurs","3 gardiens"],"On lit toujours depuis notre but : gardien, défense, milieu, attaque."],
-  ["Le rôle principal des milieux, c’est…","faire le lien entre la défense et l’attaque",["rester dans le but","attendre devant le but adverse","ne jamais défendre"],"Ils récupèrent, passent et soutiennent."],
-  ["Qui est le « premier défenseur » de l’équipe ?","l’attaquant",["le gardien","l’arbitre","le défenseur central"],"Quand on perd le ballon, c’est lui qui gêne en premier l’adversaire."]],
- largeur:[["Quand mon équipe a le ballon, on doit plutôt…","s’écarter pour rendre le terrain grand",["se coller autour du ballon","s’arrêter et regarder","tous courir vers le but"],"Écartés, on a plus d’espace et plus de solutions de passe."],
-  ["« Prendre la largeur », c’est…","avoir des joueurs près des lignes de touche",["courir plus vite","tirer de loin","rester au centre"],"Ça oblige les adversaires à s’écarter eux aussi."],
-  ["« Prendre la profondeur », c’est…","avoir un joueur loin devant, vers le but adverse",["reculer près de son gardien","faire une passe en arrière","sauter haut"],"L’attaquant pousse les défenseurs à reculer."],
-  ["Pourquoi est-il facile de défendre contre une équipe groupée autour du ballon ?","peu d’adversaires suffisent à bloquer toutes les passes",["parce qu’elle court trop vite","parce que le ballon est trop gros","ce n’est pas facile"],"Tout le monde est au même endroit : il n’y a pas d’espace."],
-  ["En attaque on rend le terrain grand. En défense, on le rend…","petit",["grand aussi","rond","plus long"],"C’est le principe le plus important de la tactique."]],
- soutien:[["Un partenaire caché derrière un adversaire…","ne peut pas recevoir la passe : il doit se décaler",["est bien placé","doit crier plus fort","doit s’asseoir"],"Il faut sortir de « l’ombre » du défenseur pour ouvrir une ligne de passe."],
-  ["Pourquoi joue-t-on souvent en triangle ?","le porteur a toujours deux solutions de passe",["c’est plus joli","le règlement l’oblige","pour courir moins vite"],"Un défenseur ne peut fermer qu’une passe à la fois."],
-  ["Avant de recevoir le ballon, je dois…","regarder autour de moi (prendre l’information)",["fermer les yeux","regarder seulement le ballon","m’arrêter"],"Partenaires, adversaires, espace libre : je sais déjà quoi faire avant que le ballon arrive."],
-  ["Soutenir le porteur du ballon, c’est…","se placer pour lui offrir une passe facile",["le pousser","prendre le ballon dans ses pieds","rester loin derrière lui"],"Ni trop près, ni caché derrière un adversaire."],
-  ["« Conserver le ballon » veut dire…","faire tourner le ballon dans l’équipe sans le perdre",["le garder dans les mains","dribbler tout le monde seul","tirer tout de suite"],"Quand on a le ballon, l’adversaire ne peut pas marquer."]],
- unedeux:[["Dans un une-deux, après ma passe…","je cours tout de suite dans le dos du défenseur",["je m’arrête","je lève les bras","je retourne en défense"],"C’est le « passe et va »."],
-  ["Pourquoi le une-deux élimine-t-il le défenseur ?","il regarde le ballon et oublie le joueur qui court",["il est fatigué","il n’a pas le droit de bouger","le ballon est trop rapide pour l’arbitre"],"Deux joueurs contre un, le défenseur ne peut pas tout suivre."],
-  ["Un « appel » en profondeur, c’est…","une course dans le dos des défenseurs pour recevoir",["crier le nom du gardien","demander le ballon dans les pieds","sortir du terrain"],"On part au moment où le passeur peut nous voir."],
-  ["Pour un appel, le passeur joue le ballon…","dans l’espace, devant le coureur",["dans le dos du coureur","au gardien adverse","en touche"],"Le coureur arrive lancé sur le ballon."],
-  ["Si l’attaquant part trop tôt, il risque d’être…","hors-jeu",["fatigué","expulsé","remplacé"],"Il doit rester au niveau des défenseurs jusqu’à la passe."]],
- defense:[["Quand on perd le ballon, le premier réflexe est de…","revenir entre le ballon et notre but",["s’arrêter et râler","rester devant","regarder l’arbitre"],"On protège d’abord notre but."],
-  ["Une équipe « compacte » en défense, c’est…","des joueurs proches les uns des autres, sans grand trou",["des joueurs éparpillés partout","tout le monde dans le but","des joueurs immobiles"],"Moins d’espace pour l’adversaire."],
-  ["Quand on presse le porteur, qui y va ?","le joueur le plus proche du ballon",["tout le monde","le gardien","le plus rapide de l’équipe, même s’il est loin"],"Les autres l’aident : un couvre, les autres ferment."],
-  ["« Couvrir » un partenaire qui presse, c’est…","se placer juste derrière lui, au cas où il est dribblé",["lui donner sa veste","courir devant lui","aller au but adverse"],"S’il est éliminé, je suis là."],
-  ["En pressant, on essaie de pousser le porteur vers…","le côté du terrain, près de la ligne de touche",["le centre du terrain","notre but","son gardien"],"Près de la touche, il a moins de solutions."],
-  ["Qui défend dans une équipe ?","tout le monde, attaquant compris",["seulement les défenseurs","seulement le gardien","personne, on attend"],"On attaque à 8 et on défend à 8."]],
- trans:[["Juste après avoir perdu le ballon, pourquoi presser tout de suite ?","l’adversaire n’est pas encore organisé",["parce que c’est la mi-temps","pour se fatiguer","ce n’est pas utile"],"C’est le contre-pressing : on essaie de le reprendre en quelques secondes."],
-  ["Une transition, c’est le moment où…","l’équipe passe de l’attaque à la défense, ou l’inverse",["on change de joueur","l’arbitre siffle","on boit de l’eau"],"Ballon perdu ou ballon récupéré : il faut réagir vite."],
-  ["Après une récupération, pour une contre-attaque on joue…","vite et vers l’avant",["lentement en arrière","toujours au gardien","en touche"],"Les adversaires sont encore devant : derrière eux, il y a de l’espace."],
-  ["Pendant une contre-attaque, les ailiers…","sprintent dans les couloirs pour donner de la largeur",["restent en défense","s’arrêtent","vont dans le but"],"Le porteur a ainsi des solutions sur les côtés."],
-  ["« Fixer » un défenseur, c’est…","aller vers lui pour l’attirer, puis passer au partenaire libre",["le regarder fixement","le pousser","lui parler"],"Le défenseur ne peut pas suivre deux joueurs à la fois."]],
- sys:[["Dans un 1-2-3-2, combien y a-t-il d’attaquants ?","2",["3","1","4"],"Gardien, 2 défenseurs, 3 milieux, 2 attaquants."],
-  ["Dans un 4-4-2 (foot à 11), combien y a-t-il de milieux ?","4",["2","3","5"],"Au foot à 11, on ne compte pas le gardien : 4 défenseurs, 4 milieux, 2 attaquants."],
-  ["Le système de jeu, c’est…","la position de départ des joueurs",["une règle de l’arbitre","le score","le nom du stade"],"Pendant le match, l’équipe s’agrandit en attaque et se resserre en défense."],
-  ["En 4-3-3, combien y a-t-il de joueurs de champ ?","10",["11","9","8"],"4 + 3 + 3 = 10, plus le gardien = 11."],
-  ["Un système avec plus d’attaquants est en général…","plus offensif, mais il faut bien défendre ensemble",["toujours meilleur","interdit","plus lent"],"Chaque système a des forces et des faiblesses."]],
- regles:[["En foot à 8 (U10-U11), où compte le hors-jeu ?","seulement dans la zone des 13 mètres près du but adverse",["partout sur le terrain","jamais","seulement dans notre camp"],"Au foot à 11, la zone de hors-jeu commence à la ligne médiane."],
-  ["On est hors-jeu si, au moment de la passe, on est…","plus près du but adverse que l’avant-dernier adversaire, dans la zone de hors-jeu",["derrière le ballon","dans son propre camp","à côté de l’arbitre"],"Le gardien compte souvent comme le dernier adversaire."],
-  ["Peut-on être hors-jeu sur une rentrée de touche ?","non",["oui, toujours","seulement en 2e mi-temps","seulement le gardien"],"Pas de hors-jeu sur une touche ni sur un dégagement du gardien."],
-  ["En foot à 8, la touche se joue…","à la main",["au pied","de la tête","en roulant"],"Avec les deux mains, par-dessus la tête, les deux pieds au sol."],
-  ["En U10-U11, le penalty se tire à…","9 mètres",["11 mètres","13 mètres","5 mètres"],"Au foot à 11, c’est 11 mètres."],
-  ["Mon partenaire me fait une passe en retrait volontaire au pied. Moi, le gardien, je…","ne peux pas prendre le ballon à la main",["peux le prendre à la main","dois sortir du terrain","dois tirer au but"],"Sinon, coup franc indirect pour l’adversaire."]]
+ lire:[["Combien de couloirs verticaux utilise-t-on pour lire le terrain à 11 ?","5 : 2 couloirs, 2 demi-espaces et l’axe",["3 : gauche, axe, droit","4","7"],"Les lignes prolongent les bords de la surface et de la zone des 5,50 m."],
+  ["Le demi-espace se trouve…","entre le couloir extérieur et l’axe",["derrière le but","au milieu du rond central","sur la ligne de touche"],"De là, on peut passer, centrer, dribbler ou frapper."],
+  ["Recevoir « entre les lignes », c’est recevoir…","entre la ligne des milieux et la ligne des défenseurs adverses",["entre deux lignes de touche","derrière son gardien","dans le rond central"],"Aucun adversaire n’est chargé de toi : les milieux sont devant, les défenseurs derrière."],
+  ["Les 3 tiers du terrain s’appellent souvent…","construction, création, finition",["début, milieu, fin","défense, défense, attaque","gauche, axe, droit"],"On construit chez soi, on crée au milieu, on finit près du but."],
+  ["Une passe qui « casse une ligne », c’est…","une passe verticale qui dépasse une ligne d’adversaires",["une passe ratée","une passe en touche","une passe en retrait"],"Elle élimine d’un coup plusieurs adversaires."],
+  ["Un « bloc bas », c’est une équipe qui défend…","près de son propre but",["dans le camp adverse","sans gardien","seulement avec ses attaquants"],"Bloc bas, médian ou haut : la hauteur de la ligne défensive."]],
+ hist:[["Le tout premier grand système, au XIXe siècle, était…","le 2-3-5 (la pyramide)",["le 4-3-3","le 4-4-2","le 3-5-2"],"5 attaquants ! On attaquait beaucoup et on défendait peu."],
+  ["Quel changement de règle de 1925 a fait naître le WM ?","le hors-jeu : il ne faut plus 3 mais 2 adversaires entre l’attaquant et la ligne de but",["l’arrivée des cartons","le penalty","les remplacements"],"Herbert Chapman (Arsenal) ajoute alors un défenseur central : le WM (3-2-2-3)."],
+  ["Avec quel système le Brésil gagne la Coupe du monde 1958 ?","le 4-2-4",["le 2-3-5","le WM","le 5-4-1"],"C’est la Coupe du monde du jeune Pelé, 17 ans."],
+  ["Le catenaccio est un système…","très défensif, avec un libero derrière les défenseurs",["sans défenseur","où tout le monde attaque","sans gardien"],"Inter de Milan, années 1960 (Helenio Herrera)."],
+  ["Le rôle du libero est de…","rester libre derrière la défense pour balayer les ballons",["marquer l’avant-centre","tirer les corners","remplacer le gardien"],"Il n’a pas d’adversaire à surveiller : il couvre tout le monde."],
+  ["Le « football total » des années 1970 est associé à…","l’Ajax et aux Pays-Bas de Rinus Michels et Johan Cruyff",["l’Italie du catenaccio","l’Angleterre de 1966","l’équipe de France 1998"],"Tout le monde attaque, défend et change de poste."],
+  ["Dans le football total, « permuter » veut dire…","prendre la place libre d’un coéquipier qui est parti",["changer de maillot","sortir du terrain","s’arrêter de courir"],"Quand le latéral monte, un milieu prend sa place."],
+  ["Le piège du hors-jeu, c’est…","toute la ligne de défense avance ensemble juste avant la passe",["reculer dans son but","faire une faute","tirer au but"],"L’attaquant se retrouve hors-jeu."],
+  ["Arrigo Sacchi (Milan, fin des années 1980) défendait…","en zone, avec un bloc très court et du pressing",["en marquage individuel strict","avec un libero et 5 défenseurs","sans aucun pressing"],"Son équipe coulissait comme si les joueurs étaient reliés par des cordes."],
+  ["« Coulisser », c’est…","déplacer tout le bloc défensif du côté du ballon",["glisser sur le terrain","changer de système","faire une passe longue"],"Le côté opposé est laissé libre : il est trop loin pour l’adversaire."]],
+ pep:[["Dans le jeu de position de Guardiola, combien de joueurs au maximum dans un même couloir ?","2",["5","4","aucun"],"On occupe toute la largeur pour étirer l’adversaire."],
+  ["En attaque, Manchester City se transforme souvent en…","2-3-5 : 5 joueurs devant, un par couloir",["5-4-1","10 joueurs en défense","1-9"],"5 attaquants contre 4 défenseurs : un joueur est forcément libre."],
+  ["La « supériorité qualitative », c’est…","mettre ton meilleur dribbleur seul contre un défenseur",["avoir plus de supporters","avoir un plus beau maillot","avoir plus de remplaçants"],"Les autres supériorités : numérique (plus de joueurs) et positionnelle (mieux placés)."],
+  ["Un latéral « inversé », c’est un latéral qui…","rentre dans l’axe pour jouer milieu",["joue gardien","reste collé à la touche","joue avant-centre"],"Il crée un 3 contre 2 au milieu et protège contre les contre-attaques."],
+  ["Pourquoi le gardien de Guardiola joue-t-il court au pied ?","pour attirer le pressing et libérer de l’espace derrière",["parce qu’il ne sait pas dégager","pour perdre du temps","c’est obligatoire"],"On attire l’adversaire, puis on joue dans le dos de sa première ligne."],
+  ["Le « troisième homme », c’est…","A passe à B, qui remet en une touche à C, lancé",["le remplaçant","l’arbitre assistant","le troisième but"],"Le défenseur de C regarde le ballon et se fait surprendre."],
+  ["Un « faux 9 » est un avant-centre qui…","décroche au milieu pour attirer un défenseur central",["ne joue jamais","joue gardien","reste dans la surface"],"Il laisse un trou dans lequel foncent les ailiers. Messi l’a joué avec Guardiola."],
+  ["La « rest défense », c’est…","les joueurs qui restent derrière le ballon pendant qu’on attaque",["la mi-temps","les remplaçants","la défense quand on se repose"],"Souvent 2 + 3 joueurs, pour stopper les contre-attaques."],
+  ["Après une perte de balle, le contre-pressing dure…","quelques secondes (souvent 5 à 6)",["tout le match","une minute","zéro seconde"],"Après, on se replace en bloc."],
+  ["Lequel est un « déclencheur » de pressing ?","une passe en retrait ou un mauvais contrôle adverse",["un but marqué","la mi-temps","un remplacement"],"À ce moment-là, l’adversaire est en difficulté : toute l’équipe presse."]],
+ math:[["Que veut dire xG ?","expected goals : les buts attendus",["extra goals","x fois le gardien","expert du gardien"],"C’est la probabilité qu’un tir devienne un but."],
+  ["Un tir avec un xG de 0,25 marque environ…","1 fois sur 4",["à chaque fois","jamais","25 fois sur 4"],"0,25 = 25 sur 100 = 1 sur 4."],
+  ["Qu’est-ce qui augmente le plus l’xG d’un tir ?","être près du but et face à lui",["tirer très fort de loin","tirer depuis la ligne de touche","tirer en reculant"],"Plus l’angle vers les poteaux est grand, plus c’est facile."],
+  ["Le xG d’un penalty est d’environ…","0,76 (environ 3 sur 4)",["0,1","1","0,5"],"Même un penalty n’est pas un but sûr !"],
+  ["Une équipe a un xG de 2,5 mais perd 0-1. Que peut-on dire ?","elle a créé de belles occasions mais n’a pas été efficace (ou pas de chance)",["elle a mal joué","l’xG est faux","elle a tiré 2,5 fois"],"Sur un seul match, le hasard compte beaucoup."],
+  ["Pourquoi le meilleur ne gagne-t-il pas toujours au foot ?","il y a peu de buts, donc le hasard pèse lourd",["l’arbitre triche toujours","le ballon est rond","c’est interdit de gagner"],"Avec peu de buts, une seule occasion peut tout changer."],
+  ["Avec une équipe qui marque en moyenne 1 but par match, la probabilité qu’elle ne marque pas est d’environ…","37 %",["0 %","100 %","10 %"],"Loi de Poisson : P(0) = e⁻¹ ≈ 0,37."],
+  ["Plus on joue de matchs, plus les résultats se rapprochent…","des probabilités calculées",["du hasard total","de 0","de 50 % chacun"],"C’est la loi des grands nombres."],
+  ["Le PPDA mesure…","l’intensité du pressing (passes adverses par action défensive)",["la vitesse du ballon","le nombre de spectateurs","la taille du terrain"],"Plus le PPDA est petit, plus l’équipe presse fort."],
+  ["Au penalty, pourquoi le tireur doit-il être imprévisible ?","sinon le gardien devine son côté",["pour faire rire","c’est le règlement","pour fatiguer l’arbitre"],"C’est la théorie des jeux : il faut varier au hasard."],
+  ["Avoir 70 % de possession garantit-il la victoire ?","non, ce qui compte c’est la qualité des occasions",["oui, toujours","oui, sauf en Coupe","seulement le dimanche"],"La possession est un moyen, pas un but."]]
 };
-const FSYS=[["1-3-3-1",[1,3,3,1],"8"],["1-2-3-2",[1,2,3,2],"8"],["1-3-2-2",[1,3,2,2],"8"],["4-3-3",[1,4,3,3],"11"],["4-4-2",[1,4,4,2],"11"],["3-5-2",[1,3,5,2],"11"]];
-function footSysGen(){const [nm,c,f]=pick(FSYS),t=R(1,3),role=["défenseurs","milieux","attaquants"][t-1],good=String(c[t]),wr=shuffle(["1","2","3","4","5"].filter(x=>x!==good)).slice(0,3);
-  return mcq(`Système ${nm} (foot à ${f}) : combien de ${role} ?`,good,wr,`${nm} : ${c[0]} gardien, ${c[1]} défenseurs, ${c[2]} milieux, ${c[3]} attaquant${c[3]>1?"s":""}.`)}
+function xgSumGen(){const n=R(3,4),xs=Array.from({length:n},()=>pick([.05,.08,.1,.12,.15,.2,.25,.3,.4,.76])),tot=Math.round(xs.reduce((a,b)=>a+b,0)*100)/100;
+  return inp(`Une équipe a tiré ${n} fois, avec des xG de ${xs.map(fmt).join(" ; ")}. Quel est son xG total ?`,tot,`On additionne : ${xs.map(fmt).join(" + ")} = ${fmt(tot)}.`,{tol:.011})}
+function penPairGen(){const [p,q,t]=pick([[3,4,"3 sur 4"],[4,5,"4 sur 5"],[1,2,"1 sur 2"]]),good=`${p*p}/${q*q}`;
+  return mcq(`Un tireur marque ${t} de ses penalties. Quelle est la probabilité qu’il marque les 2 prochains ?`,good,[`${p}/${q}`,`${2*p}/${q}`,`${p}/${q*q}`],`On multiplie : ${p}/${q} × ${p}/${q} = ${good}.`)}
+function ppdaGen(){const d=R(8,20),k=pick([6,8,10,12,15]),pa=d*k;return inp(`L’adversaire fait ${pa} passes dans sa moitié de terrain, et ton équipe fait ${d} actions défensives (tacles, interceptions, fautes) dans cette zone. Calcule le PPDA.`,k,`PPDA = ${pa} ÷ ${d} = ${k}. Plus il est petit, plus le pressing est fort.`)}
+const mathGen=()=>pick([xgSumGen,penPairGen,ppdaGen])();
 
+/* ---------- les cours ---------- */
 const FLESS=[
- {id:"f_postes",sub:"foot",lvl:"CM2",title:"Le terrain et les postes",desc:"Zones, couloirs et rôles à 8",bank:[...FTB.postes,FTB.largeur[4],FTB.defense[5]],steps:[
-  {t:"Lire le terrain",h:`<p>Voici un terrain de foot à 8 vu du ciel. Ton équipe, en <b>bleu</b>, attaque vers la <b>droite</b>.</p>`+tacBoard("ft1",{frames:[
-    {n:"Le terrain vu du ciel. Notre but est à gauche, le but adverse à droite."},
-    {z:[{r:[0,0,20,40],t:"zone défensive"}],n:"Près de notre but : la <b>zone défensive</b>. On y protège notre but."},
-    {z:[{r:[20,0,20,40],t:"milieu de terrain"}],n:"Au centre : le <b>milieu de terrain</b>. On y construit le jeu."},
-    {z:[{r:[40,0,20,40],t:"zone offensive",k:"good"}],n:"Près du but adverse : la <b>zone offensive</b>. On y marque !"},
-    {z:[{r:[0,0,60,12],t:"couloir gauche"},{r:[0,12,60,16],t:"axe",k:"good"},{r:[0,28,60,12],t:"couloir droit"}],n:"Dans la longueur, on découpe aussi le terrain en <b>3 couloirs</b> : gauche, axe et droit."}]}),
-   say:"Voici un terrain de foot à huit, vu du ciel, comme depuis un drone. Ton équipe, en bleu, attaque vers la droite. Le terrain se découpe en trois zones : la zone défensive près de notre but, le milieu de terrain, et la zone offensive près du but adverse. Dans la longueur, on le découpe aussi en trois couloirs : le couloir gauche, l’axe au centre, et le couloir droit. Les entraîneurs utilisent ces mots tout le temps."},
-  {t:"Les postes à 8",h:`<p>Regarde l’équipe se mettre en place, poste par poste.</p>`+tacBoard("ft2",{frames:[
-    {p:{},n:"Une équipe de foot à 8 : <b>1 gardien</b> et <b>7 joueurs de champ</b>."},
-    {p:{a1:F331.a1},h:["a1"],n:"Le <b>gardien</b> : le seul qui a le droit de prendre le ballon à la main, dans sa surface."},
-    {p:{a2:F331.a2,a3:F331.a3,a4:F331.a4},h:["a2","a3","a4"],n:"Les <b>défenseurs</b> : ils protègent le but et relancent le jeu."},
-    {p:{a5:F331.a5,a6:F331.a6,a7:F331.a7},h:["a5","a6","a7"],n:"Les <b>milieux</b> : ils récupèrent, passent et font le lien entre la défense et l’attaque."},
-    {p:{a8:F331.a8},h:["a8"],n:"L’<b>attaquant</b> : il cherche la profondeur et marque. C’est aussi le premier défenseur !"},
-    {p:mirror(F331),n:"En face, les adversaires en rouge attaquent vers la gauche. Ce système s’appelle le <b>1-3-3-1</b>."}]}),
-   say:"Une équipe de foot à huit, c’est un gardien et sept joueurs de champ. Le gardien est le seul à pouvoir prendre le ballon à la main, dans sa surface. Devant lui, trois défenseurs protègent le but et relancent le jeu. Au milieu, trois milieux récupèrent le ballon et font le lien entre la défense et l’attaque. Et devant, l’attaquant. On compte depuis notre but : un gardien, trois défenseurs, trois milieux, un attaquant. Ce système s’appelle le un, trois, trois, un."},
-  {t:"Le rôle de chacun",h:ltab([["Poste","Avec le ballon","Sans le ballon"],["gardien","relance court ou long","arrête les tirs, guide ses défenseurs"],["défenseurs","relancent, montent si l’espace est libre","protègent le but, couvrent"],["milieux","passent, soutiennent, donnent le rythme","récupèrent, ferment les passes"],["attaquant","appels, frappes, garde le ballon","presse en premier"]])+KEY("Chaque joueur <b>attaque</b> et <b>défend</b>. Le poste dit où tu commences, pas où tu restes."),
-   say:"Chaque poste a un rôle avec le ballon et un rôle sans le ballon. Le plus important à retenir : chaque joueur attaque et défend. Ton poste dit où tu commences, mais pendant le match, toute l’équipe bouge ensemble."}]},
- {id:"f_largeur",sub:"foot",lvl:"CM2",title:"Attaquer : ouvrir le terrain",desc:"Largeur et profondeur",bank:[...FTB.largeur,...FTB.soutien.slice(0,2),FTB.postes[5]],steps:[
-  {t:"Tous autour du ballon ?",h:`<p>Que se passe-t-il quand tout le monde veut le ballon ?</p>`+tacBoard("ft3",{frames:[
-    {p:{a1:[2.5,20],a2:[23,15],a3:[24,20],a4:[23,25],a5:[27,16],a6:[28,20],a7:[27,24],a8:[31,18.5],b1:[57.5,20],b2:[37,12],b3:[38,20],b4:[37,28],b5:[32,14.5],b6:[33,20],b7:[32,25.5],b8:[30.5,22]},b:"a6",z:[{r:[21,12,14,16],k:"bad"}],n:"Tout le monde se colle autour du ballon…"},
-    {a:[["a6","a8","block"]],h:["a6"],n:"Le porteur cherche une passe, mais tous ses partenaires sont entourés."},
-    {p:{b8:[30,20],a8:[31,18]},b:"b8",d:700,n:"Interception ! Groupés, il suffit de <b>peu d’adversaires</b> pour fermer toutes les passes."}]}),
-   say:"Regarde ce qui arrive quand tous les joueurs se collent autour du ballon. Le porteur veut faire une passe, mais tous ses partenaires sont entourés d’adversaires. Résultat : interception. Quand on est tous groupés, il y a très peu d’espace, et quelques adversaires suffisent pour tout bloquer."},
-  {t:"On s’écarte !",h:`<p>Même situation, mais cette fois les bleus s’écartent.</p>`+tacBoard("ft4",{frames:[
-    {p:{a1:[2.5,20],a2:[23,15],a3:[24,20],a4:[23,25],a5:[27,16],a6:[28,20],a7:[27,24],a8:[31,18.5],b1:[57.5,20],b2:[37,12],b3:[38,20],b4:[37,28],b5:[32,14.5],b6:[33,20],b7:[32,25.5],b8:[30.5,22]},b:"a6",n:"Même départ : les bleus sont groupés."},
-    {a:[["a2",[22,4],"run"],["a4",[22,36],"run"],["a5",[37,5],"run"],["a7",[37,35],"run"],["a8",[49,20],"run"]],n:"Plan : chacun s’éloigne vers les côtés ou vers l’avant."},
-    {p:{a2:[22,4],a4:[22,36],a5:[37,5],a7:[37,35],a8:[49,20],a3:[20,20]},d:1200,z:[{r:[33,1,10,9],k:"good",t:"libre"},{r:[33,30,10,9],k:"good",t:"libre"}],n:"Les bleus prennent la <b>largeur</b> (près des touches) et la <b>profondeur</b> (l’attaquant loin devant)."},
-    {a:[["a6","a5"]],n:"Le porteur a maintenant des passes faciles."},
-    {b:"a5",p:{b2:[39,8],b5:[33,10]},n:"Passe dans le couloir gauche. Un défenseur rouge doit sortir vers lui…"},
-    {a:[["a5","a8"]],p:{a8:[47,16]},n:"…ce qui ouvre un trou dans l’axe pour l’attaquant."},
-    {b:"a8",d:700,n:"L’attaquant reçoit, face au but."},
-    {b:[60,17],p:{b1:[57.5,22]},goal:true,d:600,n:"Frappe… <b>BUT !</b> L’espace, ça se crée."}]}),
-   say:"Même situation, mais cette fois les joueurs s’écartent. Les latéraux et les milieux partent près des lignes de touche : c’est la largeur. L’attaquant part loin devant : c’est la profondeur. Les adversaires ne peuvent plus tout surveiller. Le porteur joue dans le couloir gauche, un défenseur rouge sort, et ça ouvre un trou dans l’axe. L’attaquant reçoit et marque."},
-  {t:"Grand en attaque, petit en défense",h:ltab([["Mot","Ce que ça veut dire"],["largeur","des joueurs près des deux lignes de touche"],["profondeur","un joueur loin devant, un soutien derrière le ballon"],["espace","l’endroit libre où l’on peut recevoir"]])+KEY("Avec le ballon, on rend le terrain <b>grand</b>. Sans le ballon, on le rend <b>petit</b>."),
-   say:"Retiens le principe le plus important de la tactique : quand ton équipe a le ballon, rends le terrain grand, avec de la largeur et de la profondeur. Quand l’adversaire a le ballon, rends-le petit, en te rapprochant de tes partenaires."}]},
- {id:"f_soutien",sub:"foot",lvl:"CM2",title:"Le soutien et les triangles",desc:"Se montrer, lignes de passe",bank:[...FTB.soutien,...FTB.largeur.slice(0,3)],steps:[
-  {t:"Sortir de l’ombre",h:`<p>L’attaquant est caché derrière un adversaire. Comment l’aider ?</p>`+tacBoard("ft5",{frames:[
-    {p:{a6:[25,20],a8:[41,20],a5:[28,6],b6:[33,20],b3:[47,22],b1:[57.5,20]},b:"a6",a:[["a6","a8","block"]],h:["b6"],n:"La passe vers l’attaquant est impossible : un adversaire est <b>sur la ligne de passe</b>."},
-    {a:[["a8",[40,11],"run"]],n:"L’attaquant va se décaler sur le côté…"},
-    {p:{a8:[40,11]},n:"…il sort de « l’ombre » du défenseur."},
-    {a:[["a6","a8"]],n:"La ligne de passe est libre !"},
-    {b:"a8",n:"Passe réussie. <b>Se montrer</b>, c’est bouger pour être vu par le porteur."}]}),
-   say:"Notre milieu a le ballon. L’attaquant est caché derrière un adversaire : la passe est impossible, le défenseur l’intercepterait. Alors l’attaquant se décale de quelques pas sur le côté. Il sort de l’ombre du défenseur, la ligne de passe s’ouvre, et la passe arrive. Se montrer, c’est bouger pour être vu."},
-  {t:"Le triangle magique",h:`<p>Trois joueurs, un défenseur au milieu. Qui va gagner ?</p>`+tacBoard("ft6",{frames:[
-    {p:{a2:[15,14],a5:[25,9],a6:[25,20],b5:[22,15]},b:"a6",z:[{tri:["a2","a5","a6"]}],n:"Trois bleus forment un <b>triangle</b>. Le porteur a toujours <b>deux</b> solutions."},
-    {a:[["a6","a5"]],z:[{tri:["a2","a5","a6"]}],n:"Le défenseur ne peut fermer qu’une passe à la fois."},
-    {b:"a5",p:{b5:[23,11.5],a6:[26,19]},z:[{tri:["a2","a5","a6"]}],n:"Passe ! Le défenseur court vers le ballon…"},
-    {a:[["a5","a2"]],z:[{tri:["a2","a5","a6"]}],n:"…alors on joue de l’autre côté."},
-    {b:"a2",p:{b5:[18,13],a6:[24,21],a5:[26,10]},z:[{tri:["a2","a5","a6"]}],n:"Les deux autres se replacent pour reformer le triangle."},
-    {a:[["a2","a6"]],z:[{tri:["a2","a5","a6"]}],n:"Encore une passe…"},
-    {b:"a6",p:{b5:[21,17]},z:[{tri:["a2","a5","a6"]}],n:"Le défenseur s’épuise et le ballon tourne : c’est la <b>conservation</b>."}]}),
-   say:"Trois joueurs bleus forment un triangle, avec un défenseur rouge au milieu. Le porteur a toujours deux solutions de passe, et le défenseur ne peut en fermer qu’une. Quand il court vers le ballon, on joue de l’autre côté. Et après chaque passe, les deux autres se replacent pour reformer le triangle. Le défenseur s’épuise, le ballon tourne : c’est ça, conserver le ballon."},
-  {t:"Regarder avant de recevoir",h:ltab([["Avant que le ballon arrive, je regarde…","Pour savoir…"],["mes partenaires","à qui je peux passer"],["les adversaires","d’où vient le danger"],["l’espace libre","où je peux aller avec le ballon"]])+KEY("Les meilleurs joueurs <b>tournent la tête</b> avant de recevoir. Ils savent déjà quoi faire du ballon."),
-   say:"Un secret des grands joueurs : ils tournent la tête avant de recevoir le ballon. Ils regardent où sont leurs partenaires, où sont les adversaires, et où est l’espace libre. Comme ça, quand le ballon arrive, ils savent déjà quoi faire. Essaie à ton prochain entraînement : regarde à gauche et à droite avant chaque contrôle."}]},
- {id:"f_unedeux",sub:"foot",lvl:"CM2",title:"Le une-deux et l’appel",desc:"Passe et va, courir dans le dos",bank:[...FTB.unedeux,...FTB.soutien.slice(2,4),FTB.largeur[2]],steps:[
-  {t:"Le une-deux",h:`<p>Un défenseur barre la route. Deux joueurs vont l’éliminer sans dribbler.</p>`+tacBoard("ft7",{frames:[
-    {p:{a5:[35,14],a8:[44,22],b3:[41,14],b4:[49,27],b1:[57.5,20]},b:"a5",n:"Notre milieu a le ballon, un défenseur lui barre la route."},
-    {a:[["a5","a8"],["a5",[47,10],"run"]],n:"Le plan : je passe à mon partenaire… et je cours aussitôt dans le dos du défenseur."},
-    {b:"a8",p:{a5:[44,10],b3:[41,16]},d:1100,n:"Le défenseur regarde le ballon… et oublie le coureur."},
-    {a:[["a8",[50,11]]],n:"Passe en retour, devant le coureur."},
-    {b:"a5",p:{a5:[50,11]},n:"Le défenseur est éliminé : c’est le <b>une-deux</b> !"},
-    {b:[60,17],p:{b1:[57.5,22]},goal:true,d:600,n:"Frappe… <b>BUT !</b>"}]}),
-   say:"Un défenseur barre la route à notre milieu. Au lieu de dribbler, il fait une passe à son partenaire, et il court tout de suite dans le dos du défenseur. Le défenseur regarde le ballon et oublie le coureur. Le partenaire remet le ballon devant lui : le défenseur est éliminé. C’est le une-deux, ou le passe et va."},
-  {t:"L’appel en profondeur",h:tacBoard("ft8",{frames:[
-    {p:{a6:[30,22],a8:[44,18],a7:[38,33],b2:[45,8],b3:[45,19],b4:[45,30],b1:[57.5,20]},b:"a6",z:[{vl:45,k:"dash",t:"ligne des défenseurs"}],n:"Notre attaquant attend au niveau des défenseurs : pas de hors-jeu."},
-    {a:[["a8",[53,14],"run"]],z:[{vl:45,k:"dash"}],n:"Le porteur lève la tête : l’attaquant démarre dans leur dos. C’est un <b>appel</b>."},
-    {p:{a8:[48,16],b3:[47,18]},b:[53,14],a:[],d:1200,n:"Le passeur ne joue pas dans les pieds, mais dans l’<b>espace</b>, devant le coureur."},
-    {p:{a8:[53,14],b3:[50,17]},b:"a8",n:"L’attaquant arrive le premier : seul face au gardien !"},
-    {b:[60,23],p:{b1:[57.5,17]},goal:true,d:600,n:"<b>BUT !</b> Le bon moment pour partir : quand le passeur peut te voir."}]}),
-   say:"Notre attaquant attend au même niveau que les défenseurs, pour ne pas être hors-jeu. Quand le porteur lève la tête, il démarre en sprint dans le dos des défenseurs : c’est un appel. Le passeur ne joue pas dans ses pieds, mais dans l’espace, devant lui. L’attaquant arrive lancé, les défenseurs sont arrêtés : il se retrouve seul face au gardien."},
-  {t:"Les erreurs à éviter",h:ltab([["Erreur","Conséquence"],["après la passe, je reste immobile","le défenseur n’a qu’un joueur à surveiller"],["je pars trop tôt","hors-jeu"],["je pars trop tard","le défenseur me rattrape"],["la passe arrive dans les pieds","le coureur doit s’arrêter"]])+KEY("<b>Passe et va</b> : après une passe, je ne reste jamais immobile."),
-   say:"Retiens : après une passe, ne reste jamais immobile. Passe et va. Et pour un appel, pars au bon moment : ni trop tôt, sinon tu es hors-jeu, ni trop tard, sinon le défenseur te rattrape."}]},
- {id:"f_defense",sub:"foot",lvl:"CM2",title:"Défendre ensemble",desc:"Se replacer, presser, couvrir",bank:[...FTB.defense,...FTB.trans.slice(0,2)],steps:[
-  {t:"Revenir et se resserrer",h:`<p>Cette fois, les rouges ont le ballon et attaquent vers la gauche.</p>`+tacBoard("ft9",{frames:[
-    {p:{a1:[2.5,20],a2:[38,6],a3:[30,22],a4:[37,34],a5:[44,10],a6:[40,19],a7:[46,30],a8:[50,21],b1:[57.5,20],b2:[46,12],b3:[47,21],b4:[45,29],b5:[31,8],b6:[36,20],b7:[31,32],b8:[23,21]},b:"b6",z:[{r:[6,3,22,34],k:"bad",t:"espace libre"}],n:"On vient de perdre le ballon. Les bleus sont éparpillés : un grand trou devant notre but !"},
-    {a:[["a2",[20,11],"run"],["a4",[20,29],"run"],["a5",[27,12],"run"],["a6",[28,20],"run"],["a7",[27,28],"run"],["a8",[33,20],"run"],["a3",[16,20],"run"]],n:"Premier réflexe : revenir <b>entre le ballon et notre but</b>."},
-    {p:{a2:[20,11],a3:[16,20],a4:[20,29],a5:[27,12],a6:[28,20],a7:[27,28],a8:[33,20]},d:1400,z:[{r:[14,9,21,22],k:"good",t:"bloc compact"}],n:"L’équipe forme un <b>bloc serré</b> : peu d’espace entre les joueurs."},
-    {a:[["b6","b8","block"]],z:[{r:[14,9,21,22],k:"good"}],n:"L’adversaire cherche une passe vers l’avant… tout est fermé."}]}),
-   say:"Cette fois, ce sont les rouges qui ont le ballon. Nos joueurs sont éparpillés, et il y a un grand trou devant notre but. Premier réflexe : revenir vite entre le ballon et notre but. L’équipe se resserre et forme un bloc compact, avec peu d’espace entre les joueurs. L’adversaire ne trouve plus de passe vers l’avant."},
-  {t:"Presser, couvrir, fermer",h:tacBoard("ft10",{frames:[
-    {p:{a1:[2.5,20],a2:[20,11],a3:[16,20],a4:[20,29],a5:[27,12],a6:[28,20],a7:[27,28],a8:[33,20],b5:[31,8],b6:[37,20],b7:[31,32],b8:[23,21],b3:[47,21]},b:"b6",n:"Le porteur rouge avance. Qui va le gêner ?"},
-    {a:[["a8",[35,18.5],"run"],["a6",[31,21],"run"]],n:"Le plus proche va presser, un autre le couvre."},
-    {p:{a8:[35,18.5],a6:[31,21.5],a5:[29,10],a7:[29,29]},z:[{lab:["a8",0,-2.4,"1. je presse"]},{lab:["a6",-1,3.2,"2. je couvre"]},{lab:["a5",0,-2.3,"3. je ferme"]},{lab:["a7",0,3.4,"3. je ferme"]}],n:"<b>1</b> presse le porteur, <b>1</b> couvre juste derrière, les autres <b>ferment</b> les passes."},
-    {p:{b6:[36,27],a8:[35,25],a6:[32,24]},d:1100,n:"Le porteur est poussé vers le côté : moins de solutions."},
-    {p:{a7:[34,28.5],b6:[37,28]},b:"a7",d:700,n:"Le piège se referme : <b>ballon récupéré</b> à deux !"}]}),
-   say:"Le porteur rouge avance. Le joueur le plus proche va le presser. Un deuxième se place juste derrière lui pour le couvrir, au cas où il serait dribblé. Les autres ferment les passes. Le porteur est poussé vers la ligne de touche, où il a moins de solutions. Et là, le piège se referme : on récupère le ballon à deux."},
-  {t:"Les règles d’or de la défense",h:ltab([["Qui ?","Que fait-il ?"],["le plus proche du ballon","presse : il gêne le porteur, sans plonger"],["le deuxième","couvre : il se place derrière, en renfort"],["les autres","ferment les passes et restent proches"]])+KEY("On attaque à 8 et on <b>défend à 8</b>. L’attaquant est le premier défenseur."),
-   say:"Les règles d’or de la défense : le plus proche presse, le deuxième couvre, les autres ferment les passes et restent proches. Et n’oublie pas : on défend à huit, même l’attaquant."}]},
- {id:"f_regles",sub:"foot",lvl:"CM2",title:"Les règles du foot à 8",desc:"Hors-jeu des 13 m, touche, penalty",bank:[...FTB.regles,FTB.unedeux[4],FTB.postes[0]],steps:[
-  {t:"Le hors-jeu des 13 mètres",h:tacBoard("ft16",{frames:[
-    {p:{a6:[33,22],a8:[51,14],b2:[48.5,9],b3:[48.5,21],b4:[46,31],b1:[57.5,20]},b:"a6",z:[{r:[47,0,13,40],k:"info",t:"zone de hors-jeu"}],n:"En foot à 8 (U10-U11), le hors-jeu ne compte que dans la zone des <b>13 mètres</b>, près du but adverse."},
-    {a:[["a6","a8"]],z:[{r:[47,0,13,40],k:"info"},{vl:48.5,k:"dash",t:"avant-dernier défenseur",ty:38}],h:["a8"],n:"Au moment de la passe, notre attaquant est <b>plus près du but</b> que l’avant-dernier adversaire…"},
-    {b:"a8",z:[{vl:48.5,k:"dash"},{lab:["a8",0,-2.6,"HORS-JEU !","bad"]}],n:"…il est <b>hors-jeu</b>. Coup franc pour l’adversaire."},
-    {p:{a8:[47.5,14]},b:"a6",z:[{vl:48.5,k:"dash"}],d:1100,n:"Recommençons : l’attaquant attend <b>derrière</b> la ligne des défenseurs."},
-    {a:[["a6",[54,14]],["a8",[54,14],"run"]],z:[{vl:48.5,k:"dash"}],n:"Il part au moment où le ballon part."},
-    {p:{a8:[54,14]},b:"a8",z:[{lab:["a8",0,-2.6,"pas de hors-jeu"]}],d:1100,n:"Pas de hors-jeu : il est seul face au gardien !"}]}),
-   say:"Le hors-jeu est la règle la plus difficile du foot. En foot à huit, chez les U10 et U11, il ne compte que dans la zone des treize mètres, près du but adverse. Au moment où le ballon part, si tu es dans cette zone et plus près du but que l’avant-dernier adversaire, tu es hors-jeu. L’avant-dernier, car le gardien compte souvent comme le dernier. La solution : attendre derrière la ligne des défenseurs, et partir au moment de la passe."},
-  {t:"Les autres règles",h:ltab([["Situation","Règle en foot à 8 (U10-U11)"],["l’équipe","8 joueurs dont 1 gardien"],["la touche","à la main ; pas de hors-jeu sur une touche"],["le penalty","à 9 mètres"],["le gardien","pas de dégagement de volée ni de demi-volée"],["passe en retrait volontaire au pied","le gardien ne la prend pas à la main"]])+`<p class="muted">Ces règles peuvent varier un peu selon les districts : demande à ton éducateur.</p>`,
-   say:"Quelques règles du foot à huit : huit joueurs dont un gardien, la touche se joue à la main, et il n’y a pas de hors-jeu sur une touche. Le penalty se tire à neuf mètres. Le gardien ne dégage pas de volée. Et si un partenaire lui fait une passe en retrait volontaire au pied, il n’a pas le droit de la prendre à la main. Ces règles peuvent varier un peu selon les districts : demande à ton éducateur."},
-  {t:"L’esprit du foot",h:KEY("On respecte l’<b>arbitre</b>, les <b>adversaires</b>, ses <b>partenaires</b> et l’<b>éducateur</b>. Une erreur d’un coéquipier ? On l’encourage, on ne le critique pas.")+`<p>À la fin du match, on serre la main des adversaires et de l’arbitre, qu’on ait gagné ou perdu.</p>`,
-   say:"Le foot, c’est aussi un état d’esprit. On respecte l’arbitre, les adversaires, ses partenaires et son éducateur. Quand un coéquipier rate, on l’encourage. Et à la fin du match, gagné ou perdu, on serre la main de tout le monde."}]},
- {id:"f_trans",sub:"foot",lvl:"6e",title:"Les transitions",desc:"Contre-pressing et contre-attaque",bank:[...FTB.trans,...FTB.defense.slice(0,3)],steps:[
-  {t:"Ballon perdu : 5 secondes !",h:tacBoard("ft11",{frames:[
-    {p:{a8:[48,20],a5:[44,10],a7:[44,30],a6:[38,21],b3:[50.5,20],b2:[51,10],b4:[51,30],b6:[42,15],b1:[57.5,20]},b:"a8",n:"Notre attaquant a le ballon près du but adverse."},
-    {b:"b3",p:{b3:[49.5,21]},d:600,n:"Perdu ! Mais c’est le <b>meilleur moment</b> pour le reprendre : les rouges ne sont pas encore organisés."},
-    {a:[["a8",[48,18.5],"run"],["a5",[48,16],"run"],["a7",[48,25],"run"],["a6",[45,21.5],"run"]],n:"Les plus proches foncent tout de suite sur le porteur."},
-    {p:{a8:[48,18.5],a5:[48.5,16.5],a7:[48.5,24.5],a6:[45.5,21.5]},d:900,n:"Il est encerclé : c’est le <b>contre-pressing</b>."},
-    {b:"a5",p:{b3:[51,22]},d:600,n:"Récupéré, tout près du but adverse !"},
-    {b:[60,18],p:{a5:[51,16],b1:[57.5,22]},goal:true,d:600,n:"<b>BUT !</b> Reprendre vite le ballon donne souvent la meilleure occasion."}]}),
-   say:"Notre attaquant perd le ballon près du but adverse. Au lieu de baisser les bras, c’est le meilleur moment pour le reprendre : l’adversaire n’est pas encore organisé. Les trois ou quatre joueurs les plus proches foncent tout de suite sur le porteur. C’est le contre-pressing. On a environ cinq secondes. Et si on récupère, on est tout près du but adverse."},
-  {t:"Ballon récupéré : contre-attaque !",h:tacBoard("ft12",{frames:[
-    {p:{a1:[2.5,20],a3:[14,20],a2:[15,10],a4:[15,30],a6:[21,21],a5:[24,6],a7:[24,34],a8:[32,23],b8:[19,18],b5:[22,11],b7:[22,29],b6:[27,19],b2:[38,11],b3:[40,20],b4:[38,29],b1:[57.5,20]},b:"b8",a:[["b8","b5"]],n:"Les rouges attaquent chez nous."},
-    {b:"a3",p:{a3:[20,14]},d:600,n:"Interception ! Les rouges sont presque tous devant le ballon : derrière eux, de la place."},
-    {a:[["a3","a8"],["a5",[42,7],"run"],["a7",[42,33],"run"]],n:"Vite vers l’avant : passe à l’attaquant, les ailiers sprintent dans les couloirs."},
-    {b:"a8",p:{a8:[35,21],a5:[39,7],a7:[39,33],b6:[30,19],b5:[27,12],b7:[27,28],b8:[24,17]},d:1000,n:"Les rouges doivent courir vers leur but, mais ils sont en retard."},
-    {p:{a8:[44,20],b3:[46,21],b4:[45,28],a7:[47,31],a5:[47,8]},d:1000,n:"L’attaquant conduit et <b>fixe</b> le défenseur…"},
-    {a:[["a8","a7"]],n:"…puis donne au partenaire libre."},
-    {b:"a7",p:{a7:[50,30]},d:700,n:"Le partenaire est seul !"},
-    {b:[60,22],p:{b1:[57.5,25]},goal:true,d:600,n:"<b>BUT !</b> Une contre-attaque : vite, vers l’avant, avec de la largeur."}]}),
-   say:"Cette fois, les rouges attaquent chez nous, et notre défenseur intercepte. Les rouges sont presque tous devant le ballon : derrière eux, il y a beaucoup de place. Alors on joue vite vers l’avant. Passe à l’attaquant, et les ailiers sprintent dans les couloirs. L’attaquant conduit le ballon, attire le défenseur, puis donne au partenaire libre. But ! Une contre-attaque, c’est vite, vers l’avant, avec de la largeur."},
-  {t:"Les deux réflexes",h:ltab([["Moment","Les bons réflexes"],["ballon perdu","les plus proches pressent tout de suite ; les autres se replacent"],["ballon récupéré","regarder devant ; jouer vite vers l’avant ; prendre la largeur"]])+KEY("Une <b>transition</b>, c’est le moment où tout change. L’équipe qui réagit le plus vite gagne souvent le match."),
-   say:"Une transition, c’est le moment où tout change : on perd le ballon, ou on le récupère. Ballon perdu : les plus proches pressent, les autres se replacent. Ballon récupéré : on regarde devant et on joue vite vers l’avant. L’équipe qui réagit le plus vite gagne souvent le match."}]},
- {id:"f_sys",sub:"foot",lvl:"6e",title:"Les systèmes de jeu",desc:"1-3-3-1, 4-3-3, 4-4-2…",gen:footSysGen,bank:FTB.sys,steps:[
-  {t:"Les systèmes à 8",h:`<p>Touche les boutons pour changer de système.</p>`+tacBoard("ft13",{btns:[[0,"1-3-3-1"],[1,"1-2-3-2"],[2,"1-3-2-2"]],frames:[
-    {p:F331,n:"<b>1-3-3-1</b> : 3 défenseurs, 3 milieux, 1 attaquant. Très équilibré, le plus utilisé en foot à 8."},
-    {p:{a1:[2.5,20],a2:[12,13],a3:[12,27],a5:[22,7],a6:[20,20],a7:[22,33],a4:[30,14],a8:[30,26]},d:1000,n:"<b>1-2-3-2</b> : 2 défenseurs, 3 milieux, 2 attaquants. Plus offensif, mais attention aux contre-attaques."},
-    {p:{a1:[2.5,20],a2:[13,8],a3:[11,20],a4:[13,32],a5:[21,14],a6:[21,26],a7:[30,12],a8:[30,28]},d:1000,n:"<b>1-3-2-2</b> : une défense solide et deux attaquants. Les deux milieux doivent beaucoup courir."}]}),
-   say:"Un système de jeu, c’est la façon de répartir les joueurs sur le terrain. On le lit toujours depuis notre but. En foot à huit, le un, trois, trois, un est le plus équilibré. Le un, deux, trois, deux a deux attaquants, il est plus offensif. Le un, trois, deux, deux garde une défense solide avec deux attaquants. Touche les boutons pour les comparer."},
-  {t:"Les systèmes à 11",h:`<p>Au foot à 11, on ne compte pas le gardien dans le nom du système.</p>`+tacBoard("ft14",{btns:[[0,"4-3-3"],[1,"4-4-2"],[2,"3-5-2"]],frames:[
-    {p:{a1:[2.5,20],a2:[12,5],a3:[11,15],a4:[11,25],a5:[12,35],a6:[21,12],a7:[19,20],a8:[21,28],a9:[29,7],a10:[30,20],a11:[29,33]},n:"<b>4-3-3</b> : 4 défenseurs, 3 milieux, 3 attaquants. Deux ailiers pour attaquer par les côtés."},
-    {p:{a2:[12,5],a3:[11,15],a4:[11,25],a5:[12,35],a6:[21,6],a7:[20,15],a8:[20,25],a9:[21,34],a10:[29,15],a11:[29,25]},d:1000,n:"<b>4-4-2</b> : deux lignes de 4 très solides et deux attaquants. Facile à organiser en défense."},
-    {p:{a2:[12,11],a3:[11,20],a4:[12,29],a5:[22,4],a6:[20,13],a7:[19,20],a8:[20,27],a9:[22,36],a10:[29,15],a11:[29,25]},d:1000,n:"<b>3-5-2</b> : 3 défenseurs centraux et 5 milieux. Les joueurs des côtés doivent attaquer ET défendre."}]}),
-   say:"Au foot à onze, on ne compte pas le gardien dans le nom. Le quatre, trois, trois a deux ailiers pour attaquer par les côtés. Le quatre, quatre, deux forme deux lignes de quatre très solides. Le trois, cinq, deux met beaucoup de joueurs au milieu, et les joueurs des côtés doivent attaquer et défendre. Chaque système a ses forces et ses faiblesses."},
-  {t:"Un système qui respire",h:tacBoard("ft15",{frames:[
-    {p:F331,n:"Le système, c’est seulement la <b>position de départ</b>."},
-    {p:{a2:[22,4],a3:[18,20],a4:[22,36],a5:[38,6],a6:[30,20],a7:[38,34],a8:[50,20]},d:1400,z:[{r:[16,2,36,36],k:"good",t:"terrain grand"}],n:"Avec le ballon, l’équipe <b>s’agrandit</b> : largeur et profondeur."},
-    {p:{a2:[13,12],a3:[10,20],a4:[13,28],a5:[20,13],a6:[19,20],a7:[20,27],a8:[27,20]},d:1400,z:[{r:[8,10,21,20],k:"info",t:"bloc serré"}],n:"Sans le ballon, elle <b>se resserre</b> devant son but."},
-    {p:F331,d:1200,n:"Puis tout recommence. Une équipe, c’est comme un accordéon !"}]}),
-   say:"Attention : un système n’est pas une photo. C’est seulement la position de départ. Avec le ballon, l’équipe s’agrandit pour prendre de la largeur et de la profondeur. Sans le ballon, elle se resserre devant son but. Une bonne équipe bouge comme un accordéon."}]}
+ {id:"f11_lire",sub:"foot",lvl:"6e",title:"Lire le terrain comme un entraîneur",desc:"Tiers, 5 couloirs, demi-espaces, entre les lignes",bank:[...FTB.lire,FTB.pep[0],FTB.hist[9]],steps:[
+  {t:"Le découpage des entraîneurs",h:tacBoard("fl1",{frames:[
+    {p:{},n:"Terrain à 11 : environ 105 m × 68 m. Les bleus attaquent vers la droite."},
+    {z:[{r:[0,0,35,68],t:"construction"},{r:[35,0,35,68],t:"création",k:"good"},{r:[70,0,35,68],t:"finition"}],n:"En longueur, 3 tiers : on <b>construit</b> chez soi, on <b>crée</b> au milieu, on <b>finit</b> près du but."},
+    {z:laneZ(),n:"En largeur, <b>5 couloirs</b>. Les lignes prolongent les bords de la surface et de la zone des 5,50 m."},
+    {z:laneZ(true),n:"Les deux <b>demi-espaces</b> : de là, on peut passer, centrer, dribbler ou frapper. La zone préférée des meneurs de jeu."}]}),
+   say:"Les entraîneurs professionnels découpent le terrain. En longueur, trois tiers : on construit chez soi, on crée au milieu, on finit près du but adverse. En largeur, cinq couloirs : les deux couloirs le long des touches, les deux demi-espaces, et l’axe. Les lignes prolongent les bords de la surface de réparation. Guardiola a même fait tracer ces lignes sur ses terrains d’entraînement. Les demi-espaces sont les zones préférées des meneurs de jeu : de là, on peut tout faire."},
+  {t:"Recevoir entre les lignes",h:tacBoard("fl2",{frames:[
+    {p:{...B442,a5:[38,24],a4:[38,44],a6:[50,34],a8:[60,20],a10:[62,48],a9:[88,34],a11:[80,4],a7:[80,64]},b:"a6",n:"Les rouges défendent en deux lignes de 4."},
+    {a:[["a8",[78,22],"run"]],z:[{r:[73,12,10,44],k:"good",t:"entre les lignes",sm:1}],n:"Entre leur ligne de milieux et leur ligne de défense : un espace. On dit <b>entre les lignes</b>."},
+    {p:{a8:[78,22]},z:[{r:[73,12,10,44],k:"good"}],d:1100,n:"Le milieu bleu s’y glisse. Aucun rouge n’est chargé de lui."},
+    {a:[["a6","a8"]],n:"Passe verticale : elle <b>casse la ligne</b> des milieux rouges."},
+    {b:"a8",p:{b5:[82,24],b8:[75,26]},n:"Il reçoit face au jeu. Un défenseur sort sur lui… et laisse un trou."},
+    {a:[["a8",[94,31]],["a9",[94,31],"run"]],n:"Passe dans le trou pour l’avant-centre."},
+    {p:{a9:[94,31]},b:"a9",d:900,n:"Seul face au gardien !"},
+    {b:[105,36],p:{b1:[101,31]},goal:true,d:600,n:"<b>BUT !</b> Tout est parti d’un joueur bien placé entre les lignes."}]}),
+   say:"Les rouges défendent en deux lignes de quatre. Entre leurs milieux et leurs défenseurs, il y a un espace : entre les lignes. Le milieu bleu s’y glisse, et aucun rouge n’est chargé de lui. Une passe verticale casse la ligne des milieux. Il reçoit face au jeu. Un défenseur central est obligé de sortir, et ça ouvre un trou derrière lui pour l’avant-centre."},
+  {t:"Le vocabulaire du coach",h:ltab([["Mot","Sens"],["bloc bas / médian / haut","la hauteur à laquelle l’équipe défend"],["casser une ligne","une passe qui dépasse une ligne d’adversaires"],["fixer","attirer un adversaire pour libérer un partenaire"],["renverser le jeu","changer de côté par une longue passe"],["temporiser","ralentir pour laisser l’équipe se replacer"]])+KEY("Un grand joueur ne regarde pas que le ballon : il voit les <b>espaces</b> entre les adversaires."),
+   say:"Voici le vocabulaire des entraîneurs. Le bloc bas, médian ou haut, c’est la hauteur où l’équipe défend. Casser une ligne, c’est passer par-dessus une ligne d’adversaires. Fixer, c’est attirer un adversaire pour libérer un partenaire. Renverser le jeu, c’est changer de côté. Et retiens : un grand joueur ne regarde pas que le ballon, il voit les espaces."}]},
+ {id:"fh_syst",sub:"foot",lvl:"6e",title:"Histoire : de la pyramide au 4-3-3",desc:"2-3-5, WM, 4-2-4… et les systèmes d’aujourd’hui",bank:[...FTB.hist.slice(0,3),FTB.lire[3],FTB.pep[1],FTB.math[10]],steps:[
+  {t:"Les anciens systèmes",h:`<p>Touche les boutons pour voyager dans le temps.</p>`+tacBoard("fs1",{btns:[[0,"1880 : 2-3-5"],[1,"1925 : WM"],[2,"1958 : 4-2-4"]],frames:[
+    {p:{a1:[4,34],a2:[18,24],a3:[18,44],a4:[34,12],a5:[32,34],a6:[34,56],a7:[52,6],a8:[50,20],a9:[52,34],a10:[50,48],a11:[52,62]},n:"La <b>pyramide (2-3-5)</b> : 2 arrières, 3 demis, 5 attaquants ! On dribblait beaucoup et on défendait peu."},
+    {p:{a2:[18,14],a3:[16,34],a4:[18,54],a5:[30,26],a6:[30,42],a8:[42,24],a10:[42,44],a7:[54,8],a9:[54,34],a11:[54,60]},d:1100,n:"Le <b>WM (3-2-2-3)</b> d’Herbert Chapman à Arsenal. En 1925, la règle du hors-jeu change : il ajoute un défenseur central."},
+    {p:{a2:[20,8],a3:[17,26],a4:[17,42],a5:[20,60],a6:[34,26],a8:[34,42],a7:[50,6],a9:[52,26],a10:[52,42],a11:[50,62]},d:1100,n:"Le <b>4-2-4</b> du Brésil champion du monde en 1958, avec le jeune Pelé (17 ans). Les ancêtres de nos systèmes modernes."}]}),
+   say:"Voyageons dans le temps. Au dix-neuvième siècle, la pyramide : deux arrières, trois demis et cinq attaquants. En 1925, la règle du hors-jeu change, et l’entraîneur d’Arsenal Herbert Chapman invente le WM en ajoutant un défenseur central. En 1958, le Brésil de Pelé gagne la Coupe du monde en 4-2-4. Touche les boutons pour comparer."},
+  {t:"Les systèmes d’aujourd’hui",h:tacBoard("fs2",{btns:[[0,"4-3-3"],[1,"4-2-3-1"],[2,"3-4-2-1"]],frames:[
+    {p:T433,n:"<b>4-3-3</b> : une sentinelle, deux relayeurs, deux ailiers. Le système préféré de Guardiola à Barcelone."},
+    {p:{a1:[4,34],a3:[22,8],a5:[17,25],a4:[17,43],a2:[22,60],a6:[30,27],a8:[30,41],a10:[44,34],a11:[46,10],a7:[46,58],a9:[54,34]},d:1100,n:"<b>4-2-3-1</b> : deux milieux défensifs protègent la défense, un numéro 10 crée derrière l’avant-centre."},
+    {p:{a1:[4,34],a5:[17,20],a4:[16,34],a2:[17,48],a3:[30,6],a6:[30,28],a8:[30,40],a7:[30,62],a11:[44,24],a10:[44,44],a9:[54,34]},d:1100,n:"<b>3-4-2-1</b> : trois centraux et deux « pistons » qui font tout le couloir, de la défense à l’attaque."}]}),
+   say:"Aujourd’hui, les systèmes les plus courants sont le quatre, trois, trois, le quatre, deux, trois, un, et les systèmes à trois défenseurs centraux comme le trois, quatre, deux, un. Dans ce dernier, les joueurs de côté s’appellent des pistons : ils font tout le couloir, de la défense à l’attaque."},
+  {t:"Ce qu’il faut retenir",h:ltab([["Époque","Système","Idée"],["1870-1920","2-3-5","attaquer à 5"],["1925-1950","WM (3-2-2-3)","la nouvelle règle du hors-jeu"],["1958-1970","4-2-4, 4-3-3","Brésil : technique et liberté"],["années 1960","catenaccio","défendre à tout prix"],["années 1970","football total","tout le monde fait tout"],["fin des années 1980","4-4-2 en zone","Sacchi : pressing et bloc court"],["depuis 2008","jeu de position","Guardiola : le ballon et l’espace"]])+KEY("Les tactiques évoluent quand les <b>règles</b> changent, et quand un entraîneur trouve comment battre la mode du moment."),
+   say:"Les tactiques évoluent quand les règles changent, comme le hors-jeu en 1925, et quand un entraîneur génial trouve comment battre la mode du moment. Les prochains cours racontent les plus grandes révolutions."}]},
+ {id:"fh_cat",sub:"foot",lvl:"6e",title:"Le catenaccio et le libero",desc:"Inter de Milan, années 1960 : le verrou",bank:[...FTB.hist.slice(3,5),FTB.hist[1],FTB.math[5],FTB.lire[5],FTB.pep[8]],steps:[
+  {t:"Le verrou",h:`<p>Ici, les bleus défendent (ils protègent le but de gauche).</p>`+tacBoard("fc1",{frames:[
+    {p:{a1:[3,34],a6:[9,34],a5:[19,30],a4:[20,42],a3:[23,13],a2:[23,56],a8:[32,24],a10:[32,44],a7:[36,34],a9:[52,28],a11:[50,48],b9:[22,30],b10:[23,42],b7:[26,12],b11:[26,57],b6:[38,34],b8:[42,22],b4:[42,47]},b:"b6",z:[{lab:["a6",0,-3.4,"libero"]}],n:"Inter de Milan, années 1960 : chaque défenseur bleu <b>colle</b> un attaquant (marquage individuel)."},
+    {h:["a6"],z:[{lab:["a6",0,-3.4,"libero"]}],n:"Et derrière eux, le <b>libero</b> : il n’a personne à marquer. Il balaie tout."},
+    {a:[["b6","b9"]],n:"Les rouges cherchent leur avant-centre…"},
+    {b:"b9",p:{b9:[16,33],a5:[20,30]},d:1000,n:"Il élimine son défenseur !"},
+    {a:[["a6",[14,33],"run"]],n:"Mais le libero arrive…"},
+    {p:{a6:[14.5,33],b9:[17,34]},b:"a6",d:700,n:"…et récupère. Rien ne passe : c’est le <b>catenaccio</b> (le « verrou »)."},
+    {a:[["a6",[60,27]],["a9",[60,27],"run"]],n:"Aussitôt, une longue passe : contre-attaque !"},
+    {p:{a9:[88,30]},b:"a9",d:2000,n:"L’attaquant file vers le but…"},
+    {b:[105,32],p:{b1:[101,36]},goal:true,d:600,n:"<b>BUT !</b> Peu d’occasions, mais une défense presque imprenable."}]}),
+   say:"Dans les années soixante, l’Inter de Milan de l’entraîneur Helenio Herrera invente le catenaccio, le verrou. Chaque défenseur colle un attaquant adverse. Et derrière eux, un joueur reste libre : le libero. Quand un attaquant élimine son défenseur, le libero est là pour récupérer. Puis, une longue passe, et c’est la contre-attaque."},
+  {t:"Forces et faiblesses",h:ltab([["Forces","Faiblesses"],["très difficile à percer","on laisse le ballon à l’adversaire"],["contre-attaques dangereuses","si un défenseur est battu, tout se décale"],["idéal pour garder un score","peu de spectacle"]])+KEY("Le marquage <b>individuel</b> suit un joueur. Le marquage <b>en zone</b> (cours suivant) défend un espace."),
+   say:"Le catenaccio est très difficile à percer et ses contre-attaques sont dangereuses. Mais on laisse le ballon à l’adversaire, et si un défenseur se fait battre, toute la défense doit se décaler. Retiens la différence : le marquage individuel suit un joueur, le marquage en zone défend un espace."}]},
+ {id:"fh_total",sub:"foot",lvl:"6e",title:"Le football total",desc:"Ajax et Pays-Bas des années 1970",bank:[...FTB.hist.slice(5,8),FTB.pep[1],FTB.lire[4],FTB.hist[3]],steps:[
+  {t:"Tout le monde fait tout",h:tacBoard("ft1",{frames:[
+    {p:{a1:[8,34],a3:[34,8],a5:[30,26],a4:[30,42],a2:[34,60],a6:[44,34],a8:[52,24],a10:[52,44],a11:[66,8],a9:[70,34],a7:[66,60],...B442},b:"a5",n:"Ajax et Pays-Bas, années 1970 (Rinus Michels, Johan Cruyff) : le <b>football total</b>."},
+    {a:[["a3",[70,5],"run"],["a11",[58,18],"run"],["a8",[38,10],"run"]],n:"Le latéral gauche monte, l’ailier rentre, le milieu descend…"},
+    {p:{a3:[70,5],a11:[58,18],a8:[38,10]},d:1300,n:"…chacun prend la place libre. Personne n’a de poste fixe : on <b>permute</b>."},
+    {a:[["a5","a3"]],n:"Le défenseur devenu ailier reçoit dans l’espace."},
+    {b:"a3",p:{b2:[80,9]},d:1200,n:"La défense rouge ne sait plus qui marquer qui !"}]}),
+   say:"Dans les années soixante-dix, l’Ajax d’Amsterdam et l’équipe des Pays-Bas, avec l’entraîneur Rinus Michels et le génie Johan Cruyff, inventent le football total. Tout le monde attaque et défend. Le latéral monte, l’ailier rentre, le milieu descend pour prendre sa place : on permute. La défense adverse ne sait plus qui marquer."},
+  {t:"Le piège du hors-jeu",h:tacBoard("ft2",{frames:[
+    {p:{a1:[6,34],a3:[30,10],a5:[30,26],a4:[30,42],a2:[30,58],b9:[31,30],b8:[46,34],b7:[40,12]},b:"b8",z:[{vl:30,k:"dash"}],n:"Les rouges attaquent. La défense bleue joue très haut, en ligne."},
+    {a:[["a3",[36,10],"run"],["a5",[36,26],"run"],["a4",[36,42],"run"],["a2",[36,58],"run"]],n:"Juste avant la passe, toute la ligne avance <b>ensemble</b>…"},
+    {p:{a3:[36,10],a5:[36,26],a4:[36,42],a2:[36,58]},a:[["b8","b9"]],z:[{vl:36,k:"dash",t:"ligne de défense",ty:65}],d:700,n:"…et l’avant-centre rouge se retrouve <b>derrière</b> elle."},
+    {b:"b9",z:[{vl:36,k:"dash"},{lab:["b9",0,-3.4,"HORS-JEU !","bad"]}],n:"Hors-jeu ! Mais attention : si un seul défenseur reste en retard, le piège échoue."}]}),
+   say:"Les Hollandais défendaient très haut. Au moment exact où l’adversaire allait passer, toute la ligne de défense avançait ensemble, et l’attaquant se retrouvait hors-jeu. C’est le piège du hors-jeu. Mais c’est risqué : si un seul défenseur reste en retard, l’attaquant est seul face au gardien."},
+  {t:"L’héritage",h:KEY("Le football total a inspiré <b>Cruyff entraîneur</b> à Barcelone, qui a formé un jeune milieu nommé… <b>Pep Guardiola</b>.")+`<p>Les rondos (des jeux de passes en cercle avec des défenseurs au milieu) viennent de cette école. Ils sont encore la base des entraînements de Barcelone et de Manchester City.</p>`,
+   say:"Johan Cruyff est ensuite devenu entraîneur du FC Barcelone. Dans son équipe jouait un jeune milieu de terrain : Pep Guardiola. C’est de là que vient toute la philosophie de Guardiola, et les fameux rondos, ces jeux de passes en cercle qu’on fait encore à chaque entraînement."}]},
+ {id:"fh_sacchi",sub:"foot",lvl:"6e",title:"Sacchi : la zone et le pressing",desc:"Milan, fin des années 1980",bank:[...FTB.hist.slice(8,10),FTB.hist[7],FTB.pep[9],FTB.lire[5],FTB.math[8]],steps:[
+  {t:"Le bloc qui coulisse",h:`<p>Les bleus défendent en 4-4-2. Le ballon est aux rouges.</p>`+tacBoard("fz1",{frames:[
+    {p:{a1:[4,34],a3:[28,12],a5:[28,27],a4:[28,41],a2:[28,56],a11:[38,12],a8:[38,27],a6:[38,41],a7:[38,56],a9:[49,28],a10:[49,40],b2:[56,6],b6:[60,24],b8:[62,40],b11:[56,62],b9:[42,30],b10:[42,44]},b:"b2",z:[{r:[26,9,25,50],k:"info",t:"bloc court",sm:1}],n:"Milan de <b>Sacchi</b> : deux lignes de 4, très proches. On défend une <b>zone</b>, pas un joueur."},
+    {p:{a3:[28,7],a5:[28,20],a4:[28,33],a2:[28,46],a11:[38,6],a8:[38,19],a6:[38,32],a7:[38,45],a9:[49,20],a10:[49,32]},d:1300,z:[{r:[26,3,25,46],k:"info"}],n:"Le ballon est en haut : tout le bloc <b>coulisse</b> vers lui. Le côté opposé est vide, mais il est loin."},
+    {a:[["b2","b11"]],n:"Les rouges changent de côté…"},
+    {b:"b11",d:1500,n:"…le ballon voyage longtemps : le bloc a le temps de coulisser."},
+    {p:{a3:[28,22],a5:[28,35],a4:[28,48],a2:[28,61],a11:[38,22],a8:[38,35],a6:[38,48],a7:[38,61],a9:[49,36],a10:[49,48]},d:1300,z:[{r:[26,19,25,46],k:"info"}],n:"Comme si les joueurs étaient reliés par des cordes."},
+    {a:[["a7",[54,61],"run"],["a2",[44,62],"run"],["a6",[48,52],"run"]],n:"Le ballon est près de la touche : <b>pressing</b> !"},
+    {p:{a7:[54,61],a2:[45,63],a6:[48,53]},b:"a7",d:900,n:"Piège refermé, ballon récupéré. Les rouges avaient pourtant des joueurs libres… mais trop loin."}]}),
+   say:"À la fin des années quatre-vingt, Arrigo Sacchi et son AC Milan révolutionnent la défense. Fini le marquage individuel : on défend une zone, en deux lignes de quatre très proches. Quand le ballon va d’un côté, tout le bloc coulisse vers lui, comme si les joueurs étaient reliés par des cordes. Et quand le ballon arrive près de la ligne de touche, on presse tous ensemble."},
+  {t:"Individuel ou zone ?",h:ltab([["","Marquage individuel","Défense en zone"],["je surveille","un joueur","un espace"],["si mon joueur part","je le suis partout","je le laisse au partenaire de la zone suivante"],["la défense","peut être désorganisée","reste en place"],["exemple","catenaccio","Milan de Sacchi"]])+KEY("Presque toutes les équipes modernes défendent <b>en zone</b>, avec du pressing."),
+   say:"Avec le marquage individuel, tu suis un joueur partout. En zone, tu surveilles un espace, et tu passes le joueur à ton partenaire quand il sort de ta zone. Aujourd’hui, presque toutes les équipes défendent en zone, avec du pressing."}]},
+ {id:"fg_pos",sub:"foot",lvl:"5e",title:"Guardiola : le jeu de position",desc:"2-3-5, 5 couloirs, les 3 supériorités",bank:[...FTB.pep.slice(0,3),FTB.lire[1],FTB.lire[0],FTB.hist[5]],steps:[
+  {t:"Du 4-3-3 au 2-3-5",h:tacBoard("fp1",{frames:[
+    {p:{...T433,...B442},b:"a5",n:"Barcelone, puis Manchester City de <b>Guardiola</b>. Sur le papier : un 4-3-3."},
+    {a:[["a3",[53,24],"run"],["a2",[53,44],"run"],["a8",[79,19],"run"],["a10",[79,49],"run"],["a11",[78,4],"run"],["a7",[78,64],"run"]],n:"Mais avec le ballon, l’équipe se transforme…"},
+    {p:{...P235,b10:[64,29],b9:[64,39]},d:1600,n:"…en <b>2-3-5</b> : 2 défenseurs, 3 milieux (dont les 2 latéraux rentrés), 5 attaquants."},
+    {z:laneZ(),n:"Un attaquant <b>par couloir</b> : les 5 couloirs sont occupés. Les 4 défenseurs rouges ne peuvent pas tout couvrir."},
+    {z:[{r:[76,1,13,66],k:"good",t:"5 contre 4",sm:1}],n:"5 contre 4 sur la dernière ligne : un bleu est forcément libre. C’est la <b>supériorité numérique</b>."}]}),
+   say:"Avec Barcelone puis Manchester City, Guardiola a perfectionné le jeu de position. Sur le papier, son équipe joue en quatre, trois, trois. Mais avec le ballon, elle se transforme en deux, trois, cinq. Les deux latéraux rentrent au milieu, et cinq joueurs occupent les cinq couloirs. Face à quatre défenseurs, il y a toujours un attaquant libre."},
+  {t:"Renverser pour isoler",h:tacBoard("fp2",{frames:[
+    {p:{...P235,...B442,b2:[86,8],b5:[86,20],b4:[86,32],b3:[86,46],b7:[73,6],b8:[73,20],b6:[73,33],b11:[73,46],b10:[64,24],b9:[64,34]},b:"a3",n:"Le ballon est à gauche. Les rouges <b>coulissent</b> tous vers lui."},
+    {a:[["a3","a6"]],n:"On fait vite circuler…"},
+    {b:"a6",d:600,a:[["a6","a2"]],n:"…une passe, deux passes…"},
+    {b:"a2",d:600,a:[["a2","a7"]],n:"…et un renversement vers l’ailier droit."},
+    {b:"a7",p:{b3:[86,56]},d:1000,z:[{lab:["a7",0,-3.4,"1 contre 1"]}],n:"L’ailier est seul contre son défenseur : c’est la <b>supériorité qualitative</b>. Ton meilleur dribbleur contre un seul adversaire."},
+    {p:{a7:[96,52],b3:[90,57]},b:"a7",d:900,n:"Dribble réussi…"},
+    {a:[["a7","a10"]],p:{a10:[92,40]},d:900,n:"…passe en retrait vers le joueur du demi-espace…"},
+    {b:[105,34],p:{b1:[101,38]},goal:true,d:600,n:"<b>BUT !</b> On a attiré l’adversaire d’un côté pour frapper de l’autre."}]}),
+   say:"Le ballon est à gauche, et les rouges coulissent tous vers lui. Les bleus font vite circuler le ballon, puis renversent le jeu vers l’ailier droit. Il se retrouve seul contre son défenseur : c’est la supériorité qualitative. Il dribble, passe en retrait, but. L’idée de Guardiola : attirer l’adversaire d’un côté pour frapper de l’autre."},
+  {t:"Les règles du jeu de position",h:ltab([["Règle","Pourquoi"],["pas plus de 2 joueurs dans le même couloir","pour étirer l’adversaire en largeur"],["pas plus de 3 joueurs sur la même ligne horizontale","pour toujours avoir des passes en diagonale"],["le ballon court, les joueurs restent à leur place","le ballon va plus vite qu’un joueur"],["supériorité numérique","être plus nombreux là où est le ballon"],["supériorité positionnelle","être mieux placé (entre les lignes, dans le dos)"],["supériorité qualitative","mettre le meilleur joueur en duel"]])+KEY("Guardiola : « Prendre le ballon, le passer, et occuper les espaces. » Le jeu de position, c’est d’abord <b>être au bon endroit</b>."),
+   say:"Les règles du jeu de position : jamais plus de deux joueurs dans le même couloir, jamais plus de trois sur la même ligne, et c’est le ballon qui court, pas les joueurs. On cherche trois supériorités : être plus nombreux, être mieux placés, et mettre son meilleur joueur en duel."}]},
+ {id:"fg_build",sub:"foot",lvl:"5e",title:"La relance courte et le latéral inversé",desc:"Construire depuis le gardien",bank:[FTB.pep[3],FTB.pep[4],FTB.lire[4],FTB.lire[5],FTB.pep[2],FTB.pep[9]],steps:[
+  {t:"Casser le pressing",h:tacBoard("fb1",{frames:[
+    {p:{a1:[4,34],a5:[12,22],a4:[12,46],a3:[22,6],a2:[22,62],a6:[26,34],a8:[36,22],a10:[36,46],a11:[54,6],a9:[58,34],a7:[54,62],b10:[22,27],b9:[22,41],b8:[30,30],b6:[40,24],b7:[40,46],b2:[30,10],b11:[30,58],b5:[70,28],b4:[70,40],b1:[101,34]},b:"a1",n:"Les rouges pressent haut avec 2 attaquants. Le gardien bleu a le ballon."},
+    {a:[["a2",[27,41],"run"]],n:"Le latéral droit rentre dans l’axe, à côté de la sentinelle…"},
+    {p:{a2:[27,41],b11:[30,52]},z:[{lab:["a2",0,3.6,"latéral inversé"]}],d:1100,n:"…c’est le <b>latéral inversé</b>."},
+    {z:[{r:[1,16,16,36],k:"good",t:"3 contre 2",sm:1}],n:"Derrière : gardien + 2 centraux = <b>3 contre 2</b>. Une passe sera toujours libre."},
+    {a:[["a1","a4"]],n:"Le gardien joue court, exprès…"},
+    {b:"a4",p:{b9:[15,44]},d:900,n:"…pour <b>attirer</b> le pressing."},
+    {a:[["a4","a2"]],n:"Le défenseur trouve le latéral inversé…"},
+    {b:"a2",d:800,n:"…libre dans l’axe : la première ligne rouge est cassée."},
+    {a:[["a2","a10"]],p:{a10:[46,46]},d:900,n:"Il joue vers l’avant…"},
+    {b:"a10",d:800,n:"…et le milieu reçoit entre les lignes. On a <b>attiré</b>, puis on est <b>sorti</b>."}]}),
+   say:"Les rouges pressent haut. Le latéral droit des bleus rentre dans l’axe, à côté de la sentinelle : c’est le latéral inversé. Derrière, le gardien et les deux défenseurs centraux font trois contre deux attaquants : une passe sera toujours libre. Le gardien joue court, exprès, pour attirer le pressing. Puis le défenseur trouve le latéral inversé, libre, et le jeu sort vers l’avant. On attire, puis on sort."},
+  {t:"Les rôles modernes",h:ltab([["Rôle","Ce qu’il fait"],["gardien relanceur","joue au pied comme un défenseur de plus"],["sentinelle (le 6)","se place devant les défenseurs, oriente le jeu"],["latéral inversé","rentre au milieu au lieu de monter le long de la touche"],["défenseur hybride","défenseur central qui monte au milieu quand on a le ballon"],["ailier à pied inversé","un gaucher à droite : il rentre pour frapper"]])+`<p>Ces rôles existent aussi dans les jeux de manager : en lisant ces cours, tu comprends ce que font vraiment tes consignes tactiques.</p>`+KEY("La relance courte est risquée : une erreur près de son but coûte cher. Elle demande de la <b>technique</b> et du <b>courage</b>."),
+   say:"Voici les rôles modernes : le gardien relanceur, la sentinelle, le latéral inversé, le défenseur hybride, et l’ailier à pied inversé, comme un gaucher qui joue à droite pour rentrer et frapper. Attention : la relance courte est risquée. Une erreur près de son but peut coûter un but. Il faut de la technique et du courage."}]},
+ {id:"fg_3h",sub:"foot",lvl:"5e",title:"Le troisième homme et le faux 9",desc:"Les combinaisons de Barcelone",bank:[FTB.pep[5],FTB.pep[6],FTB.lire[2],FTB.lire[4],FTB.pep[2],FTB.hist[6]],steps:[
+  {t:"Le troisième homme",h:tacBoard("f3a",{frames:[
+    {p:{a5:[40,30],a6:[46,40],a8:[56,22],a9:[74,34],b8:[59,23],b6:[60,38],b5:[84,30],b4:[84,40],b2:[80,14],b1:[101,34]},b:"a5",a:[["a5","a8","block"]],n:"Le défenseur veut trouver le milieu (C), mais il est marqué de près."},
+    {a:[["a9",[63,33],"run"]],n:"L’avant-centre (B) décroche vers le ballon…"},
+    {p:{a9:[63,33],b5:[68,32]},d:1000,a:[["a5","a9"]],n:"…son défenseur le suit. Passe vers B."},
+    {b:"a9",a:[["a9",[78,22]],["a8",[78,22],"run"]],d:900,n:"B remet <b>en une touche</b>, pendant que C démarre dans le dos de son défenseur."},
+    {p:{a8:[78,22]},b:"a8",d:1000,n:"C reçoit lancé, face au but : c’est le <b>troisième homme</b>. Son défenseur regardait le ballon."},
+    {b:[105,31],p:{b1:[101,29]},goal:true,d:700,n:"<b>BUT !</b> A → B → C : la combinaison préférée de Barcelone."}]}),
+   say:"Le défenseur veut passer à son milieu, mais celui-ci est marqué. Alors il joue l’avant-centre, qui décroche vers le ballon et remet tout de suite en une touche. Pendant ce temps, le milieu a démarré dans le dos de son défenseur, qui regardait le ballon. Il reçoit lancé. C’est le troisième homme : A passe à B, qui remet à C."},
+  {t:"Le faux 9",h:tacBoard("f3b",{frames:[
+    {p:{a9:[84,34],a11:[80,8],a7:[80,60],a8:[68,24],a10:[68,44],a6:[58,34],b5:[89,29],b4:[89,39],b2:[87,12],b3:[87,56],b8:[76,28],b6:[76,40],b1:[101,34]},b:"a6",n:"L’avant-centre est coincé entre les deux défenseurs centraux."},
+    {a:[["a9",[72,34],"run"]],n:"Il <b>décroche</b> au milieu : c’est un <b>faux 9</b>."},
+    {p:{a9:[72,34],b4:[79,37]},d:1100,z:[{r:[84,29,10,12],k:"good",t:"trou",sm:1}],n:"Le défenseur central le suit… et laisse un trou derrière lui."},
+    {a:[["a6","a9"],["a11",[92,35],"run"]],z:[{r:[84,29,10,12],k:"good"}],n:"Passe au faux 9, pendant que l’ailier gauche plonge en diagonale."},
+    {b:"a9",p:{a11:[88,30]},d:900,a:[["a9",[94,36]]],n:"Remise dans le trou…"},
+    {p:{a11:[94,36]},b:"a11",d:800,n:"…l’ailier est seul !"},
+    {b:[105,32],p:{b1:[101,38]},goal:true,d:600,n:"<b>BUT !</b> Avec Messi en faux 9, Barcelone gagne 6-2 à Madrid en mai 2009."}]}),
+   say:"L’avant-centre est coincé entre les deux défenseurs centraux. Alors il décroche au milieu : c’est un faux neuf. Si le défenseur le suit, il laisse un trou derrière lui, et un ailier plonge dedans. S’il ne le suit pas, le faux neuf est libre au milieu. Guardiola a utilisé Lionel Messi comme ça, notamment lors de la victoire six à deux de Barcelone au stade du Real Madrid, en mai 2009."},
+  {t:"Le dilemme",h:KEY("Une bonne combinaison pose un <b>dilemme</b> au défenseur : quoi qu’il fasse, il a tort. Suivre le faux 9 ouvre un trou ; ne pas le suivre le laisse libre.")+ltab([["Combinaison","Le principe"],["une-deux","je passe et je reçois en retour dans le dos"],["troisième homme","A → B → C, C est déjà lancé"],["faux 9","l’avant-centre décroche, les ailiers plongent"],["appel-contre-appel","je feinte vers le ballon, puis je pars dans le dos"]]),
+   say:"Le secret d’une bonne combinaison : poser un dilemme au défenseur. Quoi qu’il fasse, il a tort. S’il suit le faux neuf, il ouvre un trou. S’il ne le suit pas, le faux neuf est libre."}]},
+ {id:"fg_press",sub:"foot",lvl:"5e",title:"Contre-pressing et rest défense",desc:"Guardiola, Klopp et le Gegenpressing",bank:[...FTB.pep.slice(7,10),FTB.hist[8],FTB.math[8],FTB.pep[1]],steps:[
+  {t:"Récupérer en quelques secondes",h:tacBoard("fr1",{frames:[
+    {p:{...P235,b5:[88,40],b4:[88,52],b2:[86,24],b3:[84,62],b6:[76,44],b8:[76,30],b11:[70,58],b7:[70,12],b10:[62,36],b9:[60,46],b1:[101,34]},b:"a10",z:[{r:[40,20,16,28],k:"info",t:"rest défense",sm:1}],n:"Les bleus attaquent, mais 5 joueurs restent derrière le ballon : la <b>rest défense</b> (2 + 3)."},
+    {b:"b5",p:{b5:[85,47]},d:700,n:"Ballon perdu !"},
+    {a:[["a10",[82,48],"run"],["a9",[85,42],"run"],["a7",[84,55],"run"],["a2",[78,46],"run"]],n:"Réflexe : les plus proches foncent <b>tout de suite</b> sur le porteur."},
+    {p:{a10:[82,48],a9:[85,43],a7:[84,54],a2:[76,46]},d:900,n:"C’est le <b>contre-pressing</b>. Guardiola parle souvent d’environ 5 à 6 secondes pour récupérer."},
+    {b:[50,40],p:{b5:[86,47]},d:900,n:"Le rouge, pressé, dégage au hasard…"},
+    {p:{a4:[50,40]},b:"a4",d:600,n:"…et la rest défense récupère. L’attaque bleue recommence !"}]}),
+   say:"Même quand ses joueurs attaquent, Guardiola en garde cinq derrière le ballon : c’est la rest défense, deux plus trois. Quand on perd le ballon, les plus proches foncent tout de suite sur le porteur : c’est le contre-pressing. L’adversaire, pressé, dégage au hasard, et la rest défense récupère. L’attaque peut recommencer. Jürgen Klopp, à Dortmund puis à Liverpool, a rendu célèbre cette idée sous le nom de Gegenpressing."},
+  {t:"Les déclencheurs de pressing",h:ltab([["Déclencheur","Pourquoi presser maintenant ?"],["passe en retrait","l’adversaire recule : on peut avancer"],["mauvais contrôle","le ballon s’éloigne de son pied"],["joueur dos au but","il ne voit pas ce qui arrive"],["passe lente ou en l’air","on a le temps d’arriver"],["ballon près de la touche","la ligne de touche est un défenseur de plus"]])+KEY("On ne presse pas n’importe quand : on presse <b>tous ensemble</b>, au <b>bon signal</b>."),
+   say:"On ne presse pas n’importe quand. On attend un signal, un déclencheur : une passe en retrait, un mauvais contrôle, un joueur dos au but, une passe lente, ou un ballon près de la touche. À ce signal, toute l’équipe presse en même temps."},
+  {t:"Gegenpressing",h:`<p>Jürgen Klopp (Dortmund puis Liverpool) disait que le contre-pressing est le meilleur meneur de jeu du monde : récupérer le ballon tout près du but adverse crée des occasions énormes.</p>`+KEY("Ballon perdu près du but adverse = la défense adverse n’est pas encore en place. C’est le moment le plus dangereux… pour <b>elle</b>."),
+   say:"Jürgen Klopp disait que le contre-pressing est le meilleur meneur de jeu du monde. Quand on récupère le ballon juste après l’avoir perdu, tout près du but adverse, la défense n’est pas encore en place. C’est une énorme occasion."}]},
+ {id:"fd_xg",sub:"foot",lvl:"5e",title:"Maths : les expected goals (xG)",desc:"Calcule les chances de but d’un tir",gen:xgSumGen,bank:FTB.math.slice(0,5),steps:[
+  {t:"Qu’est-ce que l’xG ?",h:`<p>Les analystes ont étudié des centaines de milliers de tirs. Pour chaque position, ils savent combien finissent au fond.</p>`+KEY("Le <b>xG</b> (expected goals, « buts attendus ») d’un tir, c’est la <b>probabilité</b> qu’il devienne un but : un nombre entre 0 et 1.")+ltab([["Tir","xG environ","Ça veut dire"],["penalty","0,76","3 buts sur 4"],["face au but, à 6 m","0,5 à 0,7","plus d’un but sur 2"],["point de penalty, en jeu","0,2 à 0,3","1 but sur 4 ou 5"],["entrée de la surface","0,1","1 but sur 10"],["à 30 m","0,03","3 buts sur 100"]]),
+   say:"Les analystes ont étudié des centaines de milliers de tirs. Pour chaque endroit du terrain, ils savent combien de tirs finissent au fond. Le x G, pour expected goals, buts attendus, d’un tir, c’est sa probabilité de devenir un but : un nombre entre zéro et un. Un penalty vaut environ zéro virgule sept six, soit trois buts sur quatre. Un tir de trente mètres, seulement zéro virgule zéro trois."},
+  {t:"À toi de tirer !",h:`<p>Le but est en haut. Touche le terrain pour placer des tirs. Le triangle jaune montre l’<b>angle</b> vers les poteaux : plus il est ouvert, plus c’est facile.</p>`+xgMap("xg1")+`<p class="muted">Modèle simplifié, calculé avec la distance et l’angle de tir. Les vrais modèles ajoutent : tir du pied ou de la tête, défenseurs devant, passe reçue…</p>`,
+   say:"À toi de tirer. Le but est en haut de l’image. Touche le terrain pour placer un tir : je calcule sa distance, son angle, et son x G. Le triangle jaune montre l’angle de tir vers les deux poteaux. Essaie de tirer du point de penalty, puis de loin, puis depuis un côté, près de la ligne de but. Tu verras que l’angle compte autant que la distance."},
+  {t:"Lire un match avec les xG",h:ltab([["","Bleus","Rouges"],["tirs","6","2"],["xG de chaque tir","0,05 · 0,08 · 0,1 · 0,12 · 0,3 · 0,76","0,04 · 0,35"],["xG total","1,41","0,39"],["score","0","1"]])+EX(`<p>Les bleus ont « mérité » environ 1,4 but, les rouges environ 0,4. Pourtant les rouges gagnent : ils ont été <b>efficaces</b>, ou les bleus ont manqué de <b>réussite</b> (penalty raté !).</p>`)+KEY("L’xG d’une équipe, c’est la <b>somme</b> des xG de ses tirs. Sur un match, le hasard compte. Sur une saison, l’xG dit qui joue vraiment bien."),
+   say:"Pour un match, on additionne les x G de tous les tirs. Ici, les bleus totalisent un virgule quatre un, les rouges zéro virgule trois neuf. Pourtant, les rouges gagnent un à zéro ! Sur un seul match, le hasard compte beaucoup. Mais sur une saison entière, le x G montre quelles équipes jouent vraiment bien."}]},
+ {id:"fd_proba",sub:"foot",lvl:"4e",title:"Maths : probabilités et loi de Poisson",desc:"Pourquoi le meilleur ne gagne pas toujours",gen:()=>pick([penPairGen,xgSumGen])(),bank:[...FTB.math.slice(5,8),FTB.math[9],FTB.math[4],FTB.math[3]],steps:[
+  {t:"Simule des matchs",h:`<p>Les bleus créent en moyenne <b>1,8</b> but attendu par match, les rouges <b>0,9</b>. Les bleus sont deux fois plus forts… gagnent-ils toujours ?</p>`+poisWidget("po1",1.8,.9),
+   say:"Les bleus créent en moyenne un virgule huit but attendu par match, les rouges zéro virgule neuf. Les bleus sont deux fois plus forts. Mais gagnent-ils toujours ? Lance un match, puis cent, puis mille. Regarde : les bleus gagnent souvent, mais pas toujours. Et plus tu joues de matchs, plus les résultats se rapprochent des pourcentages calculés. C’est la loi des grands nombres."},
+  {t:"La loi de Poisson",h:`<p>Les buts sont rares et arrivent un peu au hasard. Les mathématiciens utilisent la <b>loi de Poisson</b> (du mathématicien français Siméon Denis Poisson, 1837) :</p>`+CALC("P(k buts) = e^(−λ) × λ^k ÷ k!\n\nλ = nombre moyen de buts (le xG)\nk! = 1 × 2 × … × k     e ≈ 2,718")+EX(CALC("λ = 1 :  P(0 but) = e^(−1) ≈ 0,37\n        P(1 but) = e^(−1) × 1 ≈ 0,37\n        P(2 buts) = e^(−1) × 1 ÷ 2 ≈ 0,18"))+KEY("Même une équipe qui marque en moyenne 1 but ne marque <b>pas du tout</b> dans environ 37 % de ses matchs."),
+   say:"Pour calculer ces pourcentages, les mathématiciens utilisent la loi de Poisson, inventée par le Français Siméon Denis Poisson. Lambda, c’est le nombre moyen de buts. Pour une équipe qui marque en moyenne un but par match, la probabilité de ne pas marquer du tout est d’environ trente-sept pour cent. Change les curseurs de l’étape précédente pour voir le tableau changer."},
+  {t:"Le penalty et la théorie des jeux",h:`<p>Exemple simplifié : le tireur frappe à gauche ou à droite, le gardien plonge à gauche ou à droite.</p>`+ltab([["","Gardien plonge à gauche","Gardien plonge à droite"],["Tireur à gauche","le gardien arrête souvent","but presque sûr"],["Tireur à droite","but presque sûr","le gardien arrête souvent"]])+KEY("Si le tireur choisit <b>toujours</b> le même côté, le gardien le devine. La meilleure stratégie : <b>varier au hasard</b>. C’est la théorie des jeux, une branche des maths.")+`<p>Deux penalties de suite à 3 chances sur 4 : 3/4 × 3/4 = 9/16, soit environ 56 %.</p>`,
+   say:"Au penalty, si le tireur frappe toujours du même côté, le gardien finit par le deviner. La meilleure stratégie, c’est de varier au hasard. C’est ce qu’étudie la théorie des jeux. Et pour enchaîner deux réussites, on multiplie les probabilités : trois quarts fois trois quarts, cela fait neuf seizièmes, à peu près cinquante-six pour cent."}]},
+ {id:"fd_stats",sub:"foot",lvl:"6e",title:"Les stats du foot moderne",desc:"Possession, PPDA, réseaux de passes",gen:ppdaGen,bank:[FTB.math[8],FTB.math[10],FTB.math[4],FTB.pep[7],FTB.math[0],FTB.lire[2]],steps:[
+  {t:"Le réseau de passes",h:`<p>Chaque trait relie deux joueurs : plus il est épais, plus ils se sont fait de passes.</p>`+tacBoard("fn1",{frames:[
+    {p:P235,nob:true,n:"Positions moyennes des bleus pendant un match."},
+    {nob:true,z:[["a5","a4",9],["a5","a3",7],["a4","a2",7],["a3","a6",8],["a2","a6",8],["a6","a8",7],["a6","a10",7],["a3","a11",4],["a2","a7",4],["a8","a11",5],["a10","a7",5],["a8","a9",3],["a10","a9",3],["a5","a6",5],["a4","a6",5]].map(x=>({ln:x})),n:"Le réseau de passes : on voit tout de suite comment l’équipe joue."},
+    {nob:true,h:["a6"],z:[["a3","a6",8],["a2","a6",8],["a6","a8",7],["a6","a10",7],["a5","a6",5],["a4","a6",5]].map(x=>({ln:x})),n:"La <b>sentinelle</b> (6) est au centre de tout : c’est elle qu’il faut gêner pour casser le jeu bleu."}]}),
+   say:"Les analystes dessinent des réseaux de passes. Chaque joueur est placé à sa position moyenne, et chaque trait relie deux joueurs : plus il est épais, plus ils se sont fait de passes. On voit tout de suite le cerveau de l’équipe. Ici, c’est la sentinelle, le numéro six. Un entraîneur adverse demandera de la marquer de près."},
+  {t:"Le PPDA : mesurer le pressing",h:CALC("PPDA = passes de l’adversaire dans sa moitié\n       ÷ actions défensives de ton équipe dans cette zone")+EX(CALC("L’adversaire fait 240 passes, ton équipe fait 30 tacles,\ninterceptions ou fautes dans cette zone :\nPPDA = 240 ÷ 30 = 8"))+KEY("Plus le PPDA est <b>petit</b>, plus l’équipe presse <b>fort</b> : elle laisse peu de passes à l’adversaire avant d’intervenir."),
+   say:"Le P P D A mesure le pressing : c’est le nombre de passes que l’adversaire peut faire avant que ton équipe intervienne. On divise les passes de l’adversaire dans sa moitié de terrain par le nombre de tacles, interceptions et fautes de ton équipe dans cette zone. Deux cent quarante divisé par trente égale huit. Plus le nombre est petit, plus le pressing est fort."},
+  {t:"Possession ou efficacité ?",h:ltab([["Stat","Ce qu’elle mesure","Son piège"],["possession","le temps avec le ballon","on peut avoir le ballon sans danger"],["tirs","le nombre de frappes","100 tirs de 30 m valent peu"],["xG","la qualité des occasions","un seul match reste du hasard"],["passes progressives","les passes qui avancent vraiment","ne dit pas si l’action finit bien"]])+KEY("Aucune stat ne dit tout seule qui a bien joué. Les analystes les <b>croisent</b> : c’est comme ça que les clubs choisissent leurs joueurs et préparent les matchs."),
+   say:"La possession dit qui a le ballon, mais pas si c’est dangereux. Les tirs disent combien de fois on frappe, mais pas d’où. Le x G mesure la qualité des occasions. Aucune statistique ne dit tout seule qui a bien joué. Les analystes des clubs les croisent toutes, pour recruter des joueurs et préparer les matchs."}]}
 ];
+{const POOL={fh:FTB.hist,fg:FTB.pep,fd:FTB.math};for(const L of FLESS){if(!L.gen&&L.bank.length<8){const pool=(POOL[L.id.slice(0,2)]||FTB.lire).filter(e=>!L.bank.includes(e));L.bank=[...L.bank,...shuffle(pool).slice(0,8-L.bank.length)]}}}
 for(const L of FLESS){LESSONS.push(L);LESSON[L.id]=L}
 for(const t of [
- {id:"f_q_bases",sub:"foot",lvl:"CM2",title:"Les bases de la tactique",desc:"Postes, espace, soutien, défense",bank:[...FTB.postes,...FTB.largeur,...FTB.soutien,...FTB.defense]},
- {id:"f_q_regles",sub:"foot",lvl:"CM2",title:"Les règles du foot à 8",desc:"Hors-jeu, touche, penalty",bank:FTB.regles},
- {id:"f_q_attaque",sub:"foot",lvl:"CM2",title:"Attaquer ensemble",desc:"Une-deux, appels, largeur",bank:[...FTB.unedeux,...FTB.largeur,...FTB.soutien]},
- {id:"f_q_pro",sub:"foot",lvl:"6e",title:"Transitions et systèmes",desc:"Contre-pressing, contre-attaque, 4-3-3…",gen:footSysGen,bank:[...FTB.trans,...FTB.sys]}]){THEMES.push(t);THEME[t.id]=t}
+ {id:"fq_lire",sub:"foot",lvl:"6e",title:"Lire le jeu à 11",desc:"Couloirs, demi-espaces, entre les lignes",bank:FTB.lire},
+ {id:"fq_hist",sub:"foot",lvl:"6e",title:"Histoire des tactiques",desc:"Pyramide, WM, catenaccio, football total, Sacchi",bank:FTB.hist},
+ {id:"fq_pep",sub:"foot",lvl:"5e",title:"Guardiola et le jeu de position",desc:"2-3-5, latéral inversé, faux 9, contre-pressing",bank:FTB.pep},
+ {id:"fq_math",sub:"foot",lvl:"4e",title:"Les maths du foot",desc:"xG, probabilités, PPDA (calculs)",gen:mathGen,bank:FTB.math}]){THEMES.push(t);THEME[t.id]=t}
 
 
 function buildQuestions(t,n=t.n||10){
