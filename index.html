@@ -20,7 +20,7 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   --rule:rgba(39,71,216,.055); --rule-strong:rgba(39,71,216,.11); --margin:#e7718d;
   --accent:#2747d8; --accent-ink:#ffffff; --fluo:#ffe14d; --fluo-ink:#2a2300;
   --good:#16884f; --good-bg:#e3f5ea; --bad:#c8392f; --bad-bg:#fbe7e5; --warn:#b26b00;
-  --c-maths:#2747d8; --c-geom:#0c8f81; --c-prog:#7438cc; --c-hg:#9a5424; --c-fr:#c92a62; --c-en:#0b7fb3; --c-rev:#5b6782; --c-defi:#b07a00; --c-elec:#d9480f;
+  --c-maths:#2747d8; --c-geom:#0c8f81; --c-prog:#7438cc; --c-hg:#9a5424; --c-fr:#c92a62; --c-en:#0b7fb3; --c-rev:#5b6782; --c-defi:#b07a00; --c-elec:#d9480f; --c-3d:#2b8a3e;
   --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --f-body:"Atkinson Hyperlegible", "Segoe UI", Roboto, system-ui, sans-serif;
   --f-mono:"JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
@@ -31,14 +31,14 @@ body{margin:0}img{max-width:100%}[hidden]{display:none!important}
   --rule:rgba(237,243,238,.035); --rule-strong:rgba(237,243,238,.06); --margin:#c25a74;
   --accent:#8eaaff; --accent-ink:#0d1a3d; --fluo:#ffe14d; --fluo-ink:#2a2300;
   --good:#5fd396; --good-bg:#173a2a; --bad:#ff8a7f; --bad-bg:#43211f; --warn:#f0b65a;
-  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d; --c-elec:#ff9a5c;
+  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d; --c-elec:#ff9a5c; --c-3d:#69db7c;
   --shadow:0 1px 0 rgba(0,0,0,.2), 0 8px 20px -12px rgba(0,0,0,.6); color-scheme:dark }}
 :root[data-theme="dark"]{
   --paper:#132024; --card:#1b2c31; --ink:#edf3ee; --muted:#9db0ad; --line:#2c4247;
   --rule:rgba(237,243,238,.035); --rule-strong:rgba(237,243,238,.06); --margin:#c25a74;
   --accent:#8eaaff; --accent-ink:#0d1a3d; --fluo:#ffe14d; --fluo-ink:#2a2300;
   --good:#5fd396; --good-bg:#173a2a; --bad:#ff8a7f; --bad-bg:#43211f; --warn:#f0b65a;
-  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d; --c-elec:#ff9a5c;
+  --c-maths:#8eaaff; --c-geom:#4fd2c2; --c-prog:#b994ff; --c-hg:#e3a072; --c-fr:#ff86b0; --c-en:#5cc6f2; --c-rev:#9db0ad; --c-defi:#f2c34d; --c-elec:#ff9a5c; --c-3d:#69db7c;
   --shadow:0 1px 0 rgba(0,0,0,.2), 0 8px 20px -12px rgba(0,0,0,.6); color-scheme:dark }
 
 html,body{height:100%}
@@ -388,6 +388,22 @@ pre.calc{margin:0;padding:14px 16px;border-radius:12px;background:var(--card);bo
 .bit[aria-pressed="true"] i{background:var(--fluo);box-shadow:0 0 14px var(--fluo)}
 .bit b{font:800 20px var(--f-mono)}.bit span{font:700 12px var(--f-body);color:var(--muted)}
 .bitout{text-align:center;font-size:18px}
+.fcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.fcard{position:relative;height:150px;border:0;padding:0;background:none;perspective:800px}
+.fface{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);box-shadow:var(--shadow);backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .5s;text-align:center}
+.fback{transform:rotateY(180deg);background:color-mix(in srgb,var(--fluo) 35%,var(--card))}
+.fcard.flip .ffront{transform:rotateY(180deg)}.fcard.flip .fback{transform:rotateY(360deg)}
+.fface b{font-family:var(--f-display);font-size:19px;line-height:1.15}
+.fback b{font-size:22px}
+.fface small{font-size:12.5px;color:var(--muted);line-height:1.3}
+.fback small{color:var(--ink)}
+.flag{font-size:44px;line-height:1}
+.v3d{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-height:200px;display:flex;align-items:center;justify-content:center}
+.v3d canvas{display:block;width:100%!important;cursor:grab}
+.v3d-wait{padding:20px;text-align:center}
+.v3d-hint{font-size:14px;text-align:center}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.dim{display:flex;flex-direction:column;gap:4px;font-size:15px}.dim input{width:100%;height:30px}
 .code{font-family:var(--f-mono);font-weight:700;letter-spacing:.04em}.code.big{font-size:clamp(20px,3.6vw,28px);user-select:all;word-break:break-all;margin:4px 0}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 @keyframes pop{from{transform:scale(.96);opacity:.6}to{transform:none;opacity:1}}
@@ -447,6 +463,7 @@ const SUBJECTS={
   geom:{label:"Géométrie",short:"Géométrie",glyph:"△",c:"var(--c-geom)"},
   prog:{label:"Programmation",short:"Code",glyph:"{ }",c:"var(--c-prog)"},
   elec:{label:"Électronique",short:"Électronique",glyph:"Ω",c:"var(--c-elec)"},
+  m3d:{label:"Modélisation 3D",short:"3D",glyph:"3D",c:"var(--c-3d)"},
   hg:{label:"Histoire-Géographie",short:"Histoire-Géo",glyph:"1789",c:"var(--c-hg)"},
   fr:{label:"Français",short:"Français",glyph:"Aa",c:"var(--c-fr)"},
   en:{label:"Anglais",short:"Anglais",glyph:"EN",c:"var(--c-en)"}
@@ -1430,6 +1447,205 @@ for(const t of [
  {id:"el_ohm",sub:"elec",lvl:"4e",title:"La loi d’Ohm",desc:"U = R × I",gen:G.ohm,bank:EB.ohm},
  {id:"p_robot",sub:"prog",lvl:"CM2",title:"Le robot : où arrive-t-il ?",desc:"Suivre un programme pas à pas",gen:G.robot},
  {id:"p_var",sub:"prog",lvl:"6e",title:"Variables & Python",desc:"Lire un programme et prédire le résultat",gen:G.py,bank:EB.vars}]){THEMES.push(t);THEME[t.id]=t}
+/* ================= capitales & modélisation 3D ================= */
+const flagOf=i=>String.fromCodePoint(...[...i].map(c=>127397+c.charCodeAt(0)));
+const noAcc=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"");
+const CAPS=[
+ ["France","Paris","FR","eu","Tu la connais : la tour Eiffel et le PSG !"],
+ ["Espagne","Madrid","ES","eu","Le célèbre club du Real Madrid joue dans la capitale.","Barcelone"],
+ ["Portugal","Lisbonne","PT","eu","Les clubs de Benfica et du Sporting (où a débuté Cristiano Ronaldo) sont à Lisbonne.","Porto"],
+ ["Italie","Rome","IT","eu","« Tous les chemins mènent à Rome » : c’était le centre de l’Empire romain.","Milan"],
+ ["Allemagne","Berlin","DE","eu","Le mur de Berlin a coupé la ville en deux jusqu’en 1989.","Munich"],
+ ["Royaume-Uni","Londres","GB","eu","Big Ben, les bus rouges à étage et les clubs d’Arsenal et de Chelsea.","Manchester"],
+ ["Belgique","Bruxelles","BE","eu","On l’appelle aussi la « capitale de l’Europe » : l’Union européenne y siège.","Anvers"],
+ ["Pays-Bas","Amsterdam","NL","eu","Les canaux, les vélos… et le club de l’Ajax Amsterdam.","La Haye"],
+ ["Suisse","Berne","CH","eu","Berne vient de « Bär », l’ours en allemand : un ours est sur son drapeau. Piège : ce n’est pas Genève !","Genève"],
+ ["Autriche","Vienne","AT","eu","Les viennoiseries (croissants, pains au chocolat) portent le nom de Vienne !"],
+ ["Grèce","Athènes","GR","eu","La ville d’Athéna, déesse de la sagesse, avec le Parthénon sur la colline."],
+ ["Pologne","Varsovie","PL","eu","Marie Curie, deux fois prix Nobel, est née à Varsovie."],
+ ["Suède","Stockholm","SE","eu","C’est à Stockholm qu’on remet les prix Nobel (sauf celui de la paix)."],
+ ["Norvège","Oslo","NO","eu","Le prix Nobel de la paix, lui, est remis à Oslo."],
+ ["Danemark","Copenhague","DK","eu","La statue de la Petite Sirène surveille son port. Et les LEGO sont danois !"],
+ ["Hongrie","Budapest","HU","eu","Deux villes collées de chaque côté du Danube : Buda + Pest."],
+ ["Croatie","Zagreb","HR","eu","Z comme Zagreb… et comme la finale de 2018, gagnée par la France contre la Croatie !"],
+ ["Russie","Moscou","RU","eu","La place Rouge et le Kremlin sont à Moscou.","Saint-Pétersbourg"],
+ ["Maroc","Rabat","MA","af","Le roi du Maroc habite à Rabat. Casablanca est plus grande, mais ce n’est pas la capitale !","Casablanca"],
+ ["Algérie","Alger","DZ","af","Algérie → Alger : on garde le début du nom du pays."],
+ ["Tunisie","Tunis","TN","af","Tunisie → Tunis : même astuce que pour l’Algérie."],
+ ["Égypte","Le Caire","EG","af","Les pyramides de Gizeh sont juste à côté du Caire, au bord du Nil.","Alexandrie",["Caire"]],
+ ["Sénégal","Dakar","SN","af","Le célèbre rallye Paris-Dakar arrivait à Dakar."],
+ ["Mali","Bamako","ML","af","Bamako est au bord du fleuve Niger."],
+ ["Côte d’Ivoire","Yamoussoukro","CI","af","Piège : Abidjan est la plus grande ville, mais la capitale officielle est Yamoussoukro.","Abidjan"],
+ ["Nigeria","Abuja","NG","af","Piège : Lagos est la plus grande ville, mais la capitale est Abuja depuis 1991.","Lagos"],
+ ["Kenya","Nairobi","KE","af","Nairobi a un parc national avec des girafes et des lions, tout près des immeubles !"],
+ ["Éthiopie","Addis-Abeba","ET","af","Addis-Abeba veut dire « nouvelle fleur ». L’Union africaine y a son siège.",null,["Addis Abeba"]],
+ ["RD Congo","Kinshasa","CD","af","Kinshasa est l’une des plus grandes villes francophones du monde."],
+ ["Cameroun","Yaoundé","CM","af","Piège : Douala est plus grande, mais la capitale est Yaoundé.","Douala"],
+ ["Madagascar","Antananarivo","MG","af","On la surnomme « Tana ». Son nom veut dire « la ville des mille »."],
+ ["Afrique du Sud","Pretoria","ZA","af","Ce pays a 3 capitales ! Pretoria est celle du gouvernement, où Nelson Mandela est devenu président.","Johannesburg"],
+ ["États-Unis","Washington","US","am","Comme George Washington, le premier président. New York est plus grande, mais ce n’est pas la capitale.","New York",["Washington DC","Washington D.C."]],
+ ["Canada","Ottawa","CA","am","Piège : ni Toronto ni Montréal ! Ottawa est entre les deux, à la limite du Québec.","Toronto"],
+ ["Mexique","Mexico","MX","am","Le pays et sa capitale portent presque le même nom."],
+ ["Brésil","Brasília","BR","am","Brésil → Brasília, une ville construite exprès en 1960. Rio n’est plus la capitale !","Rio de Janeiro",["Brasilia"]],
+ ["Argentine","Buenos Aires","AR","am","« Buenos Aires » veut dire « bons airs ». Maradona y a joué à Boca Juniors."],
+ ["Chili","Santiago","CL","am","Santiago est au pied de la cordillère des Andes."],
+ ["Pérou","Lima","PE","am","L’ours Paddington vient du Pérou : sa tante Lucy vit à Lima !"],
+ ["Colombie","Bogota","CO","am","Bogota est perchée à plus de 2 600 m d’altitude, dans les Andes.",null,["Bogotá"]],
+ ["Cuba","La Havane","CU","am","De vieilles voitures américaines colorées roulent encore à La Havane.",null,["Havane"]],
+ ["Chine","Pékin","CN","as","Pékin (Beijing) veut dire « capitale du Nord ». Shanghai est plus grande !","Shanghai",["Beijing"]],
+ ["Japon","Tokyo","JP","as","Tokyo veut dire « capitale de l’Est ». L’ancienne capitale, Kyoto, a les mêmes lettres mélangées !","Kyoto"],
+ ["Corée du Sud","Séoul","KR","as","Samsung, la marque de ta tablette, est une entreprise sud-coréenne. Capitale : Séoul.",null,["Seoul"]],
+ ["Inde","New Delhi","IN","as","New Delhi est le quartier du gouvernement dans la grande ville de Delhi.","Bombay"],
+ ["Thaïlande","Bangkok","TH","as","Bangkok, la ville des temples dorés et des tuk-tuks."],
+ ["Vietnam","Hanoï","VN","as","Piège : Hô-Chi-Minh-Ville est plus grande, mais la capitale est Hanoï, au nord.","Hô-Chi-Minh-Ville",["Hanoi"]],
+ ["Turquie","Ankara","TR","as","Piège : Istanbul est la plus célèbre, mais la capitale est Ankara !","Istanbul"],
+ ["Arabie saoudite","Riyad","SA","as","Riyad est en plein désert d’Arabie.",null,["Riyadh"]],
+ ["Qatar","Doha","QA","as","La Coupe du monde 2022 s’est jouée au Qatar, autour de Doha."],
+ ["Émirats arabes unis","Abou Dabi","AE","as","Piège : Dubaï est plus connue, mais la capitale est Abou Dabi.","Dubaï",["Abu Dhabi","Abou Dhabi"]],
+ ["Pakistan","Islamabad","PK","as","Piège : Karachi est plus grande ; Islamabad a été construite pour être la capitale.","Karachi"],
+ ["Australie","Canberra","AU","as","Le grand piège : ni Sydney ni Melbourne ! Canberra a été construite entre les deux.","Sydney"],
+ ["Nouvelle-Zélande","Wellington","NZ","as","Le pays des All Blacks. Piège : Auckland est plus grande, mais la capitale est Wellington.","Auckland"]
+].map(([c,k,i,z,a,p,alt])=>({c,k,i,z,a,p,alt:alt||[]}));
+const CAPOF=c=>CAPS.find(x=>x.c===c);
+function capsGen(zone){return ()=>{const L=zone?CAPS.filter(c=>c.z===zone):CAPS,x=pick(L),others=L.filter(c=>c!==x),t=R(1,5),fl=flagOf(x.i),ex=`${x.c} → ${x.k}. ${x.a}`;
+  if(t===1||(t===3&&!x.p))return mcq(`Quelle est la capitale de ce pays : ${x.c} ${fl} ?`,x.k,shuffle(others.map(c=>c.k)),ex);
+  if(t===2)return mcq(`${x.k} est la capitale de…`,x.c,shuffle(others.map(c=>c.c)),ex);
+  if(t===3)return mcq(`Attention au piège ! Quelle est la capitale de ce pays : ${x.c} ${fl} ?`,x.k,[x.p,...shuffle(others.map(c=>c.k))],ex);
+  if(t===4)return mcq(`Quel est ce drapeau ? ${fl}`,x.c,shuffle(others.map(c=>c.c)),`C’est le drapeau du pays ${x.c}, capitale ${x.k}.`,{sig:"flag"+x.i});
+  return inp(`Écris la capitale : ${x.c} ${fl}`,x.k,ex,{alt:[noAcc(x.k),...x.alt,...x.alt.map(noAcc)]})}}
+function fcards(list){return `<div class="fcards">${list.map(n=>{const x=CAPOF(n);return `<button class="fcard" data-fc="1" data-say="${esc(`${x.c} : ${x.k}. ${x.a}`)}"><span class="fface ffront"><span class="flag">${flagOf(x.i)}</span><b>${esc(x.c)}</b><small>Touche pour retourner</small></span><span class="fface fback"><b>${esc(x.k)}</b><small>${esc(x.a)}</small></span></button>`}).join("")}</div>`}
+const capStep=(t,list,intro)=>({t,h:`<p>${intro||"Devine d’abord dans ta tête, puis touche chaque carte pour vérifier et écouter l’astuce."}</p>`+fcards(list),say:`${intro||"Pour chaque pays, essaie de deviner la capitale dans ta tête. Puis touche la carte pour la retourner : tu verras la capitale et une astuce pour t’en souvenir, et je te la lirai."}`});
+const CAPLESS=[
+ {id:"c_method",sub:"hg",lvl:"CM2",title:"Les secrets pour retenir les capitales",desc:"4 astuces de mémoire",gen:capsGen(null),steps:[
+  {t:"Astuce 1 : le nom qui se ressemble",h:`<p>Parfois, la capitale ressemble au nom du pays : il suffit de couper ou de garder le début.</p>`+fcards(["Algérie","Tunisie","Mexique","Brésil"]),say:"Première astuce : pour certains pays, la capitale ressemble au nom du pays. Algérie, Alger. Tunisie, Tunis. Mexique, Mexico. Brésil, Brasília. Touche les cartes pour vérifier."},
+  {t:"Astuce 2 : le piège de la grande ville",h:`<p>La ville la plus grande ou la plus célèbre n’est <b>pas toujours</b> la capitale !</p>`+fcards(["Australie","Turquie","Maroc","Canada"]),say:"Deuxième astuce, et c’est la plus importante : la ville la plus grande ou la plus célèbre n’est pas toujours la capitale. Sydney n’est pas la capitale de l’Australie, Istanbul n’est pas celle de la Turquie, Casablanca n’est pas celle du Maroc. Retourne les cartes pour découvrir les vraies capitales."},
+  {t:"Astuce 3 : une histoire ou un club de foot",h:`<p>Le cerveau retient mieux une <b>histoire</b> qu’un mot tout seul. Associe chaque capitale à un club, un monument ou un personnage.</p>`+fcards(["Espagne","Pays-Bas","Pérou","Corée du Sud"]),say:"Troisième astuce : ton cerveau retient beaucoup mieux une histoire qu’un mot tout seul. Associe chaque capitale à un club de foot, un monument ou un personnage. Le Real Madrid pour l’Espagne, l’Ajax Amsterdam pour les Pays-Bas, ou l’ours Paddington pour le Pérou."},
+  {t:"Astuce 4 : répéter au bon moment",h:KEY("Révise une capitale 3 fois : <b>aujourd’hui</b>, <b>demain</b>, puis <b>dans une semaine</b>. Les capitales que tu rates vont dans tes Révisions : l’appli te les redonne jusqu’à ce que tu les saches.")+`<p>Et récite-les à voix haute : dire, c’est retenir deux fois !</p>`,say:"Quatrième astuce : pour retenir pour toujours, il faut répéter au bon moment. Aujourd’hui, demain, puis dans une semaine. Les capitales que tu rates vont dans tes révisions, et l’appli te les redonne jusqu’à ce que tu les saches. Et récite-les à voix haute : dire, c’est retenir deux fois !"}]},
+ {id:"c_eu",sub:"hg",lvl:"CM2",title:"Capitales d’Europe",desc:"18 pays, avec leurs astuces",gen:capsGen("eu"),steps:[
+  capStep("Nos voisins",["Espagne","Italie","Allemagne","Belgique","Suisse"]),
+  capStep("Le nord et les îles",["Royaume-Uni","Pays-Bas","Danemark","Suède","Norvège"]),
+  capStep("Le centre et l’est",["Autriche","Pologne","Hongrie","Croatie"]),
+  capStep("Le sud et l’est",["Portugal","Grèce","Russie","France"])]},
+ {id:"c_af",sub:"hg",lvl:"CM2",title:"Capitales d’Afrique",desc:"14 pays, avec leurs pièges",gen:capsGen("af"),steps:[
+  capStep("L’Afrique du Nord",["Maroc","Algérie","Tunisie","Égypte"]),
+  capStep("L’Afrique de l’Ouest",["Sénégal","Mali","Côte d’Ivoire","Nigeria","Cameroun"]),
+  capStep("L’Est et le Sud",["Kenya","Éthiopie","RD Congo","Madagascar","Afrique du Sud"])]},
+ {id:"c_am",sub:"hg",lvl:"CM2",title:"Capitales des Amériques",desc:"9 pays, du Canada au Chili",gen:capsGen("am"),steps:[
+  capStep("Amérique du Nord et Caraïbes",["États-Unis","Canada","Mexique","Cuba"]),
+  capStep("Amérique du Sud",["Brésil","Argentine","Chili","Pérou","Colombie"])]},
+ {id:"c_as",sub:"hg",lvl:"6e",title:"Capitales d’Asie et d’Océanie",desc:"14 pays, beaucoup de pièges",gen:capsGen("as"),steps:[
+  capStep("L’Asie de l’Est",["Chine","Japon","Corée du Sud","Vietnam","Thaïlande"]),
+  capStep("Le Moyen-Orient et l’Asie du Sud",["Turquie","Arabie saoudite","Qatar","Émirats arabes unis","Inde","Pakistan"]),
+  capStep("L’Océanie",["Australie","Nouvelle-Zélande"],"Deux grands pièges de l’autre côté de la Terre. Devine, puis retourne les cartes.")]}
+];
+/* ---------- 3D (Three.js chargé à la demande) ---------- */
+const THREE_URL="three.min.js";
+let threeP=null;
+function loadThree(){if(window.THREE)return Promise.resolve();if(!threeP)threeP=new Promise((res,rej)=>{const s=document.createElement("script");s.src=THREE_URL;s.onload=()=>res();s.onerror=()=>{threeP=null;rej()};document.head.appendChild(s)});return threeP}
+const V3D={};
+const v3d=(id,scene,ctl="")=>`<div class="v3d" id="v3d-${id}" data-scene="${scene}"><p class="muted v3d-wait">Chargement de la vue 3D…</p></div><p class="muted v3d-hint">Fais glisser ton doigt sur l’objet pour le faire tourner.</p>${ctl}`;
+const vbtn=(id,mode,label,ghost=true)=>`<button class="btn small ${ghost?"ghost":""}" data-v3d="${id}:${mode}">${label}</button>`;
+function rrect(T,w,h,r){const s=new T.Shape(),x=-w/2,y=-h/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s}
+function flatEx(T,shape,depth){const g=new T.ExtrudeGeometry(shape,{depth,bevelEnabled:false,curveSegments:28});g.rotateX(-Math.PI/2);return g}
+function profEx(T,pts,depth){const s=new T.Shape();s.moveTo(...pts[0]);pts.slice(1).forEach(p=>s.lineTo(...p));s.closePath();const g=new T.ExtrudeGeometry(s,{depth,bevelEnabled:false});g.translate(0,0,-depth/2);return g}
+function clearRoot(st){for(const c of [...st.root.children])if(!c.userData.keep)st.root.remove(c)}
+function addMesh(st,g,m){const x=new st.T.Mesh(g,m||st.mat);st.root.add(x);return x}
+function label3(st,text,color,pos){const c=document.createElement("canvas");c.width=128;c.height=64;const g=c.getContext("2d");g.font="bold 44px sans-serif";g.fillStyle=color;g.textAlign="center";g.textBaseline="middle";g.fillText(text,64,34);const sp=new st.T.Sprite(new st.T.SpriteMaterial({map:new st.T.CanvasTexture(c),depthTest:false}));sp.scale.set(22,11,1);sp.position.set(...pos);sp.userData.keep=true;st.root.add(sp);return sp}
+const BUILD3={
+ axes(st){const T=st.T;st.dims={x:40,y:30,z:20};const box=addMesh(st,new T.BoxGeometry(1,1,1));box.userData.keep=true;
+  const ax=(dir,col,txt,lp)=>{const a=new T.ArrowHelper(new T.Vector3(...dir),new T.Vector3(-55,0.5,55),75,col,9,6);a.userData.keep=true;st.root.add(a);label3(st,txt,"#"+col.toString(16).padStart(6,"0"),lp)};
+  ax([1,0,0],0xe03131,"X",[30,6,62]);ax([0,0,-1],0x2f9e44,"Y",[-62,6,-30]);ax([0,1,0],0x1c7ed6,"Z",[-55,84,55]);
+  st.setDim=(k,v)=>{st.dims[k]=v;box.scale.set(st.dims.x,st.dims.z,st.dims.y);box.position.y=st.dims.z/2};st.setDim("x",40)},
+ shapes(st){const T=st.T;st.setMode=m=>{clearRoot(st);let g;
+   switch(m){case"cyl":g=new T.CylinderGeometry(20,20,40,48);break;case"sphere":g=new T.SphereGeometry(22,48,32);break;case"cone":g=new T.ConeGeometry(22,44,48);break;
+    case"pyr":g=new T.ConeGeometry(28,40,4);g.rotateY(Math.PI/4);break;case"roof":g=new T.CylinderGeometry(24,24,46,3);g.rotateX(-Math.PI/2);break;case"torus":g=new T.TorusGeometry(18,7,24,64);g.rotateX(Math.PI/2);break;default:g=new T.BoxGeometry(40,40,40)}
+   g.computeBoundingBox();addMesh(st,g).position.y=-g.boundingBox.min.y};st.setMode("cube")},
+ house(st){st.cam.position.set(150,125,190);st.cam.lookAt(0,42,0);const T=st.T,parts=[],part=(g,p,ex,mat)=>{const m=addMesh(st,g,mat);m.position.set(...p);m.userData.home=p;m.userData.out=ex;parts.push(m)};
+  const roof=new T.CylinderGeometry(29,29,40,3);roof.rotateX(-Math.PI/2);
+  part(new T.BoxGeometry(50,30,40),[0,15,0],[0,15,0]);part(roof,[0,44.5,0],[0,64,0],new T.MeshStandardMaterial({color:0xc0392b,roughness:.6}));
+  part(new T.BoxGeometry(8,18,8),[13,52,6],[13,84,6],new T.MeshStandardMaterial({color:0x7f8c8d,roughness:.7}));part(new T.BoxGeometry(11,18,2),[0,9,20.5],[0,9,42],new T.MeshStandardMaterial({color:0x5d4037,roughness:.7}));
+  st.mode="build";st.setMode=m=>{st.mode=m};st.tick=()=>{parts.forEach(p=>{const t=st.mode==="explode"?p.userData.out:p.userData.home;p.position.lerp(new T.Vector3(...t),.1)})}},
+ holes(st){const T=st.T;st.setMode=m=>{clearRoot(st);
+   if(m==="group"){const s=rrect(T,50,50,4),h=new T.Path();h.absarc(0,0,10,0,Math.PI*2,true);s.holes.push(h);addMesh(st,flatEx(T,s,16))}
+   else{addMesh(st,new T.BoxGeometry(50,16,50)).position.y=8;addMesh(st,new T.CylinderGeometry(10,10,30,48),m==="hole"?st.ghost:st.mat).position.y=15}};st.setMode("solid")},
+ over(st){const T=st.T,red=new T.MeshStandardMaterial({color:0xe03131,roughness:.6});st.setMode=m=>{clearRoot(st);
+   addMesh(st,profEx(T,[[-28,0],[-12,0],[-12,60],[-28,60]],20));
+   if(m==="slope")addMesh(st,profEx(T,[[-12,16],[32,60],[-12,60]],20));
+   else{addMesh(st,profEx(T,[[-12,48],[32,48],[32,60],[-12,60]],20),m==="flat"?red:st.mat);if(m==="sup")for(const x of [-6,4,14,24])for(const z of [-6,6]){addMesh(st,new T.BoxGeometry(2.5,48,2.5),st.supM).position.set(x,24,z)}}};st.setMode("flat")},
+ layers(st){const T=st.T,n=36,mA=st.mat,mB=new T.MeshStandardMaterial({color:st.mat.color.clone().multiplyScalar(.82),roughness:.55});st.L=[];
+  const rad=i=>22-i*.4+4*Math.sin(i/5);
+  for(let i=0;i<n;i++){const m=addMesh(st,new T.CylinderGeometry(rad(i),rad(i),1.6,40),i%2?mB:mA);m.position.y=.8+i*1.6;m.visible=false;st.L.push(m)}
+  const noz=addMesh(st,new T.ConeGeometry(4,10,16),new T.MeshStandardMaterial({color:0xc9a227,metalness:.4,roughness:.4}));noz.rotation.x=Math.PI;
+  st.setMode=()=>{st.t0=performance.now()};
+  st.tick=t=>{const el=(t-st.t0)/1000,k=Math.floor(el/.33)%(n+10);st.L.forEach((m,i)=>m.visible=i<k);const i=Math.min(k,n-1),a=el*9;noz.position.set(Math.cos(a)*rad(i),1.6*(i+1)+5,Math.sin(a)*rad(i));noz.visible=k<n}},
+ key(st){const T=st.T,s=rrect(T,60,22,6),h=new T.Path();h.absarc(-23,0,3.5,0,Math.PI*2,true);s.holes.push(h);addMesh(st,flatEx(T,s,3));
+  const c=document.createElement("canvas");c.width=512;c.height=128;const g=c.getContext("2d");g.fillStyle="#ffffff";g.font="bold 80px Arial, sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText((state.name||"PRÉNOM").toUpperCase().slice(0,10),256,68);
+  const top=new T.Mesh(new T.PlaneGeometry(44,11),new T.MeshBasicMaterial({map:new T.CanvasTexture(c),transparent:true}));top.rotation.x=-Math.PI/2;top.position.set(6,3.1,0);st.root.add(top);
+  st.cam.position.set(45,55,65);st.cam.lookAt(0,0,0)}
+};
+function mountV3D(el){if(!el.isConnected)return;const id=el.id.slice(4),kind=el.dataset.scene,T=THREE;el.innerHTML="";
+  const W=el.clientWidth||600,H=Math.round(Math.min(window.innerHeight*.46,340));
+  const ren=new T.WebGLRenderer({antialias:true,alpha:true});ren.setPixelRatio(Math.min(2,window.devicePixelRatio||1));ren.setSize(W,H);el.appendChild(ren.domElement);
+  const sc=new T.Scene(),cam=new T.PerspectiveCamera(40,W/H,1,2000);cam.position.set(110,95,145);cam.lookAt(0,24,0);
+  sc.add(new T.HemisphereLight(0xffffff,0x8899aa,.95));const dl=new T.DirectionalLight(0xffffff,.65);dl.position.set(60,120,80);sc.add(dl);
+  const root=new T.Group();sc.add(root);const grid=new T.GridHelper(160,16,0x8899bb,0xc8d0e0);grid.userData.keep=true;root.add(grid);
+  const col=new T.Color((getComputedStyle(el).getPropertyValue("--c-3d")||"#2b8a3e").trim());
+  const st={T,ren,sc,cam,root,el,kind,auto:true,ry:.6,rx:.08,t0:performance.now(),mat:new T.MeshStandardMaterial({color:col,roughness:.55,metalness:.05}),ghost:new T.MeshStandardMaterial({color:0x9aa5b1,transparent:true,opacity:.45,roughness:.8,depthWrite:false}),supM:new T.MeshStandardMaterial({color:0xb0b8c4,roughness:.9})};
+  V3D[id]=st;BUILD3[kind](st);
+  const cv=ren.domElement;cv.style.touchAction="none";let drag=null;
+  cv.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY};st.auto=false;try{cv.setPointerCapture(e.pointerId)}catch(_){}});
+  cv.addEventListener("pointermove",e=>{if(!drag)return;st.ry+=(e.clientX-drag.x)*.01;st.rx=Math.max(-.4,Math.min(.7,st.rx+(e.clientY-drag.y)*.006));drag={x:e.clientX,y:e.clientY}});
+  cv.addEventListener("pointerup",()=>drag=null);cv.addEventListener("pointercancel",()=>drag=null);
+  const loop=t=>{if(!V3D[id])return;if(st.auto)st.ry+=.005;root.rotation.y=st.ry;root.rotation.x=st.rx;if(st.tick)st.tick(t);ren.render(sc,cam);st.raf=requestAnimationFrame(loop)};st.raf=requestAnimationFrame(loop)}
+function disposeV3D(){for(const k of Object.keys(V3D)){const s=V3D[k];cancelAnimationFrame(s.raf);try{s.ren.dispose();s.ren.forceContextLoss()}catch(e){}delete V3D[k]}}
+{const _cd=clearDemos;clearDemos=function(){_cd();disposeV3D()};const _is=initStep;initStep=function(){_is();document.querySelectorAll(".lesson .v3d").forEach(el=>loadThree().then(()=>mountV3D(el)).catch(()=>{el.innerHTML=`<p class="muted v3d-wait">La vue 3D a besoin d’Internet la première fois. Reconnecte-toi puis rouvre l’étape.</p>`}))}}
+document.addEventListener("input",e=>{const d=e.target.dataset&&e.target.dataset.dim;if(!d)return;const [id,k]=d.split(":"),v=+e.target.value;V3D[id]&&V3D[id].setDim(k,v);const o=document.getElementById(`dimv-${id}-${k}`);if(o)o.textContent=v+" mm"});
+const dimCtl=id=>`<div class="dims">${[["x","X : largeur","#e03131",40],["y","Y : profondeur","#2f9e44",30],["z","Z : hauteur","#1c7ed6",20]].map(([k,l,c,v])=>`<label class="dim"><span style="color:${c}"><b>${l}</b> <span id="dimv-${id}-${k}">${v} mm</span></span><input type="range" min="10" max="80" step="5" value="${v}" data-dim="${id}:${k}" style="accent-color:${c}"></label>`).join("")}</div>`;
+const B3={
+ espace:[["Combien de dimensions a un objet en 3D ?","3 : largeur, profondeur et hauteur",["2 : largeur et hauteur","1 : la longueur","4"],"X pour la largeur, Y pour la profondeur, Z pour la hauteur."],["Sur l’imprimante et dans Tinkercad, quel axe représente la hauteur ?","Z",["X","Y","W"],"Z est l’axe vertical (en bleu)."],["En quelle unité dessine-t-on un objet à imprimer ?","le millimètre",["le mètre","le kilomètre","le litre"],"10 mm = 1 cm."],["Combien de millimètres dans 3 cm ?","30",["3","300","0,3"],"1 cm = 10 mm, donc 3 cm = 30 mm."]],
+ formes:[["Quelle forme ressemble à une boîte de conserve ?","le cylindre",["le cône","la sphère","le cube"],"Deux disques reliés par une surface courbe."],["Une forme en anneau, comme une bouée, s’appelle…","un tore",["un cône","un prisme","un cylindre"],"Le tore ressemble à un donut."],["Pour faire une maison simple, on assemble…","un cube et un prisme pour le toit",["deux sphères","un cône et un tore","un cylindre seul"],"Presque tous les objets sont des assemblages de formes simples."]],
+ trous:[["Dans Tinkercad, pour creuser un trou, on transforme une forme en…","perçage",["solide","couleur","texte"],"La forme devient grise et transparente : c’est un perçage."],["Quelle commande creuse vraiment les perçages dans les solides ?","Regrouper",["Exporter","Dupliquer","Effacer"],"Regrouper fusionne les solides et enlève les perçages."],["Un perçage doit être…","plus long que l’objet à traverser",["plus petit que l’objet","invisible","de la même couleur"],"S’il dépasse des deux côtés, le trou traverse bien de part en part."]],
+ impr:[["Pourquoi éviter une partie dans le vide (porte-à-faux) ?","le plastique tomberait : il faut des supports ou une pente",["ça imprime plus vite","ça change la couleur","ce n’est jamais un problème"],"L’imprimante ne peut pas déposer du plastique dans l’air."],["Quelle pente l’imprimante sait faire sans support ?","jusqu’à environ 45°",["90°, à l’horizontale","aucune pente","180°"],"Au-delà de 45°, chaque couche dépasse trop de celle du dessous."],["Comment poser l’objet sur le plateau ?","sur une face bien plate",["sur une pointe","en équilibre","peu importe"],"Une grande face plate colle bien au plateau."],["Épaisseur minimale conseillée pour une paroi ?","environ 1,2 mm",["0,1 mm","10 cm","0 mm"],"Avec une buse de 0,4 mm, cela fait 3 passages : solide."]],
+ couches:[["L’imprimante 3D fabrique l’objet…","couche par couche, de bas en haut",["d’un seul coup","de haut en bas","en sculptant un bloc"],"Le plastique fondu est déposé en fines couches."],["Une hauteur de couche courante est…","0,2 mm",["2 cm","2 mm","20 mm"],"Plus la couche est fine, plus c’est joli… mais plus c’est long."],["Un remplissage de 20 % veut dire…","l’intérieur est rempli en partie, comme un nid d’abeille",["l’objet est 20 % plus grand","l’objet est plein","l’objet est vide et mou"],"Cela économise du plastique et du temps, tout en restant solide."]],
+ flux:[["Quel logiciel prépare l’impression pour la Snapmaker ?","Luban",["Tinkercad","Paint","Scratch"],"Luban découpe le modèle en couches (on dit « trancher »)."],["Quel format de fichier exporte-t-on depuis Tinkercad pour imprimer ?","STL",["MP3","JPG","DOC"],"Luban importe les fichiers STL ou OBJ."],["Le fichier d’instructions que lit l’imprimante s’appelle…","le G-code",["le PDF","le STL","le mot de passe"],"Luban le génère avec « Generate G-code »."],["Que fait-on avant d’exporter dans Tinkercad ?","on regroupe les formes",["on éteint l’ordinateur","on change la couleur","rien"],"Sinon les perçages ne sont pas creusés."]],
+ secu:[["Pendant l’impression, la buse est à environ…","200 °C : on ne la touche jamais",["20 °C","37 °C","0 °C"],"Le plateau aussi est chaud : on attend qu’il refroidisse."],["Les modules laser et fraiseuse (CNC) de la Snapmaker s’utilisent…","seulement avec un adulte et les protections",["seul","sans lunettes","porte ouverte"],"Le laser peut abîmer les yeux et la fraise coupe."]]
+};
+const M3LESS=[
+ {id:"m_esp",sub:"m3d",lvl:"CM2",title:"Penser en 3D",desc:"Les axes X, Y, Z et les millimètres",bank:B3.espace,steps:[
+  {t:"Trois dimensions",h:`<p>Un objet 3D a une largeur, une profondeur et une hauteur. Bouge les curseurs pour changer la boîte.</p>`+v3d("ax","axes",dimCtl("ax")),say:"Un objet en trois dimensions a une largeur, une profondeur et une hauteur. Dans les logiciels de 3D, on les appelle X, Y et Z. X en rouge pour la largeur, Y en vert pour la profondeur, et Z en bleu pour la hauteur. Bouge les curseurs pour changer la taille de la boîte, et fais-la tourner avec ton doigt."},
+  {t:"Tout se mesure en millimètres",h:ltab([["Mesure","En millimètres"],["1 cm","10 mm"],["une pièce de 1 €","environ 23 mm de diamètre"],["un porte-clé","environ 50 × 20 × 3 mm"],["le plus grand objet de ta Snapmaker Artisan","400 × 400 × 400 mm"]])+KEY("En 3D, on dessine toujours en <b>millimètres</b>. 10 mm = 1 cm."),say:"En impression 3D, tout se mesure en millimètres. Dix millimètres font un centimètre. Un porte-clé mesure environ cinquante millimètres sur vingt, et trois d’épaisseur. Ta Snapmaker Artisan peut imprimer des objets jusqu’à quarante centimètres de côté, comme un gros carton !"},
+  {t:"Tourner autour de l’objet",h:KEY("Avant d’imprimer, regarde toujours ton objet <b>sous tous les angles</b> : de face, de côté, de dessus et de dessous.")+`<p>Dans Tinkercad, on tourne la vue avec le clic droit, ou avec deux doigts sur une tablette.</p>`,say:"Un bon concepteur regarde toujours son objet sous tous les angles, de face, de côté, de dessus et même de dessous, pour vérifier qu’il n’y a pas d’erreur. Dans Tinkercad, on fait tourner la vue avec le clic droit de la souris."}]},
+ {id:"m_formes",sub:"m3d",lvl:"CM2",title:"Les formes de base",desc:"Cube, cylindre, sphère… et les assembler",bank:B3.formes,steps:[
+  {t:"La boîte à formes",h:v3d("sh","shapes",`<div class="tools stage-tools">${[["cube","Cube"],["cyl","Cylindre"],["sphere","Sphère"],["cone","Cône"],["pyr","Pyramide"],["roof","Toit (prisme)"],["torus","Tore"]].map(([m,l])=>vbtn("sh",m,l)).join("")}</div>`),say:"Dans Tinkercad, on construit avec des formes de base, comme des briques. Le cube, le cylindre, la sphère, le cône, la pyramide, le toit qui est un prisme, et le tore, qui ressemble à un donut. Touche les boutons pour les découvrir."},
+  {t:"Assembler des formes",h:`<p>Une maison, c’est un cube + un toit + une cheminée + une porte. Sépare les pièces pour voir !</p>`+v3d("hs","house",`<div class="tools stage-tools">${vbtn("hs","explode","Séparer les pièces",false)}${vbtn("hs","build","Assembler")}</div>`),say:"Presque tous les objets sont des assemblages de formes simples. Cette maison, c’est un cube, un toit en forme de prisme, une cheminée et une porte. Appuie sur séparer les pièces pour voir comment elle est construite. Avant de modéliser, demande-toi toujours : avec quelles formes simples je peux fabriquer mon objet ?"}]},
+ {id:"m_trous",sub:"m3d",lvl:"CM2",title:"Solide et perçage",desc:"Faire des trous et regrouper",bank:B3.trous,steps:[
+  {t:"Ajouter ou enlever de la matière",h:v3d("ho","holes",`<div class="tools stage-tools">${vbtn("ho","solid","1. Cylindre solide")}${vbtn("ho","hole","2. Cylindre en perçage")}${vbtn("ho","group","3. Regrouper",false)}</div>`),say:"Dans Tinkercad, chaque forme peut être un solide, qui ajoute de la matière, ou un perçage, qui en enlève. Regarde. D’abord, un cylindre solide posé sur la plaque. Ensuite, on le transforme en perçage : il devient gris et transparent. Enfin, on sélectionne tout et on clique sur regrouper : le cylindre creuse un vrai trou dans la plaque."},
+  {t:"La méthode",h:ltab([["Étape","Dans Tinkercad"],["1","Pose la forme qui fera le trou"],["2","Clique sur « Perçage » (elle devient grise)"],["3","Place-la : elle doit dépasser des deux côtés"],["4","Sélectionne tout, puis « Regrouper » (Ctrl + G)"]])+KEY("Un perçage doit être plus long que l’objet à traverser."),say:"La méthode est toujours la même. Tu poses la forme qui fera le trou. Tu cliques sur perçage. Tu la places pour qu’elle dépasse des deux côtés de l’objet. Puis tu sélectionnes tout, et tu cliques sur regrouper. C’est comme ça qu’on fait le trou d’un porte-clé ou d’un pot à crayons."}]},
+ {id:"m_impr",sub:"m3d",lvl:"6e",title:"Concevoir pour imprimer",desc:"Porte-à-faux, supports et pente à 45°",bank:B3.impr,steps:[
+  {t:"Le problème du vide",h:`<p>L’imprimante pose le plastique couche par couche. Elle ne peut pas l’accrocher dans le vide !</p>`+v3d("ov","over",`<div class="tools stage-tools">${vbtn("ov","flat","Partie dans le vide")}${vbtn("ov","sup","Avec des supports")}${vbtn("ov","slope","Pente à 45° : sans support",false)}</div>`),say:"L’imprimante dépose le plastique couche par couche, de bas en haut. La partie rouge est dans le vide : le plastique tomberait. Deux solutions. Ajouter des supports, de petites colonnes qu’on enlève après l’impression. Ou mieux : dessiner une pente à quarante-cinq degrés, que l’imprimante sait faire toute seule."},
+  {t:"Les 5 règles d’or",h:ltab([["Règle","Pourquoi"],["Une grande face plate en bas","l’objet colle bien au plateau"],["Pas de pente de plus de 45°","sinon il faut des supports"],["Parois d’au moins 1,2 mm","sinon c’est trop fragile"],["Petits détails d’au moins 1 mm","la buse fait 0,4 mm de large"],["0,3 mm de jeu pour emboîter deux pièces","le plastique gonfle un peu"]]),say:"Retiens les cinq règles d’or. Une grande face plate en bas. Pas de pente de plus de quarante-cinq degrés. Des parois d’au moins un virgule deux millimètre. Pas de détail plus petit qu’un millimètre. Et si deux pièces doivent s’emboîter, laisse zéro virgule trois millimètre de jeu."}]},
+ {id:"m_couches",sub:"m3d",lvl:"CM2",title:"Comment l’imprimante fabrique",desc:"Couches, remplissage, réglages",bank:B3.couches,steps:[
+  {t:"Couche après couche",h:v3d("ly","layers",`<div class="tools stage-tools">${vbtn("ly","restart","Recommencer l’impression")}</div>`),say:"Regarde l’imprimante travailler. La buse, très chaude, fait fondre le fil de plastique et le dépose en couches très fines, de bas en haut. Chaque couche mesure environ zéro virgule deux millimètre. Il en faut des centaines pour fabriquer un objet !"},
+  {t:"Les réglages principaux",h:ltab([["Réglage","Valeur conseillée (PLA)","Effet"],["Hauteur de couche","0,2 mm","plus fin = plus joli mais plus long"],["Remplissage","15 à 20 %","l’intérieur en nid d’abeille"],["Supports","seulement si besoin","pour les parties dans le vide"],["Matière","PLA","le plastique le plus facile"]])+KEY("Luban propose des réglages tout prêts : commence avec ceux du PLA."),say:"Avant d’imprimer, on règle quelques paramètres dans Luban. La hauteur de couche, souvent zéro virgule deux millimètre. Le remplissage, quinze à vingt pour cent : l’intérieur n’est pas plein, il ressemble à un nid d’abeille. Les supports, seulement si nécessaire. Et la matière : le PLA est le plus facile. Luban propose des réglages tout prêts."}]},
+ {id:"m_flux",sub:"m3d",lvl:"CM2",title:"De Tinkercad à la Snapmaker",desc:"Le chemin complet d’une idée à l’objet",bank:[...B3.flux,...B3.secu],steps:[
+  {t:"Deux logiciels, deux rôles",h:ltab([["Logiciel","Son rôle"],["Tinkercad (gratuit, dans le navigateur)","<b>dessiner</b> l’objet en 3D"],["Luban (logiciel de la Snapmaker)","<b>préparer</b> l’impression et l’envoyer à la machine"]])+KEY("Luban ne sert pas à dessiner : il découpe le modèle en couches et fabrique le G-code."),say:"Pour fabriquer un objet, on utilise deux logiciels. Tinkercad, gratuit, dans le navigateur, sert à dessiner l’objet en trois dimensions. Luban, le logiciel de la Snapmaker, sert à préparer l’impression : il découpe le modèle en couches et fabrique les instructions pour la machine, qu’on appelle le G-code."},
+  {t:"Dans Tinkercad",h:ltab([["Étape","Action"],["1","Un parent crée le compte sur tinkercad.com"],["2","« Créer » → « Conception 3D »"],["3","Glisse les formes du panneau de droite sur le plan de travail"],["4","Poignées blanches : changer la taille. Flèche noire : soulever"],["5","Sélectionne tout → « Regrouper »"],["6","« Exporter » → format <b>.STL</b>"]]),say:"Dans Tinkercad : un parent crée ton compte. Tu cliques sur créer, puis conception 3D. Tu fais glisser les formes du panneau de droite sur le plan de travail. Les petites poignées blanches changent la taille, la flèche noire soulève la forme. Quand tout est prêt, tu regroupes, puis tu exportes en format STL."},
+  {t:"Dans Luban",h:ltab([["Étape","Dans Luban (menus en anglais)"],["1","« 3D Printing », puis « Import » : ouvre ton fichier .STL"],["2","« Move », « Scale », « Rotate » : place l’objet à plat"],["3","Choisis la matière PLA et les réglages"],["4","Si besoin : supports automatiques"],["5","« Generate G-code » : regarde l’aperçu couche par couche"],["6","Envoie à la machine en Wi-Fi, ou par clé USB"]])+KEY("Vérifie toujours l’aperçu des couches avant de lancer : c’est là qu’on voit les erreurs."),say:"Dans Luban, on choisit impression 3D, puis import pour ouvrir le fichier STL. On place l’objet bien à plat avec move, scale et rotate. On choisit la matière PLA, on ajoute des supports si besoin, puis on clique sur generate G-code. Regarde toujours l’aperçu couche par couche avant de lancer. Enfin, on envoie à la machine par Wi-Fi ou par clé USB."},
+  {t:"La sécurité avant tout",h:`<p class="warn">La buse chauffe à environ 200 °C et le plateau à 60 °C : on ne touche jamais pendant l’impression.</p>`+KEY("Les modules <b>laser</b> et <b>fraiseuse (CNC)</b> de la Snapmaker : uniquement avec un adulte, porte fermée et lunettes de protection."),say:"Très important : la buse chauffe à environ deux cents degrés, et le plateau aussi est chaud. On ne touche jamais pendant l’impression, et on attend que tout refroidisse pour décoller l’objet. Et les modules laser et fraiseuse de la Snapmaker s’utilisent seulement avec un adulte, porte fermée, avec des lunettes de protection."}]},
+ {id:"m_projet",sub:"m3d",lvl:"CM2",title:"Projet : ton porte-clé",desc:"Ton prénom en relief, à imprimer",bank:[...B3.trous,...B3.flux.slice(0,3)],steps:[
+  {t:"Le modèle à fabriquer",h:v3d("kc","key")+`<p>Une plaque arrondie, un trou pour l’anneau et ton prénom en relief.</p>`,say:"Voici ton premier vrai projet : un porte-clé avec ton prénom. Une plaque aux coins arrondis, un trou pour l’anneau, et les lettres en relief. Fais-le tourner pour bien le regarder. On va le construire étape par étape dans Tinkercad."},
+  {t:"Étape 1 : la plaque",h:ltab([["Action","Valeur"],["Forme « Boîte »","glisse-la sur le plan"],["Largeur (X)","60 mm"],["Profondeur (Y)","22 mm"],["Hauteur (Z)","3 mm"],["Rayon (coins arrondis)","3 mm"]]),say:"Étape un, la plaque. Prends une boîte et pose-la sur le plan de travail. Clique sur les poignées pour taper les dimensions : soixante millimètres de large, vingt-deux de profondeur, et trois de hauteur. Dans le petit menu de la forme, mets un rayon de trois millimètres pour arrondir les coins."},
+  {t:"Étape 2 : le prénom",h:ltab([["Action","Valeur"],["Forme « Texte »","écris ton prénom"],["Hauteur des lettres (Z)","2 mm"],["Taille","à peu près 40 mm de long"],["Position","posée sur la plaque (soulève-la de 3 mm)"]])+KEY("Les lettres doivent toucher la plaque, sinon elles s’imprimeraient dans le vide !"),say:"Étape deux, le prénom. Prends la forme texte et écris ton prénom. Donne aux lettres deux millimètres de hauteur et environ quarante millimètres de long. Avec la flèche noire, soulève-les de trois millimètres pour qu’elles soient posées exactement sur la plaque, ni dans le vide, ni enfoncées."},
+  {t:"Étape 3 : le trou et l’impression",h:ltab([["Action","Valeur"],["Forme « Cylindre » → « Perçage »","diamètre 7 mm, hauteur 10 mm"],["Position","à gauche, à 4 mm du bord"],["Tout sélectionner → « Regrouper »","le trou est creusé"],["« Exporter » → .STL","puis Luban, PLA, couche 0,2 mm"]])+`<p>Durée d’impression : environ 20 à 30 minutes.</p>`,say:"Étape trois, le trou. Prends un cylindre, transforme-le en perçage, donne-lui sept millimètres de diamètre, et place-le à gauche de la plaque. Sélectionne tout, regroupe, puis exporte en STL. Dans Luban, choisis le PLA, une couche de zéro virgule deux millimètre, et lance l’impression avec un adulte. Dans une demi-heure, ton porte-clé est prêt !"}]}
+];
+for(const L of [...CAPLESS,...M3LESS]){LESSONS.push(L);LESSON[L.id]=L}
+for(const t of [
+ {id:"h_cap",sub:"hg",lvl:"CM2",title:"Capitales du monde",desc:"Tous les continents, drapeaux et pièges",gen:capsGen(null)},
+ {id:"h_capeu",sub:"hg",lvl:"CM2",title:"Capitales d’Europe",desc:"18 pays",gen:capsGen("eu")},
+ {id:"h_capaf",sub:"hg",lvl:"CM2",title:"Capitales d’Afrique",desc:"14 pays",gen:capsGen("af")},
+ {id:"m3_quiz",sub:"m3d",lvl:"CM2",title:"Quiz de modélisation 3D",desc:"Formes, perçages, impression, sécurité",bank:[...B3.espace,...B3.formes,...B3.trous,...B3.couches,...B3.flux,...B3.secu]},
+ {id:"m3_regles",sub:"m3d",lvl:"6e",title:"Les règles de l’impression 3D",desc:"Porte-à-faux, supports, épaisseurs",bank:[...B3.impr,...B3.couches]}]){THEMES.push(t);THEME[t.id]=t}
+
 
 function buildQuestions(t,n=t.n||10){
   const out=[],seen=new Set();const add=q=>{const k=qkey(q);if(!seen.has(k)){seen.add(k);out.push(q)}};
@@ -1736,6 +1952,8 @@ document.addEventListener("click",e=>{
   if(D.tplay)return tracePlay(D.tplay);
   if(D.treset){clearDemos();DEMOS[D.treset].i=-1;return traceShow(D.treset)}
   if(D.bit){const [id,i]=D.bit.split(":");return bitToggle(id,+i)}
+  if(D.v3d){const [id,md]=D.v3d.split(":");const st=V3D[id];if(st&&st.setMode)st.setMode(md);return}
+  if(D.fc){b.classList.toggle("flip");if(b.classList.contains("flip"))speakFr(b.dataset.say);return}
   if(D.reload)return location.reload();
   if(D.lesson){if(quiz){quiz=null}return openLesson(D.lesson)}
   if(D.lex)return startLessonEx(D.lex);
