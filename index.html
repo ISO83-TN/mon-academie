@@ -331,6 +331,7 @@ pre.calc{margin:0;padding:14px 16px;border-radius:12px;background:var(--card);bo
 .feedback.hintfb{background:color-mix(in srgb,var(--fluo) 18%,var(--card));border-left:6px solid var(--fluo)}
 .feedback.hintfb .verdict{color:var(--ink)}
 .tag.vidtag{background:color-mix(in srgb,var(--sc) 16%,transparent);color:var(--ink)}
+.vsvg .flowv{fill:none;stroke:var(--sc);stroke-width:8;stroke-linecap:round;stroke-dasharray:2 16;animation:eflow .8s linear infinite}
 
 .tag.warnt{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}.tag.badt{background:var(--bad-bg);color:var(--bad)}
 .efig{display:block;width:100%;max-width:560px;height:auto;max-height:min(46vh,340px);margin:0 auto}
@@ -3270,6 +3271,205 @@ ADDL("equa",{vid:[
   {q:"Je pense à un nombre. Je le multiplie par 3, puis j’ajoute 8. J’obtiens 35. Quel est ce nombre ?",ans:9,
    hints:["Appelle x le nombre mystère. L’énoncé devient : 3x + 8 = 35.","Enlève 8 des deux côtés : 3x = 27.","Divise les deux côtés par 3."],
    sol:"3x + 8 = 35 → 3x = 27 → x = <b>9</b>. Vérification : 3 × 9 + 8 = 35 ✓"}]});
+})();
+
+/* ---------- Autres matières : vidéos animées + problèmes rédigés ---------- */
+(()=>{const T=vT,R=vR,C=vC,L=vL,P=vP,Gr=vG;
+const tr=(dx,dy,b,d=1)=>`<animateTransform attributeName="transform" type="translate" from="0 0" to="${dx} ${dy}" begin="${b}s" dur="${d}s" fill="freeze" additive="sum"/>`;
+const op=(t,h)=>`opacity="0"><animate attributeName="opacity" from="0" to="1" begin="${t}s" dur=".3s" fill="freeze"/>${h!=null?`<animate attributeName="opacity" to="0" begin="${h}s" dur=".3s" fill="freeze"/>`:""}`;
+let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+/* ===== Électronique ===== */
+const pile=(x,y)=>L(x-28,y-10,x+28,y-10)+L(x-15,y+10,x+15,y+10,{c:"k"})+`<line x1="${x-15}" y1="${y+10}" x2="${x+15}" y2="${y+10}" class="k" style="stroke-width:8"/>`+T(x+44,y-4,"+",{z:22,c:"b"})+T(x+44,y+22,"−",{z:22,c:"m"});
+const lampe=(x,y,glow)=>(glow||"")+C(x,y,22,{c:"fc"})+L(x-15,y-15,x+15,y+15)+L(x-15,y+15,x+15,y-15);
+const glowAt=(x,y,t,h)=>`<circle cx="${x}" cy="${y}" r="38" class="fl" ${op(t,h)}</circle>`;
+const dots=(path,b,n,dur,end)=>[...Array(n).keys()].map(k=>`<circle r="6" class="fs" opacity="0"><animate attributeName="opacity" from="0" to="1" begin="${b+k*dur/n}s" dur=".2s" fill="freeze"/>${end!=null?`<animate attributeName="opacity" to="0" begin="${end}s" dur=".2s" fill="freeze"/>`:""}<animateMotion path="${path}" dur="${dur}s" begin="${b+k*dur/n}s" repeatCount="indefinite"/></circle>`).join("");
+const LOOP="M120 166 V90 H520 V290 H120 V214";
+ADDL("e_circ",{vid:[
+ {d:7,s:P("M120 166 V90 H298 M342 90 H520 V170 M520 210 V290 H120 V214")+pile(120,190)+lampe(320,90,glowAt(320,90,2.4))+C(520,170,5,{c:"fk"})+C(520,210,5,{c:"fk"})+`<line x1="520" y1="210" x2="556" y2="176" class="k" style="stroke-width:4"><animate attributeName="x2" to="520" begin="1.6s" dur=".5s" fill="freeze"/><animate attributeName="y2" to="170" begin="1.6s" dur=".5s" fill="freeze"/></line>`
+   +T(578,196,"interrupteur",{z:14,c:"m"})+dots(LOOP,2.4,10,4.5)+T(320,340,"Interrupteur ouvert : rien ne passe",{z:22,c:"b",t:0,h:2})+T(320,340,"Boucle fermée : la lampe s’allume !",{z:22,c:"g",t:2.6}),
+  say:"Voici une pile, une lampe et un interrupteur. Tant que l’interrupteur est ouvert, la boucle est coupée : rien ne passe. On ferme l’interrupteur : la boucle est complète, le courant circule de la borne plus vers la borne moins, et la lampe s’allume !"},
+ {d:6,s:P("M120 166 V90 H298 M342 90 H520 V290 H120 V214")+pile(120,190)+lampe(320,90,glowAt(320,90,0,2))+dots(LOOP,0,10,4.5,2)+`<rect x="300" y="278" width="44" height="24" style="fill:var(--card);stroke:none" ${op(1.9)}</rect>`+T(322,272,"✂",{z:28,c:"b",t:1.7})+T(320,340,"Boucle ouverte = lampe éteinte",{z:22,c:"b",t:2.6}),
+  say:"Si un fil se débranche ou se coupe, la boucle est ouverte. Le courant ne peut plus circuler, et la lampe s’éteint aussitôt. Pour qu’une lampe brille, il faut une boucle fermée, sans aucune interruption."}],
+ g:[{q:"Une lampe est reliée à la borne + d’une pile par un seul fil. Rien n’est branché sur la borne −. La lampe s’allume-t-elle ?",ch:["Non : il manque le fil du retour vers la borne −","Oui : un fil suffit","Oui, si la pile est neuve"],good:0,
+   hints:["Rappelle-toi la vidéo : le courant doit faire une boucle complète.","Le courant part de la borne + et traverse la lampe. Par où peut-il revenir à la borne − ?","Avec un seul fil, le chemin s’arrête à la lampe : la boucle est ouverte."],
+   sol:"La lampe reste éteinte : il faut <b>une boucle fermée</b>, avec un 2e fil qui revient de la lampe à la borne −."}]});
+const SER="M120 166 V90 H520 V290 H120 V214";
+ADDL("e_serie",{vid:[
+ {d:6.5,s:P(SER)+pile(120,190)+lampe(250,90,glowAt(250,90,0,2.6))+Gr(lampe(400,90,glowAt(400,90,0,2.6)),{h:2.4})+`<rect x="376" y="80" width="48" height="20" style="fill:var(--card)" ${op(2.4)}</rect>`+dots(SER,0,9,4.5,2.6)+T(250,140,"1",{z:20,c:"m"})+T(400,140,"2",{z:20,c:"m"})+T(345,200,"EN SÉRIE : une seule boucle",{z:20,c:"a"})+T(320,340,"On dévisse la lampe 2 : tout s’éteint !",{z:22,c:"b",t:2.8}),
+  say:"En série, les deux lampes sont sur la même boucle, l’une après l’autre. Si on dévisse la lampe numéro deux, la boucle est coupée : les deux lampes s’éteignent !"},
+ {d:6.5,s:P("M120 166 V70 H520 V290 H120 V214 M330 70 V290")+pile(120,190)+lampe(330,180,glowAt(330,180,0))+Gr(lampe(520,180,glowAt(520,180,0,2.4)),{h:2.4})+`<rect x="508" y="156" width="24" height="48" style="fill:var(--card)" ${op(2.4)}</rect>`+T(360,185,"1",{z:20,c:"m",a:"start"})+T(560,185,"2",{z:20,c:"m",t:0,h:2.4})+T(230,130,"EN DÉRIVATION",{z:22,c:"a"})+T(320,340,"La lampe 1 reste allumée : chacune a sa boucle",{z:21,c:"g",t:2.8}),
+  say:"En dérivation, chaque lampe a sa propre boucle avec la pile. Si on dévisse la lampe numéro deux, la lampe numéro un reste allumée. C’est comme ça qu’est câblée ta maison."}],
+ g:[{q:"Tu éteins la lampe de ta chambre, et le frigo de la cuisine continue de marcher. Comment sont-ils branchés ?",ch:["En dérivation","En série","Sur deux piles"],good:0,
+   hints:["Rappelle-toi : en série, si un appareil s’arrête, la boucle est coupée pour tous.","Ici, le frigo continue de marcher quand la lampe s’arrête. Les deux appareils partagent-ils la même boucle ?","Chaque appareil a sa propre boucle : c’est le montage de la deuxième partie de la vidéo."],
+   sol:"Ils sont branchés <b>en dérivation</b> : chaque appareil a sa boucle, donc éteindre l’un n’arrête pas l’autre. Toute la maison est câblée ainsi."}]});
+ADDL("e_unit",{vid:[
+ {d:7,s:R(60,60,120,220,{c:"fc",rx:4})+R(62,100,116,178,{c:"fa",rx:0})+P("M178 262 H560",{c:"km"})+`<path d="M178 262 H560" class="flowv"/>`+`<g transform="translate(470 222)"><circle r="34" class="fc"/><g><line x1="-30" y1="0" x2="30" y2="0" class="k"/><line x1="0" y1="-30" x2="0" y2="30" class="k"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2s" repeatCount="indefinite"/></g></g>`
+   +L(36,100,36,278,{c:"ka",draw:1})+T(205,110,"Hauteur de l’eau",{z:22,a:"start",t:1.2})+T(205,140,"= la TENSION U, en volts (V)",{z:22,a:"start",c:"a",t:1.6})+T(370,320,"Débit dans le tuyau = l’INTENSITÉ I,",{z:21,t:3.4})+T(370,348,"en ampères (A)",{z:21,c:"a",t:3.6}),
+  say:"Imagine de l’eau dans des tuyaux. Plus l’eau est haute dans le réservoir, plus elle pousse fort : c’est la tension, mesurée en volts. La quantité d’eau qui passe chaque seconde dans le tuyau, c’est l’intensité, mesurée en ampères."},
+ {d:7.5,s:P("M120 166 V120 H296 M344 120 H520 V166 M520 214 V270 H120 V214 M262 120 V48 H296 M344 48 H380 V120")+pile(120,190)+lampe(320,120)+C(320,48,22,{c:"fc"})+T(320,57,"V",{z:24,c:"a"})+C(520,190,24,{c:"fc"})+T(520,199,"A",{z:24,c:"a"})
+   +R(492,162,56,56,{c:"fl",rx:28,t:1.4})+R(296,24,48,48,{c:"fl",rx:24,t:3.4})+T(320,316,"Ampèremètre (A) : EN SÉRIE, dans la boucle",{z:20,t:1.6})+T(320,346,"Voltmètre (V) : EN DÉRIVATION, à côté de la lampe",{z:20,t:3.6}),
+  say:"Pour mesurer, on utilise deux appareils. L’ampèremètre mesure l’intensité : il se branche en série, dans la boucle, pour que le courant le traverse. Le voltmètre mesure la tension : il se branche en dérivation, à côté de la lampe, comme un petit pont."}],
+ g:[{q:"Youssef veut mesurer l’intensité du courant qui traverse une lampe. Comment doit-il brancher l’ampèremètre ?",ch:["En série, dans la boucle","En dérivation, aux bornes de la lampe","Directement sur une prise de la maison"],good:0,
+   hints:["L’intensité, c’est le « débit » du courant. Pour mesurer un débit, il faut que le courant passe À TRAVERS l’appareil.","Quel montage oblige le courant à traverser l’appareil : en série, ou en dérivation ?","Le voltmètre se met en dérivation ; l’ampèremètre, c’est l’inverse. Et on ne touche jamais une prise !"],
+   sol:"L’ampèremètre se branche <b>en série</b>, dans la boucle, pour que tout le courant le traverse. (Le voltmètre, lui, se branche en dérivation.)"}]});
+ADDL("e_ohm",{vid:[
+ {d:7,s:P("M120 300 L250 70 L380 300 Z",{c:"ka",draw:0,dd:1})+L(165,215,335,215,{draw:.8})+L(250,215,250,300,{draw:1})+T(250,180,"U",{z:46,t:.8})+T(198,280,"R",{z:42,t:1})+T(302,280,"I",{z:42,t:1})
+   +T(430,130,"U = R × I",{z:32,a:"start",t:2.4})+T(430,200,"I = U ÷ R",{z:32,a:"start",t:3.8})+T(430,270,"R = U ÷ I",{z:32,a:"start",t:5.2})+T(320,345,"Cache ce que tu cherches dans le triangle",{z:20,c:"m",t:6}),
+  say:"La loi d’Ohm relie trois grandeurs. Dans le triangle, U est en haut, R et I en bas. Cache celle que tu cherches. U égale R fois I. I égale U divisé par R. R égale U divisé par I."},
+ {d:7,s:T(320,70,"Pile de 6 V et résistance de 30 Ω",{z:26})+T(320,140,"I = 6 ÷ 30 = 0,2 A",{z:38,c:"a",t:1.4})+T(320,225,"Résistance de 60 Ω (2 fois plus)",{z:24,t:3.4})+T(320,290,"I = 6 ÷ 60 = 0,1 A (2 fois moins)",{z:32,c:"g",t:4.6}),
+  say:"Avec une pile de six volts et une résistance de trente ohms : I égale six divisé par trente, zéro virgule deux ampère. Si la résistance double, soixante ohms, le courant est divisé par deux : zéro virgule un ampère."}],
+ g:[{q:"Une lampe branchée sur 12 V est traversée par un courant de 0,5 A. Quelle est sa résistance, en ohms (Ω) ?",ans:24,unit:"Ω",
+   hints:["Dans le triangle U, R, I, cache R : il reste U au-dessus de I. Donc R = U ÷ I.","R = 12 ÷ 0,5.","Diviser par 0,5, c’est la même chose que multiplier par 2."],
+   sol:"R = U ÷ I = 12 ÷ 0,5 = <b>24 Ω</b>."},
+  {q:"Une résistance de 100 Ω est branchée sur une pile de 5 V. Quelle est l’intensité, en ampères (A) ?",ans:0.05,unit:"A",
+   hints:["On cherche I : dans le triangle, cache I. Il reste U au-dessus de R.","I = U ÷ R = 5 ÷ 100.","Diviser par 100 : la virgule recule de 2 rangs. 5 → 0,5 → ?"],
+   sol:"I = U ÷ R = 5 ÷ 100 = <b>0,05 A</b> (soit 50 milliampères)."}]});
+/* ===== Physique-Chimie ===== */
+const part=(x0,y0,w,h,mode,n,t)=>{seed=mode==="s"?11:mode==="l"?23:37;let s="";
+  for(let k=0;k<n;k++){let x,y;if(mode==="s"){x=x0+28+(k%5)*31;y=y0+h-26-Math.floor(k/5)*31}else if(mode==="l"){x=x0+22+rnd()*(w-44);y=y0+h-22-rnd()*(h*0.55)}else{x=x0+20+rnd()*(w-40);y=y0+20+rnd()*(h-40)}
+    const a=mode==="s"?3:mode==="l"?10:30,d=mode==="s"?.25:mode==="l"?1.2:.9;
+    s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="12" class="fa"><animateTransform attributeName="transform" type="translate" values="0 0;${(rnd()*2-1)*a} ${(rnd()*2-1)*a};${(rnd()*2-1)*a} ${(rnd()*2-1)*a};0 0" dur="${(d+rnd()*.4).toFixed(2)}s" repeatCount="indefinite"/></circle>`}
+  return Gr(R(x0,y0,w,h,{c:"fm",rx:10})+s,{t})};
+ADDL("pc_etats",{vid:[
+ {d:9,s:part(25,70,185,210,"s",15,0)+T(117,52,"Solide",{z:24})+T(117,312,"serrées, rangées",{z:17,c:"m"})+T(117,334,"elles vibrent sur place",{z:17,c:"m"})
+   +part(228,70,185,210,"l",14,3)+T(320,52,"Liquide",{z:24,t:3})+T(320,312,"serrées, en désordre",{z:17,c:"m",t:3})+T(320,334,"elles glissent",{z:17,c:"m",t:3})
+   +part(431,70,185,210,"g",6,6)+T(523,52,"Gaz",{z:24,t:6})+T(523,312,"éloignées",{z:17,c:"m",t:6})+T(523,334,"très agitées",{z:17,c:"m",t:6}),
+  say:"Dans un solide, comme la glace, les particules sont serrées et bien rangées : elles vibrent sur place. Dans un liquide, elles restent serrées, mais en désordre, et glissent les unes sur les autres. Dans un gaz, comme la vapeur, elles sont très éloignées et bougent dans tous les sens, très vite."}],
+ g:[{q:"Pourquoi peut-on comprimer l’air d’une seringue bouchée, mais pas l’eau ?",ch:["Dans un gaz, les particules sont très éloignées : on peut les rapprocher","L’eau est plus lourde que l’air","L’air est invisible"],good:0,
+   hints:["Regarde à nouveau la vidéo : compare l’espace entre les particules d’un liquide et d’un gaz.","Comprimer, c’est faire tenir la même matière dans moins de place. Il faut donc de l’espace libre entre les particules.","Dans un liquide, elles se touchent presque : impossible de les serrer plus."],
+   sol:"Dans un <b>gaz</b>, les particules sont très éloignées : on peut les rapprocher en appuyant. Dans un liquide, elles sont déjà serrées : l’eau ne se comprime presque pas."}]});
+ADDL("pc_chgt",{vid:[
+ {d:9,s:L(70,310,600,310)+L(70,310,70,40)+T(60,250,"0 °C",{z:16,c:"m",a:"end"})+T(60,110,"100 °C",{z:16,c:"m",a:"end"})+L(70,250,600,250,{c:"km"})+L(70,110,600,110,{c:"km"})+T(600,334,"temps →",{z:16,c:"m",a:"end"})+T(84,40,"température",{z:16,c:"m",a:"start"})
+   +P("M80 300 L150 250 L270 250 L370 110 L500 110 L570 60",{c:"ka",draw:.5,dd:7.5})
+   +T(215,276,"palier : la glace fond",{z:17,c:"a",t:2})+T(435,134,"palier : l’eau bout",{z:17,c:"a",t:5.6})+T(110,330,"glace",{z:16,c:"m",t:.8})+T(345,212,"eau liquide",{z:16,c:"m",a:"start",t:4})+T(590,52,"vapeur",{z:16,c:"m",a:"end",t:7.6}),
+  say:"On chauffe de la glace à moins vingt degrés. La température monte jusqu’à zéro degré. Là, la glace fond, et la température reste bloquée à zéro : c’est un palier. Puis l’eau liquide se réchauffe jusqu’à cent degrés, où elle bout : nouveau palier. Quand tout est devenu vapeur, la température remonte."},
+ {d:8,s:R(55,60,150,56,{c:"fa",rx:12})+T(130,96,"SOLIDE",{z:22})+R(435,60,150,56,{c:"fa",rx:12})+T(510,96,"LIQUIDE",{z:22})+R(245,262,150,56,{c:"fa",rx:12})+T(320,298,"GAZ",{z:22})
+   +Gr(P("M210 76 Q320 30 430 76",{c:"ka"})+T(320,44,"fusion →",{z:20,c:"a"}),{t:.6})+Gr(P("M430 104 Q320 150 210 104",{c:"ka"})+T(320,150,"← solidification",{z:20,c:"a"}),{t:2.2})
+   +Gr(P("M500 122 Q470 230 400 282",{c:"ka"})+T(520,220,"vaporisation",{z:20,c:"a",a:"start"}),{t:3.8})+Gr(P("M240 282 Q170 230 140 122",{c:"ka"})+T(120,220,"liquéfaction",{z:20,c:"a",a:"end"}),{t:5.4}),
+  say:"Chaque passage a un nom. Du solide au liquide : la fusion. Du liquide au solide : la solidification. Du liquide au gaz : la vaporisation. Et du gaz au liquide : la liquéfaction, comme la buée sur une vitre froide."}],
+ g:[{q:"Le matin, des gouttes apparaissent sur la vitre froide de ta chambre. Quel changement d’état s’est produit ?",ch:["La liquéfaction","La fusion","La vaporisation","La solidification"],good:0,
+   hints:["Les gouttes viennent de la vapeur d’eau invisible qui est dans l’air de la pièce.","La vapeur est un gaz. Les gouttes sont un liquide. On passe donc de quel état à quel état ?","Du gaz au liquide : regarde le nom de cette flèche dans la vidéo."],
+   sol:"C’est la <b>liquéfaction</b> : la vapeur d’eau (gaz) touche la vitre froide et redevient liquide."}]});
+ADDL("pc_rho",{vid:[
+ {d:8,s:R(150,120,340,200,{c:"fc",rx:6})+R(152,160,336,158,{c:"fa",rx:0})+T(320,350,"eau : 1 g/cm³",{z:18,c:"m"})
+   +`<rect x="210" y="40" width="54" height="30" rx="4" class="fw">${tr(0,108,1,1.2)}</rect>`+T(237,30,"liège",{z:18,t:.2})
+   +`<path d="M380 40 l30 -6 l22 14 l-6 24 l-34 4 l-16 -18z" class="fk">${tr(0,248,3.2,1.8)}</path>`+T(400,24,"pierre",{z:18,t:2.4})
+   +T(40,200,"0,25 < 1",{z:20,c:"g",a:"start",t:2.2})+T(40,226,"il flotte",{z:20,c:"g",a:"start",t:2.2})+T(600,200,"2,5 > 1",{z:20,c:"b",a:"end",t:5})+T(600,226,"elle coule",{z:20,c:"b",a:"end",t:5}),
+  say:"L’eau a une masse volumique d’un gramme par centimètre cube. Le liège est beaucoup moins dense, environ zéro virgule vingt-cinq : il flotte. La pierre est plus dense, environ deux virgule cinq : elle coule. Plus dense que l’eau, ça coule. Moins dense, ça flotte."},
+ {d:7,s:T(320,80,"ρ = m ÷ V",{z:48,c:"a"})+T(320,150,"masse (g) ÷ volume (cm³)",{z:20,c:"m",t:.8})+T(320,215,"Cube de 100 cm³ qui pèse 80 g",{z:26,t:2})+T(320,270,"ρ = 80 ÷ 100 = 0,8 g/cm³",{z:30,t:3.4})+T(320,330,"0,8 < 1 : il flotte !",{z:30,c:"g",t:5}),
+  say:"La masse volumique, notée rho, c’est la masse divisée par le volume. Un cube de cent centimètres cubes pèse quatre-vingts grammes. Rho égale quatre-vingts divisé par cent : zéro virgule huit gramme par centimètre cube. C’est moins que l’eau : il flotte !"}],
+ g:[{q:"Un objet a un volume de 60 cm³ et une masse de 90 g. Quelle est sa masse volumique, en g/cm³ ?",ans:1.5,unit:"g/cm³",
+   hints:["Formule : ρ = m ÷ V, la masse divisée par le volume.","ρ = 90 ÷ 60.","90 ÷ 60 : c’est la même chose que 9 ÷ 6, ou 3 ÷ 2."],
+   sol:"ρ = 90 ÷ 60 = <b>1,5 g/cm³</b>. C’est plus que l’eau (1) : cet objet coule."}]});
+ADDL("pc_vit",{vid:[
+ {d:8,s:`<path d="M60 90 q10 -40 50 -30 q20 -30 60 -10 q40 -10 40 30 q20 20 -10 40 h-130 q-30 -10 -10 -30z" class="fc"/>`+`<path d="M120 120 l-18 46 h20 l-16 50 l44 -66 h-22 l16 -30z" class="fs" opacity="0"><animate attributeName="opacity" values="0;1;0;1;0" keyTimes="0;.2;.4;.6;1" begin=".4s" dur=".8s" fill="freeze"/></path>`
+   +[0,1,2].map(k=>`<circle cx="140" cy="120" r="10" class="ka" opacity="0"><animate attributeName="r" from="10" to="440" begin="${1+k*.5}s" dur="3s" fill="freeze"/><animate attributeName="opacity" values="0;.9;0" begin="${1+k*.5}s" dur="3s" fill="freeze"/></circle>`).join("")
+   +`<g transform="translate(560 250)"><circle cy="-40" r="14" class="fc"/><path d="M0 -26 V20 M-20 -6 H20 M0 20 L-14 50 M0 20 L14 50" class="k"/></g>`
+   +T(560,100,"1…",{z:28,a:"middle",t:1.4,h:2.3})+T(560,100,"2…",{z:28,t:2.4,h:3.3})+T(560,100,"3… BOUM !",{z:28,c:"b",t:3.4})+T(300,330,"3 s × 340 m/s ≈ 1 000 m : l’orage est à 1 km",{z:22,c:"g",t:4.6}),
+  say:"Un éclair ! La lumière arrive presque tout de suite. Compte les secondes jusqu’au tonnerre : un, deux, trois. Le son parcourt environ trois cent quarante mètres par seconde. Trois secondes, c’est environ mille mètres : l’orage est à un kilomètre."},
+ {d:7,s:L(60,180,580,180)+L(60,166,60,194)+L(580,166,580,194)+T(60,214,"0 m",{z:16,c:"m"})+T(580,214,"100 m",{z:16,c:"m"})+`<circle cx="60" cy="160" r="14" class="fs">${tr(520,0,.6,2.4)}</circle>`+T(320,80,"100 m en 10 s",{z:30})
+   +T(320,270,"v = d ÷ t = 100 ÷ 10 = 10 m/s",{z:28,c:"a",t:3.2})+T(320,326,"10 m/s × 3,6 = 36 km/h",{z:28,c:"g",t:4.8}),
+  say:"La vitesse, c’est la distance divisée par la durée. Un sprinteur qui court cent mètres en dix secondes va à dix mètres par seconde. Pour passer en kilomètres par heure, on multiplie par trois virgule six : trente-six kilomètres par heure."}],
+ g:[{q:"Tu vois un éclair, puis tu comptes 6 secondes avant le tonnerre. À quelle distance est l’orage, en mètres ? (Le son va à 340 m/s.)",ans:2040,unit:"m",
+   hints:["Chaque seconde, le son parcourt 340 m. Il a voyagé pendant 6 secondes.","Distance = vitesse × durée = 340 × 6.","340 × 6 = 300 × 6 + 40 × 6."],
+   sol:"d = 340 × 6 = 1 800 + 240 = <b>2 040 m</b>, soit environ 2 km."},
+  {q:"Un TGV parcourt 600 km en 2 heures. Quelle est sa vitesse moyenne, en km/h ?",ans:300,unit:"km/h",
+   hints:["La vitesse, c’est la distance divisée par la durée.","v = 600 ÷ 2.","En 1 heure, il fait la moitié du trajet."],
+   sol:"v = 600 ÷ 2 = <b>300 km/h</b>."}]});
+/* ===== Programmation ===== */
+const bulb=(x,v,on,t)=>Gr(C(x,140,34,{c:"fc"})+(on?`<circle cx="${x}" cy="140" r="34" class="fl" ${op(t)}</circle>`:"")+T(x,150,on?"1":"0",{z:30,c:on?"":"m",h:on?t:null})+(on?T(x,150,"1",{z:30,c:"a",t}):"")+T(x,206,String(v),{z:22,c:"m"}),{});
+ADDL("p_bin",{vid:[
+ {d:8,s:T(320,50,"Chaque lampe a une valeur",{z:22,c:"m"})+[[8,1,1],[4,1,2],[2,0,0],[1,1,3]].map(([v,on,t],k)=>Gr(C(140+k*120,140,34,{c:"fc"})+T(140+k*120,150,"0",{z:30,c:"m",h:on?t:null})+(on?`<circle cx="${140+k*120}" cy="140" r="34" class="fl" ${op(t)}</circle>`+T(140+k*120,150,"1",{z:30,c:"a",t}):"")+T(140+k*120,206,String(v),{z:22,c:"m"}))).join("")
+   +T(320,270,"1101 = 8 + 4 + 1 = 13",{z:34,c:"g",t:4.4})+T(320,325,"On additionne les valeurs des lampes allumées",{z:20,c:"m",t:5.4}),
+  say:"En binaire, chaque lampe a une valeur : huit, quatre, deux, un. On allume la lampe huit, la lampe quatre, on laisse la lampe deux éteinte, et on allume la lampe un. Un, un, zéro, un : huit plus quatre plus un, treize !"}],
+ g:[{q:"Combien vaut le nombre binaire 10110 en écriture décimale ?",ans:22,
+   hints:["Avec 5 chiffres, les valeurs des lampes, de gauche à droite, sont : 16, 8, 4, 2, 1.","Place les chiffres sous les valeurs : 1 sous 16, 0 sous 8, 1 sous 4, 1 sous 2, 0 sous 1.","Additionne les valeurs où il y a un 1 : 16 + 4 + 2."],
+   sol:"10110 = 16 + 4 + 2 = <b>22</b>."},
+  {q:"Écris le nombre 9 en binaire, avec 4 chiffres.",ans:"1001",
+   hints:["Les 4 lampes valent 8, 4, 2, 1. Lesquelles allumer pour faire 9 ?","Prends la plus grande valeur possible : 8. Il reste 9 − 8 = 1.","8 allumée, 4 éteinte, 2 éteinte, 1 allumée."],
+   sol:"9 = 8 + 1, donc <b>1001</b>."}]});
+const code=(lines,hl)=>R(380,70,230,150,{c:"fm",rx:10})+lines.map((s,k)=>T(396,104+k*36,s,{z:19,a:"start",c:"mono"})).join("")+(hl||"");
+ADDL("p_loop",{vid:[
+ {d:8,s:[...Array(6).keys()].map(i=>L(60+i*50,60,60+i*50,310,{c:"km"})+L(60,60+i*50,310,60+i*50,{c:"km"})).join("")
+   +code(["répéter 4 fois :","   avancer 4","   tourner ↻"])+P("M85 285 V85 H285 V285 H85",{c:"ka",draw:.5,dd:6.5})
+   +`<path d="M-11 9 L0 -13 L11 9 Z" class="fk"><animateMotion path="M85 285 V85 H285 V285 H85" dur="6.5s" begin=".5s" fill="freeze" rotate="auto" keyPoints="0;1" keyTimes="0;1"/></path>`
+   +[1,2,3,4].map(k=>T(495,262,`tour ${k} / 4`,{z:24,c:"a",t:.5+(k-1)*1.62,h:k<4?.5+k*1.62:null})).join("")+T(495,300,"carré fini !",{z:22,c:"g",t:7.1}),
+  say:"Pour dessiner un carré, le robot doit avancer puis tourner, quatre fois. Au lieu d’écrire huit instructions, on écrit une boucle : répéter quatre fois, avancer, tourner. Premier tour, deuxième, troisième, quatrième : le carré est fini !"}],
+ g:[{q:"Le robot exécute : « répéter 3 fois : avancer 2, tourner à droite, avancer 1 ». De combien de cases avance-t-il en tout ?",ans:9,unit:"cases",
+   hints:["Compte d’abord les cases d’UN seul tour de boucle. Attention : tourner ne fait pas avancer.","Un tour : avancer 2 puis avancer 1, soit 3 cases.","La boucle se répète 3 fois : 3 tours × 3 cases."],
+   sol:"Un tour = 2 + 1 = 3 cases, et 3 tours × 3 = <b>9 cases</b>."}]});
+const boxv=(x,y,lab)=>`<path d="M${x} ${y} h150 v90 h-150z M${x} ${y} l20 -20 h150 l-20 20 M${x+150} ${y} l20 -20 v90 l-20 20" class="fc"/>`+R(x+30,y+90,90,30,{c:"fs",rx:6})+T(x+75,y+111,lab,{z:18,c:"w"});
+ADDL("p_vars",{vid:[
+ {d:9,s:boxv(70,120,"score")+T(145,180,"0",{z:44,h:2.6})+T(145,180,"10",{z:44,c:"a",t:2.8,h:5.8})+T(145,180,"20",{z:44,c:"g",t:6})
+   +T(300,80,"score ← score + 10",{z:26,a:"start",c:"mono",t:1})+T(300,140,"0 + 10 = 10",{z:24,a:"start",c:"m",t:1.8,h:4.6})+T(300,140,"10 + 10 = 20",{z:24,a:"start",c:"m",t:4.8})
+   +T(320,320,"L’ancienne valeur est remplacée par la nouvelle",{z:20,c:"m",t:6.6}),
+  say:"Une variable, c’est une boîte avec une étiquette. Au début, la boîte score contient zéro. Score reçoit score plus dix : on calcule zéro plus dix, et on range dix dans la boîte. On recommence : dix plus dix, vingt. L’ancienne valeur est remplacée."}],
+ g:[{q:"Programme : x ← 5, puis x ← x × 2, puis x ← x − 3. Que contient la boîte x à la fin ?",ans:7,
+   hints:["Suis la boîte ligne par ligne. Après la 1re ligne, x contient 5.","2e ligne : on calcule avec l’ancienne valeur, 5 × 2. Que range-t-on dans x ?","x vaut 10. 3e ligne : 10 − 3."],
+   sol:"x = 5, puis 5 × 2 = 10, puis 10 − 3 = <b>7</b>."}]});
+/* ===== Histoire-Géographie ===== */
+const PER=[["Préhistoire",40,150,"fa"],["Antiquité",150,260,"fw"],["Moyen Âge",260,380,"fa"],["Temps modernes",380,480,"fw"],["Contemporaine",480,600,"fa"]];
+ADDL("hs_anti",{vid:[
+ {d:14,s:PER.map(([n,a,b,c],k)=>{const w=n.split(" ");return Gr(R(a,140,b-a,60,{c,rx:0})+(w.length>1?T((a+b)/2,166,w[0],{z:15})+T((a+b)/2,186,w[1],{z:15}):T((a+b)/2,176,n,{z:n.length>11?14:16})),{t:.5+k*2.3})}).join("")+L(40,200,600,200)
+   +[["écriture",150,"vers −3300",2.6],["476",260,"chute de Rome",5],["1492",380,"Colomb",7.3],["1789",480,"Révolution",9.6]].map(([d,x,s,t])=>L(x,128,x,212,{c:"ka",t})+T(x,240,d,{z:20,c:"a",t})+T(x,264,s,{z:15,c:"m",t})).join("")
+   +T(320,90,"Les 5 grandes périodes de l’histoire",{z:24})+T(320,330,"Aujourd’hui : époque contemporaine",{z:20,c:"g",t:11.8}),
+  say:"Les historiens découpent le passé en cinq périodes. La Préhistoire s’arrête avec l’invention de l’écriture, il y a environ cinq mille ans. L’Antiquité se termine en 476, avec la chute de Rome. Le Moyen Âge dure jusqu’en 1492, quand Christophe Colomb atteint l’Amérique. Les Temps modernes vont jusqu’à la Révolution, en 1789. Et depuis, c’est l’époque contemporaine : la nôtre."}],
+ g:[{q:"Combien d’années séparent la chute de Rome (476) et l’arrivée de Christophe Colomb en Amérique (1492) ?",ans:1016,unit:"ans",
+   hints:["Pour trouver une durée entre deux dates, on fait la plus récente moins la plus ancienne.","1492 − 476.","1492 − 400 = 1092, puis on enlève encore 76."],
+   sol:"1492 − 476 = <b>1 016 ans</b> : c’est la durée du Moyen Âge !"},
+  {q:"La Révolution française a lieu en 1789. En quel siècle ?",ch:["Le XVIIe siècle","Le XVIIIe siècle","Le XIXe siècle"],good:1,
+   hints:["Piège : le siècle n’est pas le nombre des centaines. L’an 1 à l’an 100, c’est le Ier siècle.","Les années 1701 à 1800 forment le même siècle. Le nombre des centaines de 1789 est 17.","On ajoute 1 : 17 + 1 = 18. Et 18 s’écrit XVIII en chiffres romains."],
+   sol:"1789 est au <b>XVIIIe siècle</b> (les années 1701 à 1800)."}]});
+const clock=(cx,cy,h,lab,t)=>Gr(C(cx,cy,56,{c:"fc"})+[...Array(12).keys()].map(k=>{const a=k*Math.PI/6;return L(cx+48*Math.sin(a),cy-48*Math.cos(a),cx+54*Math.sin(a),cy-54*Math.cos(a),{c:"km"})}).join("")+L(cx,cy,cx,cy-44,{c:"k"})+(()=>{const a=(h%12)*Math.PI/6;return `<line x1="${cx}" y1="${cy}" x2="${(cx+30*Math.sin(a)).toFixed(1)}" y2="${(cy-30*Math.cos(a)).toFixed(1)}" class="ka" style="stroke-width:6"/>`})()+T(cx,cy+90,lab,{z:20})+T(cx,cy+116,h+" h",{z:24,c:"a"}),{t});
+ADDL("gx_heure",{vid:[
+ {d:8,s:`<g transform="translate(200 185)"><circle r="120" class="fa"/>${[-60,-30,0,30,60].map(a=>`<ellipse rx="${(120*Math.abs(Math.sin(a*Math.PI/180))).toFixed(1)}" ry="120" class="km" style="stroke:var(--ink);opacity:.35;fill:none"/>`).join("")}<line x1="-120" y1="0" x2="120" y2="0" class="km" style="stroke:var(--ink);opacity:.35"/></g>`+P("M80 50 Q200 -10 320 50",{c:"ka",draw:.5})+P("M310 38 L320 50 L304 54",{c:"ka",t:1.3})+T(336,58,"1 tour = 24 h",{z:16,c:"a",a:"start",t:1})
+   +T(470,130,"360° en 24 h",{z:30,t:2.2})+T(470,190,"360 ÷ 24 = 15",{z:28,c:"m",t:3.6})+T(470,260,"15° par heure",{z:34,c:"g",t:5}),
+  say:"La Terre tourne sur elle-même en vingt-quatre heures. Un tour complet, c’est trois cent soixante degrés. Trois cent soixante divisé par vingt-quatre : quinze degrés par heure. Tous les quinze degrés de longitude environ, l’heure change d’une heure."},
+ {d:8,s:clock(110,140,15,"New York",3.4)+clock(320,140,17,"Rio",2)+clock(530,140,21,"Paris",.3)+T(320,330,"Vers l’ouest, on enlève des heures",{z:22,c:"g",t:4.6}),
+  say:"Un match commence à vingt et une heures à Paris. À Rio, plus à l’ouest, il y a quatre heures de moins : dix-sept heures. À New York, encore plus à l’ouest, six heures de moins : quinze heures. Vers l’ouest, on enlève des heures ; vers l’est, on en ajoute."}],
+ g:[{q:"Il est 14 h à Paris. En hiver, Dubaï a 3 heures de plus que Paris. Quelle heure est-il à Dubaï ?",ans:17,unit:"h",
+   hints:["Dubaï est à l’est de Paris : on AJOUTE des heures.","On ajoute 3 heures à 14 h.","14 + 3 = ?"],
+   sol:"14 h + 3 h = <b>17 h</b> à Dubaï."}]});
+/* ===== Foot ===== */
+const pitch=()=>R(60,40,520,300,{c:"fm",rx:0})+R(190,40,260,110,{c:"km",rx:0})+R(260,40,120,40,{c:"km",rx:0})+R(290,26,60,14,{c:"fc",rx:2})+C(320,118,4,{c:"fk"})+P("M250 150 A70 70 0 0 0 390 150",{c:"km"});
+ADDL("fd_xg",{vid:[
+ {d:10,s:pitch()+[[320,118,"0,76","penalty",.8],[400,66,"0,45","de près",3],[420,185,"0,08","angle fermé",5],[300,300,"0,03","de loin",6.6]].map(([x,y,v,lab,t])=>C(x,y,13,{c:"fs",t})+T(x+20,y+6,v,{z:22,a:"start",t})+T(x+20,y+28,lab,{z:15,c:"m",a:"start",t})).join("")
+   +T(320,358,"Total : 0,76 + 0,45 + 0,08 + 0,03 = 1,32 xG",{z:22,c:"g",t:8.2}),
+  say:"Chaque tir reçoit une note, l’xG : la probabilité de marquer depuis cet endroit. Un penalty, environ zéro virgule soixante-seize, trois chances sur quatre. Un tir de près, face au but, zéro virgule quarante-cinq. Un tir avec un angle fermé, zéro virgule zéro huit. De loin, à peine zéro virgule zéro trois. On additionne : l’équipe a créé un virgule trente-deux but attendu."}],
+ g:[{q:"Ton équipe tire 3 fois : un penalty (0,76 xG), une tête (0,12 xG) et une frappe de loin (0,04 xG). Quel est son total d’xG ?",ans:0.92,tol:.001,unit:"xG",
+   hints:["Le total d’xG d’un match, c’est la somme des xG de tous les tirs.","0,76 + 0,12 + 0,04 : pense en centièmes, 76 + 12 + 4.","76 + 12 = 88, et 88 + 4 = 92 centièmes."],
+   sol:"0,76 + 0,12 + 0,04 = <b>0,92 xG</b> : presque un but « mérité »."}]});
+ADDL("fx_scout",{vid:[
+ {d:10,s:T(160,60,"Joueur A",{z:26})+T(160,100,"10 buts en 2 700 min",{z:20,c:"m"})+T(160,150,"2 700 ÷ 90 = 30 matchs",{z:20,t:1.6})+T(160,195,"10 ÷ 30 ≈ 0,33 but / 90",{z:22,c:"a",t:3})
+   +T(480,60,"Joueur B",{z:26})+T(480,100,"7 buts en 1 260 min",{z:20,c:"m"})+T(480,150,"1 260 ÷ 90 = 14 matchs",{z:20,t:4.6})+T(480,195,"7 ÷ 14 = 0,5 but / 90",{z:22,c:"a",t:6})
+   +R(90,240,0,30,{c:"fa",grow:7.2,gto:140})+R(410,240,0,30,{c:"fs",grow:7.2,gto:212})+T(320,320,"B marque plus souvent : il est plus efficace !",{z:22,c:"g",t:8.4}),
+  say:"Joueur A : dix buts en deux mille sept cents minutes, soit trente matchs complets. Dix divisé par trente : zéro virgule trente-trois but par match. Joueur B : sept buts en mille deux cent soixante minutes, soit quatorze matchs. Sept divisé par quatorze : zéro virgule cinq. Le joueur B a marqué moins de buts, mais il est plus efficace !"}],
+ g:[{q:"Un attaquant marque 6 buts en 1 080 minutes. Combien de buts marque-t-il par 90 minutes ?",ans:.5,unit:"but / 90",
+   hints:["Compte d’abord combien de matchs complets de 90 minutes il a joués : 1 080 ÷ 90.","1 080 ÷ 90 = 12 matchs.","6 buts en 12 matchs : divise 6 par 12."],
+   sol:"1 080 ÷ 90 = 12 matchs, et 6 ÷ 12 = <b>0,5 but par 90 minutes</b> : un but tous les deux matchs."}]});
+/* ===== Modélisation 3D ===== */
+const LAY=12;
+ADDL("m_couches",{vid:[
+ {d:9,s:R(150,300,340,14,{c:"fk",rx:3})+T(320,340,"plateau",{z:16,c:"m"})+[...Array(LAY).keys()].map(k=>`<rect x="220" y="${282-k*18}" width="0" height="16" rx="2" class="fa"><animate attributeName="width" from="0" to="200" begin="${(.6+k*.55).toFixed(2)}s" dur=".5s" fill="freeze"/></rect>`).join("")
+   +`<g><path d="M-14 -40 h28 v22 l-14 18 l-14 -18z" class="fw"/><line x1="0" y1="-40" x2="0" y2="-90" class="k"/><animateMotion dur="${(LAY*.55).toFixed(2)}s" begin=".6s" fill="freeze" path="${[...Array(LAY).keys()].map(k=>`${k?"L":"M"}220 ${282-k*18} L420 ${282-k*18}`).join(" ")}"/></g>`
+   +T(500,120,"couche",{z:20,a:"start",c:"a",t:1.2})+T(500,146,"≈ 0,2 mm",{z:20,a:"start",c:"a",t:1.2})+T(80,200,"de bas",{z:20,a:"start",c:"m",t:3})+T(80,226,"en haut",{z:20,a:"start",c:"m",t:3}),
+  say:"La buse chauffe le fil de plastique à environ deux cents degrés et le dépose en un trait très fin. Une couche, puis une autre par-dessus, de bas en haut. Chaque couche mesure environ deux dixièmes de millimètre. Il en faut des centaines pour un objet !"},
+ {d:8,s:R(150,300,340,14,{c:"fk",rx:3})+R(280,140,80,160,{c:"fa",rx:0})+R(200,140,80,36,{c:"fb",rx:0,t:.5})+R(360,140,80,36,{c:"fb",rx:0,t:.5})+T(320,110,"Dans le vide : le plastique tomberait !",{z:20,c:"b",t:1,h:4})
+   +[210,240,265,375,400,425].map(x=>R(x,176,6,124,{c:"km",rx:0,t:3.6})).join("")+T(320,110,"Solution : des supports, enlevés à la fin",{z:20,c:"g",t:4.2}),
+  say:"Attention : l’imprimante ne peut pas déposer du plastique dans le vide. Si une partie dépasse sans rien en dessous, on ajoute des supports, qu’on enlève à la fin. Ou bien on tourne l’objet pour le poser sur sa grande face plate."}],
+ g:[{q:"Un objet mesure 20 mm de haut. Chaque couche fait 0,2 mm. Combien de couches l’imprimante doit-elle déposer ?",ans:100,unit:"couches",
+   hints:["Il faut savoir combien de fois 0,2 mm rentre dans 20 mm : c’est une division, 20 ÷ 0,2.","Astuce : 0,2 mm, c’est 1 mm divisé en 5. Combien de couches pour 1 mm ?","5 couches par millimètre, et il y a 20 millimètres."],
+   sol:"20 ÷ 0,2 = 20 × 5 = <b>100 couches</b>."}]});
+ADDL("m_trous",{vid:[
+ {d:9,s:R(130,150,380,90,{c:"fa",rx:14})+T(320,110,"1. Une plaque (solide)",{z:22,h:2.6})
+   +`<g opacity="0"><animate attributeName="opacity" from="0" to="1" begin="1.6s" dur=".4s" fill="freeze"/><animate attributeName="opacity" to="0" begin="6.4s" dur=".3s" fill="freeze"/><rect x="20" y="120" width="70" height="150" rx="35" style="fill:color-mix(in srgb,var(--ink) 10%,transparent);stroke:var(--ink);stroke-width:2;stroke-dasharray:8 6"/><animateTransform attributeName="transform" type="translate" from="0 0" to="130 0" begin="2.8s" dur="1.6s" fill="freeze"/></g>`
+   +T(320,110,"2. Un cylindre en PERÇAGE",{z:22,c:"a",t:2.8,h:5})+T(320,110,"3. On regroupe : un trou !",{z:22,c:"g",t:5.2})
+   +`<rect x="150" y="150" width="70" height="90" rx="0" style="fill:var(--card);stroke:var(--ink);stroke-width:2" opacity="0"><animate attributeName="opacity" from="0" to="1" begin="6.4s" dur=".3s" fill="freeze"/></rect>`
+   +T(320,300,"Le perçage dépasse des deux côtés de la plaque",{z:19,c:"m",t:4.4}),
+  say:"Dans Tinkercad, on pose d’abord la forme solide, ici une plaque. Puis on prend un cylindre et on le transforme en perçage : il devient transparent. On le place à travers la plaque, en le faisant dépasser des deux côtés. On sélectionne tout et on regroupe : le cylindre a creusé un trou !"}],
+ g:[{q:"Pour percer un trou bien net dans ton porte-clé, le cylindre de perçage doit…",ch:["dépasser des deux côtés de la plaque","être un peu moins haut que la plaque","rester posé à côté de la plaque"],good:0,
+   hints:["Le perçage enlève de la matière seulement là où il touche l’objet.","S’il est moins haut que la plaque, que reste-t-il au fond du trou ?","Pour traverser complètement, il doit sortir en haut ET en bas."],
+   sol:"Il doit <b>dépasser des deux côtés</b> : sinon il reste une fine couche de plastique au fond, et le trou n’est pas traversant."}]});
 })();
 
 for(const t of [
