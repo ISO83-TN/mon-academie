@@ -288,6 +288,50 @@ pre.calc{margin:0;padding:14px 16px;border-radius:12px;background:var(--card);bo
 .lctl{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .lesson .listen{background:var(--accent);color:var(--accent-ink)}
 .autov{display:flex;gap:8px;align-items:center;font-weight:700;color:var(--muted)}.autov input{width:22px;height:22px}
+/* cours longs : vidéo animée + problèmes guidés */
+.vid{display:flex;flex-direction:column;gap:10px}
+.vscreen{position:relative;aspect-ratio:16/9;width:100%;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;background-image:linear-gradient(var(--rule-strong) 1px,transparent 1px);background-size:100% 30px}
+.vsvg{display:block;width:100%;height:100%}
+.vover{position:absolute;inset:0;margin:auto;display:grid;place-items:center;pointer-events:none}
+.vbig{width:88px;height:88px;border-radius:50%;background:var(--sc);color:var(--accent-ink);font-size:34px;padding-left:6px;box-shadow:var(--shadow)}
+.vend{width:max-content;height:max-content;padding:12px 22px;border-radius:999px;background:var(--sc);color:var(--accent-ink);font-weight:800;font-size:18px;box-shadow:var(--shadow)}
+.vcap{margin:0;min-height:3.1em;font-size:17px;line-height:1.5;color:var(--muted);text-align:center}
+.vbar{display:flex;gap:10px;align-items:center}
+.vbtn{width:56px;height:56px;border-radius:50%;border:0;background:var(--sc);color:var(--accent-ink);font-size:20px;font-weight:800;flex:none;display:grid;place-items:center}
+.vbtn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.vprog{flex:1;display:flex;gap:6px}
+.vseg{flex:1;height:44px;border:0;background:none;padding:0;display:flex;align-items:center}
+.vseg i{display:block;height:9px;width:100%;border-radius:99px;background:color-mix(in srgb,var(--ink) 12%,transparent);position:relative;overflow:hidden}
+.vseg b{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--sc);border-radius:99px}
+.vseg.on i{height:13px}
+.vsvg .vt{fill:var(--ink);font-family:var(--f-display);font-weight:800}
+.vsvg .vt.m{fill:var(--muted);font-family:var(--f-body);font-weight:700}
+.vsvg .vt.a{fill:var(--sc)}.vsvg .vt.g{fill:var(--good)}.vsvg .vt.b{fill:var(--bad)}.vsvg .vt.w{fill:var(--card)}
+.vsvg .vt.mono{font-family:var(--f-mono);font-weight:700}
+.vsvg .k{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.vsvg .ka{fill:none;stroke:var(--sc);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.vsvg .kb{fill:none;stroke:var(--bad);stroke-width:5;stroke-linecap:round}
+.vsvg .kg{fill:none;stroke:var(--good);stroke-width:4;stroke-linecap:round}
+.vsvg .km{fill:none;stroke:var(--line);stroke-width:2}
+.vsvg .fa{fill:color-mix(in srgb,var(--sc) 55%,transparent);stroke:var(--ink);stroke-width:2}
+.vsvg .fc{fill:var(--card);stroke:var(--ink);stroke-width:2}
+.vsvg .fl{fill:color-mix(in srgb,var(--fluo) 16%,transparent);stroke:var(--fluo);stroke-width:3}
+.vsvg .fs{fill:var(--sc)}.vsvg .fg{fill:var(--good)}.vsvg .fb{fill:var(--bad)}.vsvg .fk{fill:var(--ink)}
+.vsvg .fm{fill:color-mix(in srgb,var(--ink) 7%,transparent);stroke:var(--line);stroke-width:1.5}
+.vsvg .fw{fill:color-mix(in srgb,var(--c-defi) 70%,transparent);stroke:var(--ink);stroke-width:1.5}
+.guide{display:flex;flex-direction:column;gap:14px}
+.gq{background:var(--card);border:2px solid var(--sc);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.gq p{margin:0;font-size:20px;font-weight:700;line-height:1.45}
+.gtag{align-self:flex-start;background:var(--sc);color:var(--accent-ink);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border-radius:99px;padding:4px 12px}
+.hint{border-left:6px solid var(--fluo);background:color-mix(in srgb,var(--fluo) 15%,var(--card));border-radius:10px;padding:10px 14px;line-height:1.5}
+.hint b{font-family:var(--f-display);margin-right:4px}
+.qmark{display:inline-block;min-width:1.4em;text-align:center;border-radius:6px;background:color-mix(in srgb,var(--fluo) 55%,transparent);color:var(--ink)}
+.gctl{display:flex;gap:10px;flex-wrap:wrap}
+.choice.out{opacity:.38;text-decoration:line-through}
+.feedback.hintfb{background:color-mix(in srgb,var(--fluo) 18%,var(--card));border-left:6px solid var(--fluo)}
+.feedback.hintfb .verdict{color:var(--ink)}
+.tag.vidtag{background:color-mix(in srgb,var(--sc) 16%,transparent);color:var(--ink)}
+
 .tag.warnt{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}.tag.badt{background:var(--bad-bg);color:var(--bad)}
 .efig{display:block;width:100%;max-width:560px;height:auto;max-height:min(46vh,340px);margin:0 auto}
 .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
@@ -1126,25 +1170,151 @@ const LESSONS=[
 const LESSON=Object.fromEntries(LESSONS.map(L=>[L.id,L]));
 function lessonStatus(id){const s=state.lessons?.[id];if(!s)return null;if(s.best==null)return {cls:"",txt:"Cours lu, exercice à faire"};return s.best>=80?{cls:"good",txt:`Compris · ${s.best} %`}:s.best>=50?{cls:"warnt",txt:`Presque · ${s.best} %`}:{cls:"badt",txt:`À revoir · ${s.best} %`}}
 function nextLesson(){const ci=lvlIdx(state.classe);return LESSONS.find(L=>lvlIdx(L.lvl)<=ci+1&&!(state.lessons?.[L.id]?.best>=80))}
+/* ================= cours longs : mini-vidéos animées + problèmes guidés ================= */
+const plain=h=>String(h??"").replace(/<[^>]+>/g," ").replace(/&nbsp;/g," ").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&amp;/g,"&").replace(/\s+/g," ").trim();
+/* --- briques d’animation (SVG + SMIL, 640 × 360) --- */
+const VA=(t,d=.45)=>`<animate attributeName="opacity" from="0" to="1" begin="${t}s" dur="${d}s" fill="freeze"/>`;
+const VH=(t,d=.4)=>`<animate attributeName="opacity" to="0" begin="${t}s" dur="${d}s" fill="freeze"/>`;
+const vani=o=>(o.t==null?"":VA(o.t,o.d))+(o.h==null?"":VH(o.h))
+  +(o.from?`<animateTransform attributeName="transform" type="translate" from="${o.from[0]} ${o.from[1]}" to="0 0" begin="${o.t||0}s" dur="${o.from[2]||.6}s" fill="freeze" additive="sum"/>`:"")
+  +(o.mv?`<animateTransform attributeName="transform" type="translate" from="0 0" to="${o.mv[0]} ${o.mv[1]}" begin="${o.mv[2]}s" dur="${o.mv[3]||.8}s" fill="freeze" additive="sum"/>`:"")
+  +(o.draw!=null?`<animate attributeName="stroke-dashoffset" from="1" to="0" begin="${o.draw}s" dur="${o.dd||.8}s" fill="freeze"/>`:"")
+  +(o.grow!=null?`<animate attributeName="${o.gattr||"width"}" from="0" to="${o.gto}" begin="${o.grow}s" dur="${o.gd||.8}s" fill="freeze"/>`:"");
+const vE=(tag,at,o={},inner="")=>`<${tag} ${at}${o.c?` class="${o.c}"`:""}${o.t!=null?` opacity="0"`:""}${o.draw!=null?` pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"`:""}>${inner}${vani(o)}</${tag}>`;
+const vT=(x,y,s,o={})=>vE("text",`x="${x}" y="${y}" font-size="${o.z||26}" text-anchor="${o.a||"middle"}"`,{...o,c:"vt "+(o.c||"")},s);
+const vR=(x,y,w,h,o={})=>vE("rect",`x="${x}" y="${y}" width="${o.grow!=null?0:w}" height="${h}" rx="${o.rx??8}"`,{...o,gto:w,c:o.c||"fc"});
+const vC=(cx,cy,r,o={})=>vE("circle",`cx="${cx}" cy="${cy}" r="${r}"`,{...o,c:o.c||"fs"});
+const vL=(x1,y1,x2,y2,o={})=>vE("line",`x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"`,{...o,c:o.c||"k"});
+const vP=(d,o={})=>vE("path",`d="${d}"`,{...o,c:o.c||"k"});
+const vG=(inner,o={})=>vE("g",o.at||"",o,inner);
+const vArc=(x1,x2,y,lab,o={})=>{const m=(x1+x2)/2,up=o.down?1:-1,h=o.hh||34;return vG(vP(`M${x1} ${y} Q${m} ${y+up*h*2} ${x2} ${y}`,{c:"ka"})+vP(`M${x2-9} ${y+up*4} L${x2} ${y} L${x2+3} ${y+up*11}`,{c:"ka"})+vT(m,y+up*(h+10)+(up>0?14:0),lab,{c:"a",z:o.z||20}),o)};
+/* --- lecteur --- */
+let vidS=null,vidTok=0,vidTimers=[],vidMute=false;
+const curVid=()=>lesson&&lesson.steps&&lesson.steps[lesson.i]&&lesson.steps[lesson.i].vid;
+function vidHTML(st){return `<div class="vid"><div class="vscreen" id="vscreen" data-vtoggle="1" role="button" aria-label="Lire ou mettre en pause la vidéo"></div><p class="vcap" id="vcap" aria-live="polite"></p>
+ <div class="vbar"><button class="vbtn" id="vplay" data-vtoggle="1" aria-label="Lecture ou pause">▶</button><div class="vprog">${st.vid.map((_,k)=>`<button class="vseg" data-vseg="${k}" aria-label="Passage ${k+1}"><i><b></b></i></button>`).join("")}</div>${canSpeak()?`<button class="vbtn ghost" data-vmute="1" id="vmute" aria-label="Couper ou remettre le son">${vidMute?"🔇":"🔊"}</button>`:""}</div></div>`}
+function vidClear(){vidTok++;vidTimers.forEach(clearTimeout);vidTimers=[]}
+function vidStop(){if(!vidS)return;vidClear();try{speechSynthesis.cancel()}catch(e){}vidS=null}
+function vidShow(i,mode){const V=curVid(),scr=document.getElementById("vscreen");if(!V||!scr)return;
+  vidClear();if(mode!=="play"){try{speechSynthesis.cancel()}catch(e){}}
+  const prevSvg=scr.querySelector("svg");vidS={i,mode};const sc=V[i];
+  if(mode==="play"||mode==="poster"||!prevSvg)scr.innerHTML=`<svg class="vsvg" viewBox="0 0 640 360" aria-hidden="true">${sc.s}</svg>`;
+  else scr.querySelectorAll(".vover").forEach(x=>x.remove());
+  const svg=scr.querySelector("svg");
+  if(mode==="poster"){try{svg.pauseAnimations();svg.setCurrentTime(60)}catch(e){}}
+  if(mode==="pause"){try{svg.pauseAnimations()}catch(e){}}
+  if(mode!=="play")scr.insertAdjacentHTML("beforeend",mode==="end"?`<span class="vover vend">↺ Revoir la vidéo</span>`:`<span class="vover vbig" aria-hidden="true">▶</span>`);
+  document.getElementById("vcap").textContent=mode==="poster"?"Appuie sur ▶ pour regarder la vidéo.":mode==="end"?"Vidéo terminée. Tu peux la revoir ou passer à la suite.":sc.say;
+  const pb=document.getElementById("vplay");if(pb)pb.textContent=mode==="play"?"❚❚":"▶";
+  document.querySelectorAll(".vseg").forEach((s,k)=>{const b=s.firstChild.firstChild;s.classList.toggle("on",k===i&&mode!=="end");
+    if(k===i&&mode==="pause"){const w=getComputedStyle(b).width;b.style.transition="none";b.style.width=w}
+    else if(!(k===i&&mode==="play")){b.style.transition="none";b.style.width=(k<i||mode==="end")?"100%":"0"}});
+  if(mode==="play")vidRun(i)}
+function vidRun(i){const V=curVid(),sc=V[i],tok=vidTok,t0=Date.now();
+  const est=Math.max(3000,sc.say.split(/\s+/).length*430),minT=(sc.d||0)*1000;let fin=false;
+  const next=()=>{if(fin||tok!==vidTok)return;fin=true;const wait=Math.max(0,minT-(Date.now()-t0))+800;
+    vidTimers.push(setTimeout(()=>{if(tok!==vidTok)return;if(i+1<V.length)vidShow(i+1,"play");else{vidShow(i,"end");vidDone()}},wait))};
+  const b=document.querySelectorAll(".vseg b")[i];if(b){b.style.transition="none";b.style.width="0";void b.offsetWidth;b.style.transition=`width ${(Math.max(est,minT)/1000).toFixed(1)}s linear`;b.style.width="100%"}
+  if(canSpeak()&&!vidMute){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(sc.say);u.lang="fr-FR";u.rate=.95;const v=frVoice();if(v)u.voice=v;u.onend=u.onerror=()=>{if(tok===vidTok)next()};speechSynthesis.speak(u)}catch(e){}
+    vidTimers.push(setTimeout(next,est*1.9+4000))}
+  else vidTimers.push(setTimeout(next,est))}
+function vidDone(){if(!lesson)return;const s=state.lessons?.[lesson.id];if(s&&!s.vid){s.vid=Date.now();save()}}
+function vidToggle(){const V=curVid();if(!V)return;if(!vidS||vidS.mode==="poster"||vidS.mode==="end")return vidShow(0,"play");if(vidS.mode==="play")return vidShow(vidS.i,"pause");vidShow(vidS.i,"play")}
+/* --- problèmes guidés à indices progressifs --- */
+function gState(){lesson.gs=lesson.gs||{};return lesson.gs[lesson.i]||(lesson.gs[lesson.i]={hints:0,tries:0,done:false,ok:false,out:[],last:null,msg:""})}
+const gHint=(g,k,S)=>{const h=g.hints[k];return typeof h==="function"?h(S):h};
+function guideHTML(st){const g=st.g,S=gState(),nh=g.hints.length;
+  const hints=g.hints.slice(0,S.hints).map((h,k)=>`<div class="hint"><b>💡 Indice ${k+1}${k===nh-1&&nh>1?" · la méthode":""}</b> ${gHint(g,k,S)}</div>`).join("");
+  let ans="";
+  if(g.ch)ans=`<div class="choices">${g.ch.map((c,k)=>{let cls="";if(S.done&&k===g.good)cls="right";else if(S.out.includes(k))cls=(k===S.last?"wrong ":"")+"out";return `<button class="choice ${cls}" data-gpick="${k}" ${S.done||S.out.includes(k)?"disabled":""}><span class="k">${"ABCDEF"[k]}</span><span>${c}</span></button>`}).join("")}</div>`;
+  else ans=`<form class="answer-row" data-gform="1"><input class="input ${S.done&&S.ok?"right":""}" id="g-ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${typeof g.ans==="number"?'inputmode="decimal"':""} placeholder="Ta réponse${g.unit?" (en "+g.unit+")":""}" ${S.done?"disabled":""} value="${S.done&&S.ok?esc(S.typed||""):""}"><button class="btn" type="submit" ${S.done?"disabled":""}>Vérifier</button></form>`;
+  let fb="";
+  if(S.done)fb=`<div class="feedback ${S.ok?"ok":"ko"}" role="status"><span class="verdict">${S.ok?(S.hints?`Trouvé avec ${S.hints} indice${S.hints>1?"s":""}, bravo !`:"Trouvé tout seul, champion !"):"Voici la solution"}</span><p>${g.sol}</p>${S.xp?`<p class="num"><b>+${S.xp} XP</b></p>`:""}</div>`;
+  else if(S.msg)fb=`<div class="feedback ko" role="status"><span class="verdict">${S.msg}</span></div>`;
+  const ctl=S.done?"":`<div class="gctl">${S.hints<nh?`<button class="btn ghost" data-ghint="1">💡 ${S.hints?"Un autre indice":"J’ai besoin d’un indice"}</button>`:""}${S.hints>=nh&&S.tries>0||S.tries>=4?`<button class="btn ghost" data-gsol="1">Voir la solution</button>`:""}</div>`;
+  const q=/^\s*</.test(g.q)?g.q:`<p>${g.q}</p>`;
+  return `<div class="guide"><div class="gq"><span class="gtag">${g.tag||"À toi de trouver"}</span>${q}${g.fig||""}</div>${ans}${hints}${fb}${ctl}</div>`}
+function addXP(x){state.xp+=x;const tk=todayKey(),d=state.days[tk]||(state.days[tk]={xp:0,quiz:0,sec:0});d.xp+=x;save()}
+function gSay(t){if(state.voiceAuto!==false)setTimeout(()=>speakFr(t),120)}
+function gCheck(val){const st=lesson.steps[lesson.i],g=st.g,S=gState();if(S.done)return;let ok;
+  if(g.ch){ok=val===g.good;if(!ok&&!S.out.includes(val))S.out.push(val)}
+  else{if(!String(val).trim())return;ok=isRight(g.qobj||{type:"input",numeric:typeof g.ans==="number",ans:typeof g.ans==="number"?g.ans:String(g.ans),alt:g.alt||[],tol:g.tol||0},val);S.typed=val}
+  S.last=val;
+  if(ok){S.done=S.ok=true;S.msg="";S.xp=S.hints?5:10;addXP(S.xp);const l=state.lessons?.[lesson.id];if(l){l.guided=(l.guided||0)+1;save()}
+    beep([[740,0,.12],[988,.1,.18]]);renderLesson();gSay((S.hints?"Bravo, tu as trouvé ! ":"Bravo, tu as trouvé tout seul ! ")+plain(g.sol));return}
+  S.tries++;let extra="";if(typeof g.ans==="number"){const n=parseFloat(normNum(val));if(!isNaN(n)&&n!==g.ans)extra=n>g.ans?" Ta réponse est trop grande.":" Ta réponse est trop petite."}
+  const nh=g.hints.length;let newHint=null;
+  if(S.hints<nh){S.hints++;newHint=gHint(g,S.hints-1,S);S.msg=`Pas encore…${extra} Lis l’indice ${S.hints} et réessaie.`}
+  else S.msg=`Pas encore…${extra} Relis la méthode, ou regarde la solution.`;
+  beep([[300,0,.22]]);renderLesson();setTimeout(()=>document.querySelector(".guide .feedback")?.scrollIntoView({block:"nearest",behavior:"smooth"}),60);
+  gSay(plain(S.msg)+(newHint?" "+plain(newHint):""))}
+function gHintBtn(){const g=lesson.steps[lesson.i].g,S=gState();if(S.hints>=g.hints.length)return;S.hints++;S.msg="";renderLesson();
+  setTimeout(()=>{const h=document.querySelectorAll(".guide .hint");h[h.length-1]?.scrollIntoView({block:"nearest",behavior:"smooth"})},60);gSay(plain(gHint(g,S.hints-1,S)))}
+function gSol(){const g=lesson.steps[lesson.i].g,S=gState();S.done=true;S.ok=false;S.msg="";renderLesson();gSay(plain(g.sol))}
+/* --- problèmes guidés automatiques, à partir des exercices du cours --- */
+const escRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+function maskAns(expl,good){let s=esc(expl);const g=String(good);const forms=new Set([g]);const n=parseFloat(normNum(g));
+  if(!isNaN(n)&&/^[−\-+\d\s,.  ]+$/.test(g)){forms.add(fmt(n));forms.add(String(n));forms.add(String(n).replace(".",","))}
+  for(const f of [...forms].filter(Boolean).sort((a,b)=>b.length-a.length)){const re=new RegExp("(^|[^\\d,\\w])"+escRe(esc(f))+"(?![\\d\\w]|,\\d)","gi");s=s.replace(re,'$1<b class="qmark">?</b>')}
+  return s}
+function lessonKeys(L){const out=[];for(const st of L.steps){if(!st.h)continue;for(const m of st.h.matchAll(/<div class="key"><b>[^<]*<\/b><p>([\s\S]*?)<\/p><\/div>/g))out.push(plain(m[1]))}return out}
+const WRD=/[a-zàâçéèêëîïôûùüÿœ0-9]{4,}/g;
+function q2guide(q,L){if(!q||q.listen||q.say||!((q.type==="mcq"&&q.choices.length>=3)||q.type==="input"))return null;
+  let fig="";const media=q.svg||(q.map&&typeof MAPR==="function"?MAPR(q.map):"");if(q.passage)fig+=`<div class="passage">${esc(q.passage)}</div>`;if(q.code)fig+=`<pre class="code">${esc(q.code)}</pre>`;if(media)fig+=`<div class="figbox">${media}</div>`;
+  const keys=lessonKeys(L),words=new Set(plain(q.q).toLowerCase().match(WRD)||[]);let best=keys[0],bs=-1;
+  for(const k of keys){const s=(k.toLowerCase().match(WRD)||[]).filter(w=>words.has(w)).length;if(s>bs){bs=s;best=k}}
+  const hints=[best?`Rappel du cours : ${esc(best)}`:"Relis la question lentement : que cherche-t-on exactement ? Repère les nombres et les mots importants."];
+  const good=goodText(q),expl=q.expl||"",masked=maskAns(expl,good);
+  if(q.type==="mcq"){hints.push(S=>{const bad=q.choices.map((_,k)=>k).filter(k=>k!==q.answer&&!S.out.includes(k));const kill=bad.slice(0,Math.max(0,bad.length-1));
+      kill.forEach(k=>{if(!S.out.includes(k))S.out.push(k)});const left=q.choices.length-S.out.length;return kill.length?`J’ai barré ${kill.length>1?"des réponses impossibles":"une réponse impossible"}. Il en reste ${left} : laquelle respecte la règle du cours ?`:`Il ne reste que ${left} réponses : compare-les avec la règle du cours.`});
+    if(expl&&!masked.includes("qmark")&&!plain(expl).toLowerCase().includes(String(good).toLowerCase()))hints.push(esc(expl));
+    return {q:esc(q.q),fig,ch:q.choices.map(esc),good:q.answer,hints,sol:`La bonne réponse : <b>${esc(good)}</b>. ${esc(expl)}`}}
+  if(q.numeric){const a=q.ans;hints.push(S=>{const t="";
+      const A=Math.abs(a);if(A<1)return t+(a<0?"La réponse est un nombre négatif, entre −1 et 0.":"La réponse est entre 0 et 1.");const mag=10**Math.floor(Math.log10(A)),lo=Math.max(0,Math.floor(A/mag)*mag-mag),hi=lo+3*mag;
+      return t+(a<0?`La réponse est un nombre négatif, entre −${fmt(hi)} et −${fmt(lo)}.`:`Ordre de grandeur : la réponse est entre ${fmt(lo)} et ${fmt(hi)}.`)})}
+  else hints.push(`La réponse commence par « ${esc(String(good).slice(0,1).toUpperCase())}… » et compte ${String(good).length} caractères.`);
+  if(expl&&masked.includes("qmark"))hints.push(masked);
+  return {q:esc(q.q),fig,ans:q.numeric?q.ans:String(q.ans),qobj:q,unit:q.unit,hints,sol:`La bonne réponse : <b>${esc(good)}</b>. ${esc(expl)}`}}
+function autoCount(L){const hand=L.steps.filter(s=>s.g).length;return (L.gen||(L.bank&&L.bank.length))?Math.max(1,2-hand):0}
+function lessonBuild(L){const out=L.steps.slice(),seen=new Set();let k=autoCount(L),n=0;
+  while(k>0&&n++<40){let q=null;try{q=L.gen&&(!L.bank||!L.bank.length||Math.random()<.6)?L.gen():fromBank(pick(L.bank))}catch(e){}if(!q)continue;
+    const g=q2guide(q,L);if(!g||seen.has(g.q))continue;seen.add(g.q);out.push({t:"Entraînement guidé",g,say:plain(g.q),auto:1});k--}
+  return out}
+/* --- ajouter une vidéo et des problèmes rédigés à un cours --- */
+function ADDL(id,o){const L=LESSON[id];if(!L)return;if(o.vid)L.steps.splice(o.at??0,0,{t:o.vt||"En vidéo",vid:o.vid});
+  for(const g of o.g||[])L.steps.push({t:g.t||"À toi de trouver",g,say:plain(g.q)});
+  for(const s of o.more||[])L.steps.splice(s.at??L.steps.length,0,s)}
+/* --- quiz : deuxième essai avec un indice --- */
+const canRetry=q=>(q.type==="mcq"&&q.choices.length>=3)||q.type==="input";
+function quizHint(q,val){
+  if(q.type==="mcq"){const out=[val];let t=`Ce n’est pas « ${esc(q.choices[val])} ».`;
+    if(q.choices.length>=4){const bad=q.choices.map((_,k)=>k).filter(k=>k!==q.answer&&k!==val);const k=pick(bad);out.push(k);t+=` J’ai aussi barré une autre réponse fausse : il en reste ${q.choices.length-2}.`}
+    return {t,out}}
+  const good=goodText(q),masked=q.expl?maskAns(q.expl,good):"";let t="";
+  if(q.numeric){const n=parseFloat(normNum(val));t=isNaN(n)?"Écris un nombre.":n>q.ans?"Ta réponse est trop grande.":"Ta réponse est trop petite."}
+  else t=`Ce n’est pas « ${esc(val)} ». La réponse commence par « ${esc(String(good).slice(0,1).toUpperCase())}… ».`;
+  if(masked.includes("qmark"))t+=` Piste : ${masked}`;
+  return {t,out:[]}}
+
 /* lecteur de cours */
 let lesson=null;
 const frVoice=()=>canSpeak()?speechSynthesis.getVoices().find(v=>/^fr(-|_)FR/i.test(v.lang))||speechSynthesis.getVoices().find(v=>/^fr/i.test(v.lang)):null;
 function speakFr(text){if(!canSpeak())return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="fr-FR";u.rate=.95;const v=frVoice();if(v)u.voice=v;u.onend=u.onerror=()=>{if(lesson){lesson.speaking=false;updSpeakBtn()}};if(lesson){lesson.speaking=true}speechSynthesis.speak(u);updSpeakBtn()}catch(e){}}
 function stopSpeak(){try{speechSynthesis.cancel()}catch(e){}if(lesson){lesson.speaking=false;updSpeakBtn()}}
 function updSpeakBtn(){const b=document.getElementById("l-say");if(b&&lesson)b.innerHTML=lesson.speaking?"■ Arrêter":`${SPK} Écouter l’explication`}
-function openLesson(id){const L=LESSON[id];if(!L)return;lesson={id,i:0,speaking:false};state.lessons=state.lessons||{};if(!state.lessons[id]){state.lessons[id]={seen:Date.now(),best:null,last:null,tries:0};save()}
-  document.getElementById("quiz").hidden=false;document.body.style.overflow="hidden";renderLesson();if(state.voiceAuto!==false)setTimeout(()=>{if(lesson&&lesson.i===0)speakFr(L.steps[0].say)},300)}
+function openLesson(id){const L=LESSON[id];if(!L)return;lesson={id,i:0,speaking:false,steps:lessonBuild(L),gs:{}};state.lessons=state.lessons||{};if(!state.lessons[id]){state.lessons[id]={seen:Date.now(),best:null,last:null,tries:0};save()}
+  document.getElementById("quiz").hidden=false;document.body.style.overflow="hidden";renderLesson();if(state.voiceAuto!==false&&lesson.steps[0].say)setTimeout(()=>{if(lesson&&lesson.i===0)speakFr(lesson.steps[0].say)},300)}
 function closeLesson(){stopSpeak();clearDemos();lesson=null;document.getElementById("quiz").hidden=true;document.body.style.overflow="";render()}
-function lessonGo(d){const L=LESSON[lesson.id];lesson.i=Math.max(0,Math.min(L.steps.length-1,lesson.i+d));stopSpeak();renderLesson();document.getElementById("quiz").scrollTop=0;if(state.voiceAuto!==false){const i=lesson.i;setTimeout(()=>{if(lesson&&lesson.i===i)speakFr(L.steps[i].say)},250)}}
-function renderLesson(){clearDemos();setTimeout(initStep,0);const L=LESSON[lesson.id],st=L.steps[lesson.i],n=L.steps.length,last=lesson.i===n-1;
-  document.getElementById("quiz").innerHTML=`<div class="qwrap lesson" style="--sc:${SUBINFO(L.sub).c}"><div class="qtop"><button class="qclose" data-lclose="1" aria-label="Fermer le cours">✕</button><div class="steps" aria-label="Étape ${lesson.i+1} sur ${n}">${L.steps.map((_,k)=>`<i class="${k<lesson.i?"done":k===lesson.i?"on":""}"></i>`).join("")}</div><span class="num muted" style="font-weight:700">${lesson.i+1} / ${n}</span></div>
+function lessonGo(d){const L=LESSON[lesson.id];lesson.i=Math.max(0,Math.min(lesson.steps.length-1,lesson.i+d));stopSpeak();renderLesson();document.getElementById("quiz").scrollTop=0;if(state.voiceAuto!==false&&lesson.steps[lesson.i].say){const i=lesson.i;setTimeout(()=>{if(lesson&&lesson.i===i)speakFr(lesson.steps[i].say)},250)}}
+function renderLesson(){clearDemos();setTimeout(initStep,0);const L=LESSON[lesson.id],st=lesson.steps[lesson.i],n=lesson.steps.length,last=lesson.i===n-1;
+  document.getElementById("quiz").innerHTML=`<div class="qwrap lesson" style="--sc:${SUBINFO(L.sub).c}"><div class="qtop"><button class="qclose" data-lclose="1" aria-label="Fermer le cours">✕</button><div class="steps" aria-label="Étape ${lesson.i+1} sur ${n}">${lesson.steps.map((_,k)=>`<i class="${k<lesson.i?"done":k===lesson.i?"on":""}"></i>`).join("")}</div><span class="num muted" style="font-weight:700">${lesson.i+1} / ${n}</span></div>
    <p class="eyebrow">Cours · ${SUBINFO(L.sub).short} · ${L.lvl} · ${esc(L.title)}</p><h2 class="ltitle">${st.t}</h2>
-   <div class="lbody">${st.h}</div>
-   <div class="lctl">${canSpeak()?`<button class="listen" id="l-say" data-lsay="1">${lesson.speaking?"■ Arrêter":`${SPK} Écouter l’explication`}</button><label class="autov"><input type="checkbox" id="l-auto" ${state.voiceAuto!==false?"checked":""}> Lecture automatique</label>`:`<p class="muted">La lecture à voix haute n’est pas disponible sur cet appareil.</p>`}</div>
+   <div class="lbody">${st.vid?vidHTML(st):st.g?guideHTML(st):st.h}</div>
+   <div class="lctl">${st.vid?"":canSpeak()?`<button class="listen" id="l-say" data-lsay="1">${lesson.speaking?"■ Arrêter":`${SPK} Écouter l’explication`}</button><label class="autov"><input type="checkbox" id="l-auto" ${state.voiceAuto!==false?"checked":""}> Lecture automatique</label>`:`<p class="muted">La lecture à voix haute n’est pas disponible sur cet appareil.</p>`}</div>
    <div class="qnext"><button class="btn ghost" data-lprev="1" ${lesson.i===0?"disabled":""}>← Précédent</button>${last?`<button class="btn fluo" data-lex="${L.id}">Faire l’exercice</button>`:`<button class="btn" data-lnext="1">Suivant →</button>`}</div></div>`}
 function startLessonEx(id){const L=LESSON[id];stopSpeak();lesson=null;openQuiz({title:"Exercice : "+L.title,sub:L.sub,th:"les_"+id,lesson:id,qs:buildQuestions(L,8)})}
 function lessonsSection(sub){const ls=LESSONS.filter(L=>L.sub===sub&&(lvlFilter==="Tout"||L.lvl===lvlFilter));if(!ls.length)return "";const ci=lvlIdx(state.classe);
-  return `<section class="section"><div class="section-head"><h2>Cours avec explications audio</h2><span class="muted">Le cours, puis un exercice pour vérifier que tu as compris</span></div><div class="grid">${ls.map(L=>{const s=lessonStatus(L.id),li=lvlIdx(L.lvl);return `<div class="card tile" style="--sc:${SUBINFO(sub).c}"><div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="tag ${li>ci?"beyond":""}">${L.lvl}${li>ci?" · au-delà":""}</span>${s?`<span class="tag ${s.cls}">${s.txt}</span>`:""}</div><div><h3>${L.title}</h3><span class="muted">${L.desc} · ${L.steps.length} étapes</span></div><div class="tools"><button class="btn small" data-lesson="${L.id}">${s?"Revoir le cours":"Commencer le cours"}</button>${s?`<button class="btn ghost small" data-lex="${L.id}">Exercice</button>`:""}</div></div>`}).join("")}</div></section>`}
+  return `<section class="section"><div class="section-head"><h2>Cours avec explications audio</h2><span class="muted">Le cours, puis un exercice pour vérifier que tu as compris</span></div><div class="grid">${ls.map(L=>{const s=lessonStatus(L.id),li=lvlIdx(L.lvl);return `<div class="card tile" style="--sc:${SUBINFO(sub).c}"><div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="tag ${li>ci?"beyond":""}">${L.lvl}${li>ci?" · au-delà":""}</span>${s?`<span class="tag ${s.cls}">${s.txt}</span>`:""}${L.steps.some(x=>x.vid)?`<span class="tag vidtag">▶ Vidéo</span>`:""}</div><div><h3>${L.title}</h3><span class="muted">${L.desc} · ${L.steps.length+autoCount(L)} étapes${L.steps.some(x=>x.vid)?" · vidéo":""}</span></div><div class="tools"><button class="btn small" data-lesson="${L.id}">${s?"Revoir le cours":"Commencer le cours"}</button>${s?`<button class="btn ghost small" data-lex="${L.id}">Exercice</button>`:""}</div></div>`}).join("")}</div></section>`}
 
 /* ================= banques de questions ================= */
 const TOM="Tom is eleven. He lives in London with his mum, his dad and his little sister, Amy. Every morning he takes the bus to school. His favourite subject is science, but he doesn’t like history. After school, he plays basketball with his friends. On Sundays, the family visits Grandma in Brighton, near the sea.";
@@ -1444,7 +1614,7 @@ function ledStage(id){return stage(id,'data-led="ok"',efig(WR(LOOP)+WR(LOOP,"flo
 /* ---------- robot ---------- */
 const DIRS=[[0,-1],[1,0],[0,1],[-1,0]],OPL={F:"avancer",L:"tourner à gauche",R:"tourner à droite"};
 const DEMOS={};let demoTimers=[];
-function clearDemos(){demoTimers.forEach(clearTimeout);demoTimers=[]}
+function clearDemos(){demoTimers.forEach(clearTimeout);demoTimers=[];vidStop()}
 function robotCompile(cfg){const lines=[],exec=[];let s={x:cfg.start[0],y:cfg.start[1],d:cfg.start[2]};const walls=new Set((cfg.walls||[]).map(w=>w.join(",")));
   const ahead=()=>{const [dx,dy]=DIRS[s.d],nx=s.x+dx,ny=s.y+dy;return nx<0||ny<0||nx>=cfg.w||ny>=cfg.h||walls.has(nx+","+ny)},atGoal=()=>cfg.goal&&s.x===cfg.goal[0]&&s.y===cfg.goal[1];
   (function emit(ns,ind){for(const n of ns){n._l=lines.length;if(n.op)lines.push({t:OPL[n.op],ind});else if(n.rep){lines.push({t:`répéter ${n.rep} fois :`,ind});emit(n.body,ind+1)}else if(n.until){lines.push({t:"tant que pas sur le drapeau :",ind});emit(n.body,ind+1)}else if(n.ifw){lines.push({t:"si mur devant :",ind});emit(n.then,ind+1);n._le=lines.length;lines.push({t:"sinon :",ind});emit(n.else,ind+1)}}})(cfg.prog,0);
@@ -1491,7 +1661,7 @@ function bitToggle(id,i){const D=DEMOS[id],root=document.getElementById("demo-"+
   [...root.querySelectorAll(".bit")].forEach((b,k)=>{const on=!!(D.v&(128>>k));b.setAttribute("aria-pressed",on);b.querySelector("b").textContent=on?1:0});
   const parts=[128,64,32,16,8,4,2,1].filter(x=>D.v&x);document.getElementById("bitout-"+id).innerHTML=`${D.v.toString(2).padStart(8,"0")} en binaire = ${parts.length?parts.join(" + ")+" = ":""}<b>${D.v}</b>${D.v===13?" : bravo, c’est 13 !":""}`;beep([[440+D.v*2,0,.08]])}
 /* init des démos à l’affichage d’une étape */
-function initStep(){const box=document.querySelector(".lesson .lbody");if(!box)return;
+function initStep(){const box=document.querySelector(".lesson .lbody");if(!box)return;if(curVid()&&document.getElementById("vscreen")&&!vidS)vidShow(0,state.voiceAuto!==false?"play":"poster");
   box.querySelectorAll(".trace").forEach(t=>{const id=t.id.slice(5);DEMOS[id].i=-1;traceShow(id)});
   const r=box.querySelector(".demo");if(r)demoTimers.push(setTimeout(()=>runRobot(r.id.slice(5)),900))}
 document.addEventListener("input",e=>{if(e.target.id!=="ohm-r")return;const R_=+e.target.value,I=6/R_,st=e.target.closest(".lbody").querySelector(".stage");
@@ -2952,6 +3122,156 @@ const GXLESS=[
    say:"Depuis environ deux mille sept, plus de la moitié des humains vit en ville. Les plus grandes villes dépassent dix millions d’habitants : ce sont les mégapoles. Tokyo, Jakarta, Delhi, Shanghai, São Paulo, Le Caire… et Paris, avec environ onze millions d’habitants en comptant sa banlieue. Attention : les chiffres changent selon qu’on compte la ville seule ou toute l’agglomération. Un bon géographe vérifie toujours ce qu’on compte."}]}
 ];
 for(const L of GXLESS){if(!L.bank||!L.bank.length)delete L.bank;LESSONS.push(L);LESSON[L.id]=L}
+/* ---------- Maths : vidéos animées + problèmes rédigés ---------- */
+(()=>{const T=vT,R=vR,C=vC,L=vL,P=vP,Gr=vG;
+const tr=(dx,b,d=1)=>`<animateTransform attributeName="transform" type="translate" from="0 0" to="${dx} 0" begin="${b}s" dur="${d}s" fill="freeze" additive="sum"/>`;
+const mvT=(x,y,s,o,moves)=>`<text x="${x}" y="${y}" font-size="${o.z||26}" text-anchor="middle" class="vt ${o.c||""}">${s}${moves}</text>`;
+const arcLR=(x1,x2,y,lab,o={})=>{const m=(x1+x2)/2,up=o.down?1:-1,h=o.hh||34,s=x2>x1?1:-1;return vG(P(`M${x1} ${y} Q${m} ${y+up*h*2} ${x2} ${y}`,{c:"ka"})+P(`M${x2-9*s} ${y+up*4} L${x2} ${y} L${x2+3*s} ${y+up*11}`,{c:"ka"})+T(m,y+up*(h+8)+(up>0?16:0),lab,{c:"a",z:o.z||20}),o)};
+/* nombres décimaux */
+const colsHead=o=>[["dizaines",170],["unités",260],["dixièmes",380],["centièmes",470]].map(([s,x])=>T(x,70,s,{z:18,c:"m",...o})).join("")+L(320,82,320,290,{c:"km"});
+ADDL("dec",{vid:[
+ {d:7,s:colsHead({t:0})+T(260,190,"3",{z:84,t:.5})+T(320,190,",",{z:84,c:"b",t:1})+T(380,190,"4",{z:84,t:1.5})+T(470,190,"7",{z:84,t:2})+T(260,250,"3 unités",{z:20,c:"a",t:3})+T(380,288,"4 dixièmes",{z:20,c:"a",t:4.5})+T(470,250,"7 centièmes",{z:20,c:"a",t:6}),
+  say:"Voici le nombre trois virgule quarante-sept, rangé dans le tableau. Le trois est le chiffre des unités. Le quatre, juste après la virgule, est le chiffre des dixièmes. Et le sept est le chiffre des centièmes."},
+ {d:6,s:colsHead({})+T(320,36,"3,47 × 10",{z:28,c:"a"})+mvT(260,190,"3",{z:84},tr(-90,1.8,1.2))+T(320,190,",",{z:84,c:"b"})+mvT(380,190,"4",{z:84},tr(-120,1.8,1.2))+mvT(470,190,"7",{z:84},tr(-90,1.8,1.2))+T(320,270,"= 34,7",{z:40,c:"g",t:3.6})+T(320,325,"chaque chiffre devient 10 fois plus grand",{z:20,c:"m",t:4.2}),
+  say:"Multiplions par dix. Chaque chiffre devient dix fois plus grand : il glisse d’un rang vers la gauche. Le trois passe aux dizaines, le quatre aux unités, le sept aux dixièmes. On obtient trente-quatre virgule sept. C’est comme si la virgule s’était déplacée d’un rang vers la droite."},
+ {d:6,s:T(320,60,"Lequel est le plus grand ?",{z:24,c:"m"})+T(230,180,"3,5",{z:72,a:"end"})+R(228,122,50,74,{c:"fl",t:2})+T(232,180,"0",{z:72,a:"start",c:"a",t:2})+T(320,180,"?",{z:64,c:"m",t:.3,h:3.4})+T(320,180,"&gt;",{z:72,c:"g",t:3.6})+T(400,180,"3,45",{z:72,a:"start"})+T(320,290,"50 centièmes &gt; 45 centièmes",{z:26,t:4.4}),
+  say:"Qui est le plus grand : trois virgule cinq, ou trois virgule quarante-cinq ? Les parties entières sont égales. On ajoute un zéro pour avoir autant de chiffres : trois virgule cinquante. Cinquante centièmes, c’est plus que quarante-cinq centièmes. Donc trois virgule cinq est le plus grand !"}],
+ g:[{q:"Quel est le plus petit de ces trois nombres : 2,7 ; 2,07 ; 2,17 ?",ch:["2,7","2,07","2,17"],good:1,
+   hints:["Les trois nombres ont la même partie entière : 2. Il faut donc comparer ce qu’il y a après la virgule.","Écris-les tous avec deux chiffres après la virgule : 2,70 ; 2,07 ; 2,17.","Compare maintenant 70 centièmes, 7 centièmes et 17 centièmes : lequel est le plus petit ?"],
+   sol:"2,07 est le plus petit : 7 centièmes &lt; 17 centièmes &lt; 70 centièmes. Dans l’ordre : 2,07 &lt; 2,17 &lt; 2,7."},
+  {q:"Un paquet de gâteaux pèse 0,35 kg. Combien pèsent 100 paquets, en kg ?",ans:35,unit:"kg",
+   hints:["Il y a 100 paquets de 0,35 kg : il faut calculer 0,35 × 100.","Multiplier par 100 : chaque chiffre glisse de combien de rangs ? Pense au nombre de zéros de 100.","Déplace la virgule de 2 rangs vers la droite en partant de 0,35 : un rang, puis un deuxième."],
+   sol:"0,35 × 100 = 35 : la virgule se déplace de 2 rangs vers la droite. Les 100 paquets pèsent <b>35 kg</b>."}]});
+/* fractions */
+ADDL("frac",{vid:[
+ {d:7,s:T(320,80,"On partage en 4 parts égales",{z:20,c:"m",t:.2})+[0,1,2,3].map(k=>R(120+k*100,105,100,80,{rx:0})).join("")+[0,1,2].map(k=>R(120+k*100,105,100,80,{c:"fa",rx:0,t:1.2+k*.9})).join("")+T(300,262,"3",{z:46,t:4})+L(275,276,325,276,{draw:4.2})+T(300,322,"4",{z:46,t:4.4})+T(350,258,"← parts prises",{z:20,c:"a",a:"start",t:5})+T(350,318,"← parts en tout",{z:20,c:"a",a:"start",t:5.8}),
+  say:"Une barre de chocolat est partagée en quatre parts égales. On en prend une, deux, trois. On a pris trois quarts de la barre. Le trois, en haut, c’est le nombre de parts prises. Le quatre, en bas, c’est le nombre de parts en tout."},
+ {d:7,s:T(320,36,"3/4 de 20 = ?",{z:28})+[0,1,2,3].map(k=>R(150,55+k*62,340,52,{c:"fm",t:1.4+k*.3})).join("")+[0,1,2].map(k=>R(150,55+k*62,340,52,{c:"fl",t:3.6+k*.6})).join("")+[0,1,2,3].flatMap(k=>[0,1,2,3,4].map(j=>C(190+j*65,81+k*62,16,{t:.1+(k*5+j)*.04}))).join("")+[0,1,2,3].map(k=>T(510,89+k*62,"5",{z:24,c:"m",a:"start",t:2+k*.3})).join("")+T(320,338,"3 × 5 = 15",{z:30,c:"g",t:5.6}),
+  say:"Comment calculer trois quarts de vingt ? On partage les vingt billes en quatre groupes égaux : cela fait cinq billes par groupe. Puis on prend trois groupes : trois fois cinq, quinze. Trois quarts de vingt, c’est quinze."},
+ {d:7,s:[[2,"1/2",0],[4,"2/4",1.6],[8,"4/8",3.2]].map(([d,lab,t],r)=>Gr([...Array(d).keys()].map(k=>R(140+k*400/d,50+r*90,400/d,62,{rx:0,c:k<d/2?"fa":"fc"})).join("")+T(118,92+r*90,lab,{z:30,a:"end"}),{t})).join("")+L(340,32,340,300,{c:"ka",draw:4.8})+T(320,342,"La même quantité : ce sont des fractions égales",{z:22,c:"g",t:5.4}),
+  say:"Un demi, deux quarts, quatre huitièmes : regarde, la partie coloriée a exactement la même longueur ! Ce sont des fractions égales. On passe de l’une à l’autre en multipliant le haut et le bas par le même nombre."}],
+ g:[{q:"Youssef a 24 cartes de foot. Il en donne les 3/8 à son copain. Combien de cartes donne-t-il ?",ans:24*3/8,
+   hints:["Pour prendre 3/8 de 24, on commence par partager 24 en 8 parts égales.","Calcule 24 ÷ 8 : c’est la valeur d’une part, c’est-à-dire 1/8 des cartes.","Une part vaut 3 cartes. Il donne 3 parts : multiplie."],
+   sol:"24 ÷ 8 = 3 cartes par part, puis 3 × 3 = 9. Il donne <b>9 cartes</b>."},
+  {q:"Quelle fraction est égale à 3/4 ?",ch:["6/8","3/8","4/3","6/4"],good:0,
+   hints:["Une fraction égale s’obtient en multipliant le numérateur ET le dénominateur par le même nombre.","Essaie de multiplier le 3 et le 4 par 2. Que trouves-tu en haut ? Et en bas ?","3 × 2 = 6 en haut, 4 × 2 = 8 en bas."],
+   sol:"3/4 = (3 × 2)/(4 × 2) = <b>6/8</b>. Les autres ne marchent pas : 3/8 est plus petit, 4/3 et 6/4 sont plus grands que 1."}]});
+/* division euclidienne */
+const box=k=>R(40+k*120,145,100,135,{c:"fm"})+T(90+k*120,302,"Ami "+(k+1),{z:16,c:"m"});
+ADDL("div",{vid:[
+ {d:8,s:T(320,52,"47 billes à partager entre 5 amis",{z:24})+[0,1,2,3,4].map(box).join("")+[0,1,2,3,4].flatMap(k=>[...Array(9).keys()].map(j=>C(62+k*120+(j%3)*28,173+Math.floor(j/3)*38,11,{t:.8+j*.5+k*.05}))).join("")+C(288,108,11,{c:"fw",t:5.6})+C(318,108,11,{c:"fw",t:5.6})+T(340,115,"il en reste 2",{z:20,c:"b",a:"start",t:5.9})+T(320,342,"47 = 5 × 9 + 2",{z:30,c:"g",t:6.6}),
+  say:"Quarante-sept billes à partager entre cinq amis. On distribue une bille à chacun, puis encore une, tour après tour. Après neuf tours, chacun a neuf billes : cela fait quarante-cinq billes. Il en reste deux, pas assez pour faire un nouveau tour. Quarante-sept égale cinq fois neuf, plus deux."},
+ {d:6,s:[["47",150],["=",225],["5",290],["×",350],["9",410],["+",470],["2",530]].map(([s,x])=>T(x,160,s,{z:64})).join("")+[["dividende",150,1],["diviseur",290,2],["quotient",410,3],["reste",530,4]].map(([s,x,t])=>L(x,180,x,212,{c:"ka",t})+T(x,240,s,{z:20,c:"a",t})).join("")+T(320,312,"Le reste est toujours plus petit que le diviseur : 2 &lt; 5",{z:21,c:"m",t:5.2}),
+  say:"Retiens les mots. Quarante-sept, le nombre qu’on partage, est le dividende. Cinq est le diviseur. Neuf est le quotient. Deux est le reste. Et le reste est toujours plus petit que le diviseur, sinon on pourrait encore faire un tour !"}],
+ g:[{q:"La maîtresse range 150 livres sur des étagères de 12 livres. Combien d’étagères lui faut-il, au minimum ?",ans:13,
+   hints:["C’est une division : on cherche combien de fois 12 livres tiennent dans 150 livres.","12 × 12 = 144. Combien reste-t-il de livres après avoir rempli 12 étagères ?","Il reste 6 livres. Ils ont besoin, eux aussi, d’une étagère !"],
+   sol:"150 = 12 × 12 + 6. On remplit 12 étagères, et il faut 1 étagère de plus pour les 6 livres restants : <b>13 étagères</b>."},
+  {q:"Dans la division de 87 par 7, quel est le reste ?",ans:3,
+   hints:["Cherche dans la table de 7 le plus grand résultat qui ne dépasse pas 87.","7 × 12 = 84 et 7 × 13 = 91 : lequel ne dépasse pas 87 ?","Le reste, c’est ce qu’il manque pour arriver à 87 : 87 − 84."],
+   sol:"87 = 7 × 12 + 3. Le quotient est 12 et le reste est <b>3</b> (bien plus petit que 7 ✓)."}]});
+/* calcul malin */
+ADDL("malin",{vid:[
+ {d:6,s:T(320,46,"23 × 4 = ?",{z:32})+T(88,188,"4",{z:30,c:"a",t:.4})+R(110,100,360,150,{c:"fa",t:.8})+T(290,88,"20",{z:26,c:"a",t:.8})+R(480,100,60,150,{c:"fw",t:1.6})+T(510,88,"3",{z:26,c:"a",t:1.6})+T(290,186,"20 × 4 = 80",{z:30,t:2.6})+T(510,185,"12",{z:26,t:3.4})+T(510,282,"3 × 4",{z:20,c:"m",t:3.4})+T(320,338,"80 + 12 = 92",{z:34,c:"g",t:4.6}),
+  say:"Pour calculer vingt-trois fois quatre de tête, coupe vingt-trois en vingt plus trois. Vingt fois quatre, quatre-vingts. Trois fois quatre, douze. Il suffit d’additionner : quatre-vingts plus douze, quatre-vingt-douze."},
+ {d:5.5,s:T(320,72,"9 × 37",{z:40})+T(320,148,"= 10 × 37 − 37",{z:34,t:1.2})+T(320,224,"= 370 − 37",{z:34,t:2.6})+T(320,306,"= 333",{z:44,c:"g",t:4}),
+  say:"Pour multiplier par neuf, multiplie par dix, puis enlève le nombre une fois. Neuf fois trente-sept, c’est trois cent soixante-dix, moins trente-sept : trois cent trente-trois."},
+ {d:6,s:[140,220,300,380].map((x,k)=>C(x,110,34,{c:"fw",t:k*.4})+T(x,119,"25",{z:24,t:k*.4})).join("")+T(450,122,"=",{z:40,t:1.8})+C(540,110,48,{c:"fa",t:2})+T(540,121,"100",{z:30,t:2})+T(320,232,"25 × 16 = 25 × 4 × 4",{z:30,t:3.2})+T(320,300,"= 100 × 4 = 400",{z:34,c:"g",t:4.6}),
+  say:"Retiens bien : quatre pièces de vingt-cinq centimes font un euro, cent centimes. Vingt-cinq fois quatre, cent ! Alors vingt-cinq fois seize, c’est vingt-cinq fois quatre, fois quatre : cent fois quatre, quatre cents."}],
+ g:[{q:"Calcule de tête : 25 × 36",ans:900,
+   hints:["Souviens-toi de la vidéo : 25 × 4 = 100.","36, c’est 4 × 9. Donc 25 × 36 = 25 × 4 × 9.","25 × 4 = 100, il reste à calculer 100 × 9."],
+   sol:"25 × 36 = 25 × 4 × 9 = 100 × 9 = <b>900</b>."},
+  {q:"Calcule de tête : 99 × 7",ans:693,
+   hints:["99, c’est presque 100 : 99 = 100 − 1.","Calcule d’abord 100 × 7, puis enlève 7 une fois.","700 − 7 = ?"],
+   sol:"99 × 7 = 100 × 7 − 7 = 700 − 7 = <b>693</b>."}]});
+/* proportionnalité */
+const cell=(x,y,s,o={})=>R(x,y,85,62,{rx:0,c:"fc"})+T(x+42,y+41,s,{z:26,...o});
+ADDL("prop",{vid:[
+ {d:7,s:R(40,90,150,62,{rx:0,c:"fm"})+T(115,131,"Stylos",{z:22})+R(40,152,150,62,{rx:0,c:"fm"})+T(115,193,"Prix (€)",{z:22})+["1","2","3","5"].map((s,k)=>cell(190+k*85,90,s)).join("")+["2","4","6","10"].map((s,k)=>R(190+k*85,152,85,62,{rx:0})+T(232+k*85,193,s,{z:26,c:"a",t:1.4+k*1})).join("")+P("M565 121 C600 136 600 168 565 183",{c:"ka",draw:5.2})+P("M557 177 L565 183 L561 192",{c:"ka",t:5.9})+T(605,160,"×2",{z:22,c:"a",a:"start",t:5.8})+T(320,290,"On multiplie toujours par 2 :",{z:22,c:"m",t:6.2})+T(320,326,"c’est proportionnel",{z:26,c:"g",t:6.6}),
+  say:"Un stylo coûte deux euros. Deux stylos, quatre euros. Trois stylos, six euros. Cinq stylos, dix euros. On passe toujours de la première ligne à la deuxième en multipliant par deux : le prix est proportionnel au nombre de stylos."},
+ {d:7,s:T(110,100,"4 cahiers → 10 €",{z:30,a:"start"})+T(110,200,"1 cahier → 10 ÷ 4 = 2,50 €",{z:30,a:"start",t:2.2})+T(110,300,"7 cahiers → 2,50 × 7 = 17,50 €",{z:30,a:"start",t:4.6})+P("M84 108 Q40 145 84 184",{c:"ka",draw:1.6})+T(30,152,"÷4",{z:20,c:"a",t:1.8,a:"start"})+P("M84 208 Q40 245 84 284",{c:"ka",draw:4})+T(30,252,"×7",{z:20,c:"a",t:4.2,a:"start"}),
+  say:"Quatre cahiers coûtent dix euros. Combien en coûtent sept ? D’abord, on revient à un seul cahier : dix divisé par quatre, deux euros cinquante. Puis on multiplie par sept : dix-sept euros cinquante. C’est le retour à l’unité."}],
+ g:[{q:"3 baguettes coûtent 3,60 €. Combien coûtent 5 baguettes, en € ?",ans:6,unit:"€",
+   hints:["Utilise le retour à l’unité : combien coûte UNE baguette ?","1 baguette : 3,60 ÷ 3 = 1,20 €.","Il reste à multiplier le prix d’une baguette par 5."],
+   sol:"1 baguette coûte 3,60 ÷ 3 = 1,20 €. 5 baguettes coûtent 1,20 × 5 = <b>6 €</b>."},
+  {q:"Un maillot de foot à 60 € est soldé à −30 %. Quel est son nouveau prix, en € ?",ans:42,unit:"€",
+   hints:["Calcule d’abord la réduction : 30 % de 60 €.","10 % de 60, c’est 6 € (on divise par 10). Donc 30 %, c’est 3 fois plus.","La réduction est de 18 €. Enlève-la du prix de départ."],
+   sol:"30 % de 60 = 3 × 6 = 18 € de réduction. Nouveau prix : 60 − 18 = <b>42 €</b>."}]});
+/* priorités */
+const expr=(items,y,z,o={})=>items.map(([s,x])=>T(x,y,s,{z,...o})).join("");
+ADDL("prio",{vid:[
+ {d:5.5,s:R(278,52,204,80,{c:"fl",t:1.2})+expr([["2",170],["+",240],["3",310],["×",380],["4",450]],115,64)+T(380,160,"d’abord !",{z:20,c:"a",t:1.4})+T(320,232,"2 + 12",{z:52,t:2.6})+T(320,318,"= 14",{z:60,c:"g",t:4}),
+  say:"Deux plus trois fois quatre. Attention, la multiplication passe avant l’addition ! On calcule d’abord trois fois quatre, douze. Puis deux plus douze : quatorze."},
+ {d:5,s:T(320,110,"2 + 3 = 5",{z:44,t:.3})+T(320,190,"5 × 4 = 20",{z:44,t:1.6})+L(200,70,440,210,{c:"kb",draw:3})+L(440,70,200,210,{c:"kb",draw:3.3})+T(320,285,"Faux : on n’a pas respecté la priorité",{z:24,c:"b",t:3.8}),
+  say:"Si on calcule de gauche à droite, deux plus trois, cinq, puis cinq fois quatre, on trouve vingt. C’est faux, car on n’a pas respecté la priorité de la multiplication."},
+ {d:5.5,s:R(130,58,220,76,{c:"fl",t:1})+T(320,115,"(2 + 3) × 4",{z:60})+T(320,205,"= 5 × 4",{z:48,t:2})+T(320,290,"= 20",{z:56,c:"g",t:3.4})+T(320,343,"Les parenthèses passent toujours en premier",{z:20,c:"m",t:4.2}),
+  say:"Et si on veut vraiment faire l’addition d’abord ? On met des parenthèses ! Deux plus trois entre parenthèses, cinq. Cinq fois quatre, vingt. Les parenthèses passent toujours en premier."}],
+ g:[{q:"Calcule : 18 − 2 × 5 + 1",ans:9,
+   hints:["Cherche d’abord la multiplication : elle passe avant les additions et les soustractions.","2 × 5 = 10. Le calcul devient 18 − 10 + 1.","Il ne reste que + et − : on calcule de gauche à droite, donc 18 − 10 d’abord."],
+   sol:"18 − 2 × 5 + 1 = 18 − 10 + 1 = 8 + 1 = <b>9</b>."},
+  {q:"Où faut-il mettre des parenthèses pour que 2 + 3 × 4 fasse 20 ?",ch:["(2 + 3) × 4","2 + (3 × 4)","On ne peut pas"],good:0,
+   hints:["Sans parenthèses, on trouve 14, car la multiplication passe d’abord.","Pour trouver 20, il faudrait faire 5 × 4. Comment obtenir 5 avec les premiers nombres ?","2 + 3 = 5 : il faut obliger à faire cette addition en premier."],
+   sol:"<b>(2 + 3) × 4</b> = 5 × 4 = 20. Avec 2 + (3 × 4), on garde 14 : ces parenthèses ne changent rien."}]});
+/* nombres relatifs */
+const nl=(lo,hi,y,o={})=>{const W=520,st=W/(hi-lo),X=n=>60+(n-lo)*st;let s=L(40,y,600,y)+P(`M592 ${y-7} L602 ${y} L592 ${y+7}`);for(let n=lo;n<=hi;n++)s+=L(X(n),y-10,X(n),y+10,{c:n===0?"k":"km"})+T(X(n),y+38,n>0?"+"+n:n<0?"−"+(-n):"0",{z:n===0?20:17,c:n===0?"":"m"});return {s,X}};
+const N1=nl(-6,6,200),N2=nl(-8,8,190);
+ADDL("rel",{vid:[
+ {d:7,s:T(320,60,"On part de 0",{z:22,c:"m",t:.2})+N1.s+arcLR(N1.X(0),N1.X(5),178,"+5",{t:1.4})+arcLR(N1.X(5),N1.X(2),252,"−3",{down:1,hh:20,t:4})+`<circle cx="${N1.X(0)}" cy="200" r="14" class="fs">${tr(N1.X(5)-N1.X(0),1.5,1.6)}${tr(N1.X(2)-N1.X(5),4.1,1.2)}</circle>`+T(320,345,"(+5) + (−3) = +2",{z:30,c:"g",t:5.6}),
+  say:"Partons de zéro sur la droite graduée. Plus cinq : on avance de cinq vers la droite. Puis moins trois : on recule de trois. On arrive à plus deux. Plus cinq, plus moins trois, égale plus deux."},
+ {d:6,s:N2.s+C(N2.X(-7),190,13,{c:"fb",t:.6})+T(N2.X(-7),150,"−7",{z:26,c:"b",t:.6})+C(N2.X(-3),190,13,{c:"fs",t:1.2})+T(N2.X(-3),150,"−3",{z:26,c:"a",t:1.2})+T(320,80,"plus à gauche = plus petit",{z:22,c:"m",t:2})+T(320,294,"−7 < −3",{z:44,c:"g",t:3.2})+T(320,340,"Il fait plus froid à −7 °C qu’à −3 °C",{z:20,c:"m",t:4.2}),
+  say:"Sur la droite graduée, plus un nombre est à gauche, plus il est petit. Moins sept est à gauche de moins trois, donc moins sept est plus petit que moins trois. D’ailleurs, il fait plus froid à moins sept degrés qu’à moins trois !"}],
+ g:[{q:"Le matin, il fait −4 °C. L’après-midi, la température monte de 9 °C. Quelle température fait-il l’après-midi, en °C ?",ans:5,unit:"°C",
+   hints:["Monter de 9 °C, c’est ajouter +9 : on calcule (−4) + (+9).","Imagine la droite graduée : pars de −4 et avance de 9 vers la droite. Combien de pas pour arriver à 0 ?","4 pas pour arriver à 0, puis il reste 9 − 4 pas après zéro."],
+   sol:"(−4) + (+9) = <b>+5</b>. On met 4 pas pour arriver à 0, puis il reste 5 pas : il fait 5 °C."},
+  {q:"Calcule : (−3) − (−8)",ans:5,
+   hints:["Règle du cours : soustraire un nombre, c’est ajouter son opposé.","L’opposé de −8 est +8. Le calcul devient (−3) + (+8).","Signes différents : on fait 8 − 3, et on garde le signe du nombre le plus loin de zéro, +8."],
+   sol:"(−3) − (−8) = (−3) + (+8) = <b>+5</b>."}]});
+/* additionner des fractions */
+const fbar=(y,d,fill,lab,o={})=>Gr([...Array(d).keys()].map(k=>R(140+k*400/d,y,400/d,58,{rx:0,c:fill(k)})).join("")+T(125,y+40,lab,{z:28,a:"end",c:o.lc||""}),o);
+ADDL("fadd",{vid:[
+ {d:5,s:T(400,175,"1/2 + 1/4 =",{z:56,a:"end"})+T(420,175,"2/6",{z:56,a:"start",c:"b",t:1})+T(530,175,"?",{z:56,a:"start",c:"m",t:1})+L(410,110,515,190,{c:"kb",draw:2.6})+L(515,110,410,190,{c:"kb",draw:2.9})+T(320,270,"On n’additionne pas les dénominateurs !",{z:26,c:"b",t:3.4}),
+  say:"Un demi plus un quart, est-ce que ça fait deux sixièmes ? Non ! C’est le piège classique : on n’additionne jamais les dénominateurs entre eux."},
+ {d:8,s:fbar(40,2,k=>k===0?"fa":"fc","")+T(125,80,"1/2",{z:28,a:"end",h:2.6})+T(125,80,"2/4",{z:28,a:"end",c:"a",t:2.8})+L(240,40,240,98,{c:"ka",draw:1.4})+L(440,40,440,98,{c:"ka",draw:1.4})+fbar(140,4,k=>k===0?"fw":"fc","1/4",{t:3.6})+fbar(240,4,k=>k<2?"fa":k===2?"fw":"fc","3/4",{t:5.2,lc:"g"})+T(320,340,"2/4 + 1/4 = 3/4",{z:30,c:"g",t:6.2}),
+  say:"Pour additionner, il faut des parts de même taille. On coupe chaque moitié en deux : un demi devient deux quarts. Maintenant, on peut ajouter un quart. Deux quarts plus un quart, trois quarts. On additionne les numérateurs, et on garde le dénominateur."}],
+ g:[{q:"Calcule 1/3 + 1/6. Écris le résultat sous forme de fraction simplifiée (par exemple 2/5).",ans:"1/2",alt:["3/6"],
+   hints:["Il faut d’abord le même dénominateur. 6 est un multiple de 3 : on peut tout mettre en sixièmes.","1/3 = 2/6 (on multiplie le haut et le bas par 2). Le calcul devient 2/6 + 1/6.","2/6 + 1/6 = 3/6. Peut-on simplifier 3/6 en divisant en haut et en bas par 3 ?"],
+   sol:"1/3 + 1/6 = 2/6 + 1/6 = 3/6 = <b>1/2</b> (on simplifie par 3)."},
+  {q:"Youssef mange 1/4 d’une pizza et son copain en mange 3/8. Quelle fraction de la pizza ont-ils mangée en tout ?",ans:"5/8",alt:["0,625"],
+   hints:["Les parts ne sont pas de même taille : des quarts et des huitièmes. Mets tout en huitièmes.","1/4 = 2/8 (on multiplie le haut et le bas par 2).","2/8 + 3/8 : additionne les numérateurs, garde le dénominateur 8."],
+   sol:"1/4 + 3/8 = 2/8 + 3/8 = <b>5/8</b> de la pizza."}]});
+/* puissances */
+ADDL("pow",{vid:[
+ {d:7,s:T(320,46,"2⁵ = 2 × 2 × 2 × 2 × 2",{z:32})+[2,4,8,16,32].map((v,k)=>{const h=v*6.2,x=95+k*110;return Gr(R(x,312-h,62,h,{c:"fa",rx:4})+T(x+31,302-h,String(v),{z:24})+T(x+31,340,"2"+sup(k+1),{z:18,c:"m"}),{t:.8+k*1})+(k?T(x-24,300,"×2",{z:18,c:"a",t:.8+k*1}):"")}).join(""),
+  say:"Deux puissance cinq, c’est deux multiplié cinq fois par lui-même. Deux, quatre, huit, seize, trente-deux : à chaque fois, on double ! Deux puissance cinq égale trente-deux."},
+ {d:5,s:T(320,120,"2³ = 2 × 2 × 2 = 8",{z:44,c:"g",t:.3})+T(320,220,"2³ ≠ 2 × 3",{z:44,c:"b",t:2})+T(320,310,"L’exposant compte combien de fois on écrit le 2",{z:21,c:"m",t:3.4}),
+  say:"Le piège : deux au cube, ce n’est pas deux fois trois ! C’est deux fois deux fois deux, huit. L’exposant dit combien de fois on écrit le nombre dans la multiplication."},
+ {d:6,s:[["10¹ = 10",0],["10² = 100",1],["10³ = 1 000",2],["10⁶ = 1 000 000",3]].map(([s,t],k)=>T(150,72+k*68,s,{z:34,a:"start",t})).join("")+T(320,345,"10ⁿ = 1 suivi de n zéros",{z:26,c:"g",t:4.4}),
+  say:"Avec dix, c’est magique : l’exposant donne le nombre de zéros. Dix puissance un, dix. Dix puissance deux, cent. Dix puissance trois, mille. Dix puissance six, un million : un suivi de six zéros."}],
+ g:[{q:"Calcule 3⁴.",ans:81,
+   hints:["3⁴ = 3 × 3 × 3 × 3. Attention, ce n’est pas 3 × 4 !","Avance pas à pas : 3 × 3 = 9, puis 9 × 3 = 27.","Il reste une dernière multiplication : 27 × 3."],
+   sol:"3⁴ = 3 × 3 × 3 × 3 = 9 × 9 = <b>81</b>."},
+  {q:"On écrit 2 500 000 = 2,5 × 10ⁿ. Combien vaut l’exposant n ?",ans:6,
+   hints:["En notation scientifique, on met devant un nombre entre 1 et 10 : ici 2,5.","Compte de combien de rangs la virgule doit se déplacer pour passer de 2,5 à 2 500 000.","2,5 → 25 → 250 → 2 500 → … Compte chaque × 10."],
+   sol:"2,5 × 10 × 10 × 10 × 10 × 10 × 10 = 2 500 000 : on a multiplié 6 fois par 10, donc <b>n = 6</b>."}]});
+/* équations */
+const bal=o=>{const w=(x,y,lab,cls,oo={})=>Gr(R(x,y,34,34,{c:cls,rx:5})+T(x+17,y+24,lab,{z:18}),oo);
+  return L(140,170,500,170)+L(320,170,320,330)+L(262,330,378,330)+L(170,170,170,214)+L(470,170,470,214)+R(70,214,200,9,{c:"fk",rx:3})+R(370,214,200,9,{c:"fk",rx:3})+C(320,170,8,{c:"fk"})
+   +Gr(R(82,164,50,50,{c:"fa",rx:6})+T(107,198,"x",{z:28}))+[0,1,2].map(k=>w(144+k*40,180,"1","fw",{h:o.rm})).join("")
+   +[0,1,2,3].map(k=>w(382+k*46,180,"1","fw")).join("")+[0,1,2].map(k=>w(405+k*46,142,"1","fw",{h:o.rm})).join("")};
+ADDL("equa",{vid:[
+ {d:6,s:bal({})+T(320,58,"x + 3 = 7",{z:36,t:1.2})+T(320,100,"Combien vaut x ?",{z:20,c:"m",t:2.2}),
+  say:"Une équation, c’est une balance en équilibre. À gauche, une boîte mystère, x, et trois poids de un. À droite, sept poids de un. Combien vaut x ?"},
+ {d:6.5,s:bal({rm:1.6})+T(320,58,"On enlève 3 de chaque côté",{z:26,c:"a",t:.4,h:3.6})+T(320,62,"x = 4",{z:46,c:"g",t:3.9}),
+  say:"Pour garder l’équilibre, on fait la même chose des deux côtés. On enlève trois poids à gauche, et trois poids à droite. Il reste x d’un côté, et quatre de l’autre. Donc x égale quatre !"},
+ {d:5,s:T(320,110,"x + 3 = 7",{z:44})+T(320,205,"4 + 3 = 7 ✓",{z:48,c:"g",t:1.2})+T(320,300,"On vérifie en remplaçant x par la solution",{z:22,c:"m",t:2.6}),
+  say:"Et on vérifie toujours : on remplace x par quatre. Quatre plus trois, sept. C’est juste !"}],
+ g:[{q:"Résous l’équation : 5x − 4 = 21. Combien vaut x ?",ans:5,
+   hints:["Commence par te débarrasser du − 4 : ajoute 4 des deux côtés de la balance.","Tu obtiens 5x = 25. Rappel : 5x veut dire 5 × x.","Pour trouver x, divise les deux côtés par 5."],
+   sol:"5x − 4 = 21 → 5x = 25 → x = 25 ÷ 5 = <b>5</b>. Vérification : 5 × 5 − 4 = 21 ✓"},
+  {q:"Je pense à un nombre. Je le multiplie par 3, puis j’ajoute 8. J’obtiens 35. Quel est ce nombre ?",ans:9,
+   hints:["Appelle x le nombre mystère. L’énoncé devient : 3x + 8 = 35.","Enlève 8 des deux côtés : 3x = 27.","Divise les deux côtés par 3."],
+   sol:"3x + 8 = 35 → 3x = 27 → x = <b>9</b>. Vérification : 3 × 9 + 8 = 35 ✓"}]});
+})();
+
 for(const t of [
  {id:"hx_caps",sub:"hg",lvl:"Expert",title:"Capitales : niveau expert",desc:"Sur la carte, pièges et capitales à écrire",gen:G.hgXcaps},
  {id:"hx_heure",sub:"hg",lvl:"Expert",title:"Fuseaux horaires et hémisphères",desc:"Calculer l’heure partout dans le monde",gen:G.hgHeure},
@@ -3112,7 +3432,7 @@ function vProgress(){const H=state.history;const totalQ=H.length,totalMin=Math.r
   <section class="section"><h2>XP des 14 derniers jours</h2><div class="card" style="padding:14px">${chart(days)}</div></section>
   <section class="section"><h2>Maîtrise par matière</h2><div class="card">${Object.entries(SUBJECTS).map(([k,s])=>{const m=subMastery(k);return `<div class="mastery">${glyph(k)}<div><b>${s.label}</b><div class="bar" style="margin-top:6px"><i style="width:${m.pct??0}%;background:${s.c}"></i></div></div><span class="num" style="text-align:right;font-weight:700">${m.pct===null?"–":m.pct+" %"}</span></div>`}).join("")}</div></section>
   ${weak.length?`<section class="section"><h2>À retravailler</h2><div class="grid">${weak.map(t=>`<button class="tile" data-theme="${t.id}" style="--sc:${SUBJECTS[t.sub].c}"><div class="tile-head">${glyph(t.sub)}<div><h3>${t.title}</h3><span class="muted">Moyenne ${Math.round(themeAvg(t.id))} %</span></div></div></button>`).join("")}</div></section>`:""}
-  <section class="section"><h2>Derniers quiz</h2><div class="card tbl-wrap">${H.length?`<table><thead><tr><th>Date</th><th>Matière</th><th>Thème</th><th style="text-align:right">Score</th></tr></thead><tbody>${H.slice(-12).reverse().map(h=>`<tr><td>${new Date(h.d).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</td><td>${SUBINFO(h.sub).short}</td><td>${esc(h.title)}</td><td class="num">${h.c} / ${h.n}</td></tr>`).join("")}</tbody></table>`:`<p class="empty">Tes résultats apparaîtront ici après ton premier quiz.</p>`}</div></section>`}
+  <section class="section"><h2>Derniers quiz</h2><div class="card tbl-wrap">${H.length?`<table><thead><tr><th>Date</th><th>Matière</th><th>Thème</th><th style="text-align:right">Score</th></tr></thead><tbody>${H.slice(-12).reverse().map(h=>`<tr><td>${new Date(h.d).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}</td><td>${SUBINFO(h.sub).short}</td><td>${esc(h.title)}</td><td class="num">${fmt(h.c)} / ${h.n}</td></tr>`).join("")}</tbody></table>`:`<p class="empty">Tes résultats apparaîtront ici après ton premier quiz.</p>`}</div></section>`}
 function chart(days){const W=700,Hh=190,pl=34,pb=26,pt=18,max=Math.max(100,Math.ceil(Math.max(...days.map(x=>x.v))/50)*50),bw=(W-pl-10)/days.length;
   const y=v=>pt+(Hh-pt-pb)*(1-v/max);const L=["D","L","M","M","J","V","S"];
   let s=`<svg class="chart" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="XP gagnés par jour sur 14 jours">`;
@@ -3181,20 +3501,22 @@ function renderQuiz(){const el=document.getElementById("quiz");const si=SUBINFO(
   if(q.listen){body+=canSpeak()?`<button class="listen" data-say="${esc(q.listen)}">${SPK} Écouter${q.listen.includes(" ")?" la phrase":" le mot"}</button>`:`<p class="card passage">Le son n’est pas disponible ici. Le texte : <b>${esc(q.listen)}</b></p>`}
   if(q.say&&canSpeak())body+=`<button class="listen" data-say="${esc(q.say)}">${SPK} Écouter « ${esc(q.say)} »</button>`;
   let ans="",media=q.svg||(q.map?MAPR(q.map):"");
-  if(q.type==="mcq"){ans=`<div class="choices">${q.choices.map((c,i)=>{let cls="";if(a){if(i===q.answer)cls="right";else if(i===quiz.picked)cls="wrong"}return `<button class="choice ${cls}" data-pick="${i}" ${a?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(c)}</span></button>`}).join("")}</div>`}
+  if(q.type==="mcq"){const ro=!a&&quiz.retry?quiz.retry.out:[];ans=`<div class="choices">${q.choices.map((c,i)=>{let cls="";if(a){if(i===q.answer)cls="right";else if(i===quiz.picked)cls="wrong";else if(quiz.retry&&quiz.retry.out.includes(i))cls="out"}else if(ro.includes(i))cls="out";return `<button class="choice ${cls}" data-pick="${i}" ${a||ro.includes(i)?"disabled":""}><span class="k">${"ABCD"[i]}</span><span>${esc(c)}</span></button>`}).join("")}</div>`}
   else if(q.type==="input"){ans=`<form class="answer-row" data-form="1"><input class="input ${a?(quiz.lastOk?"right":"wrong"):""}" id="q-ans" autocomplete="off" autocapitalize="off" spellcheck="false" ${q.numeric?'inputmode="decimal"':""} placeholder="${q.numeric?"Ta réponse"+(q.unit?" (en "+q.unit+")":""):"Écris ta réponse"}" ${a?"disabled":""} value="${a?esc(quiz.typed):""}"><button class="btn" type="submit" ${a?"disabled":""}>Valider</button></form>`}
   else{media=q.type==="draw"?drawSvg(q,a):q.type==="color"?colorSvg(q,a):symSvg(q,a);ans=toolsHTML(q,a)}
+  if(!a&&quiz.retry)ans=`<div class="feedback hintfb" role="status"><span class="verdict">Pas encore… 💡 Un indice</span><p>${quiz.retry.t}</p><p class="muted">Deuxième essai : une bonne réponse rapporte ½ point.</p></div>`+ans;
   body+=media?`<div class="qsplit"><div class="card figbox">${media}</div><div class="qside">${ans}</div></div>`:ans;
-  if(a){const ok=quiz.lastOk;body+=`<div class="feedback ${ok?"ok":"ko"}" role="status"><span class="verdict">${ok?pick(["Bravo !","Exact !","Bien joué !","Parfait !"]):"Pas tout à fait…"}</span>${!ok&&!VIS(q)?`<p>La bonne réponse : <b>${esc(goodText(q))}</b></p>`:""}${q.type==="draw"?`<p><b>${esc(quiz.drawMsg||"")}</b></p>`:""}${!ok&&(q.type==="color"||q.type==="sym")?`<p>En pointillés verts : ce qu’il fallait colorier. En rouge : les erreurs.</p>`:""}<p>${esc(q.expl||"")}</p>${quiz.explain!==null?`<p class="ai">${esc(quiz.explain||"Claude réfléchit…")}</p>`:""}</div>
+  if(a){const ok=quiz.lastOk;body+=`<div class="feedback ${ok?"ok":"ko"}" role="status"><span class="verdict">${ok?(quiz.retry?"Trouvé au 2e essai ! +½ point":pick(["Bravo !","Exact !","Bien joué !","Parfait !"])):"Pas tout à fait…"}</span>${!ok&&!VIS(q)?`<p>La bonne réponse : <b>${esc(goodText(q))}</b></p>`:""}${q.type==="draw"?`<p><b>${esc(quiz.drawMsg||"")}</b></p>`:""}${!ok&&(q.type==="color"||q.type==="sym")?`<p>En pointillés verts : ce qu’il fallait colorier. En rouge : les erreurs.</p>`:""}<p>${esc(q.expl||"")}</p>${quiz.explain!==null?`<p class="ai">${esc(quiz.explain||"Claude réfléchit…")}</p>`:""}</div>
    <div class="qnext">${!ok&&sample&&!VIS(q)&&quiz.explain===null?`<button class="btn ghost" data-explain="1">Claude, explique-moi</button>`:""}<button class="btn" data-next="1" id="q-next">${quiz.i+1<n?"Question suivante":"Voir mon score"}</button></div>`}
   el.innerHTML=body+"</div>";
   if(!a&&q.type==="input")setTimeout(()=>document.getElementById("q-ans")?.focus(),60);
   if(a)setTimeout(()=>document.getElementById("q-next")?.scrollIntoView({block:"nearest",behavior:"smooth"}),60)}
-function answer(val){const q=quiz.qs[quiz.i];if(quiz.answered)return;const ok=isRight(q,val);if(q.type==="draw")quiz.drawMsg=evalDraw(q,val).msg;
-  quiz.answered=true;quiz.lastOk=ok;quiz.picked=val;quiz.typed=typeof val==="string"?val:"";if(ok)quiz.c++;quiz.results.push(ok);
+function answer(val){const q=quiz.qs[quiz.i];if(quiz.answered)return;if(quiz.retry&&q.type==="mcq"&&quiz.retry.out.includes(val))return;const ok=isRight(q,val);if(q.type==="draw")quiz.drawMsg=evalDraw(q,val).msg;
+  if(!ok&&!quiz.retry&&canRetry(q)){quiz.retry=quizHint(q,val);beep([[300,0,.22]]);renderQuiz();setTimeout(()=>document.querySelector(".feedback.hintfb")?.scrollIntoView({block:"nearest",behavior:"smooth"}),60);return}
+  quiz.answered=true;quiz.lastOk=ok;quiz.picked=val;quiz.typed=typeof val==="string"?val:"";if(ok)quiz.c+=quiz.retry?.5:1;quiz.results.push(ok&&!quiz.retry);
   beep(ok?[[740,0,.12],[988,.1,.18]]:[[300,0,.22]]);
   renderQuiz();if(q.sayAfter&&canSpeak())setTimeout(()=>speak(q.sayAfter),300)}
-function nextQ(){quiz.i++;quiz.answered=false;quiz.explain=null;quiz.quitArm=false;quiz.work={pts:[],closed:false,col:{},crayon:quiz.work.crayon};if(quiz.i>=quiz.qs.length)return finishQuiz();renderQuiz();autoListen()}
+function nextQ(){quiz.i++;quiz.answered=false;quiz.retry=null;quiz.explain=null;quiz.quitArm=false;quiz.work={pts:[],closed:false,col:{},crayon:quiz.work.crayon};if(quiz.i>=quiz.qs.length)return finishQuiz();renderQuiz();autoListen()}
 function finishQuiz(){const n=quiz.qs.length,c=quiz.c,pct=Math.round(c/n*100),sec=Math.round((Date.now()-quiz.start)/1000);
   const gain=c*10+(c===n?20:0);const before=levelInfo(state.xp).L;state.xp+=gain;
   const tk=todayKey();const d=state.days[tk]||(state.days[tk]={xp:0,quiz:0,sec:0});d.xp+=gain;d.quiz++;d.sec=(d.sec||0)+sec;
@@ -3210,7 +3532,7 @@ function finishQuiz(){const n=quiz.qs.length,c=quiz.c,pct=Math.round(c/n*100),se
 function renderResult(){const r=quiz.done,si=SUBINFO(quiz.sub),lv=levelInfo(state.xp);
   const msg=quiz.lesson?(r.pct>=80?"Cours bien compris, bravo !":r.pct>=50?"Presque compris : revois les étapes où tu as hésité.":"Pas encore compris : revois le cours, puis réessaie."):r.pct===100?"Sans faute ! Tu peux tenter le niveau au-dessus.":r.pct>=80?"Très beau travail !":r.pct>=60?"Pas mal ! Encore un essai pour viser la médaille d’argent.":"Courage, tes erreurs sont dans les Révisions pour t’entraîner.";
   const md=quiz.th!=="rev"&&!quiz.ai&&!quiz.lesson?medal(quiz.th):null;
-  document.getElementById("quiz").innerHTML=`<div class="qwrap" style="--sc:${si.c}"><div class="result"><p class="eyebrow">${esc(si.label)} · ${esc(quiz.title)}</p><div class="score num">${quiz.c}<span class="muted" style="font-size:44px"> / ${quiz.qs.length}</span></div><h2><span class="mark">${msg}</span></h2>
+  document.getElementById("quiz").innerHTML=`<div class="qwrap" style="--sc:${si.c}"><div class="result"><p class="eyebrow">${esc(si.label)} · ${esc(quiz.title)}</p><div class="score num">${fmt(quiz.c)}<span class="muted" style="font-size:44px"> / ${quiz.qs.length}</span></div><h2><span class="mark">${msg}</span></h2>
    <p class="num">+${r.gain} XP ${r.lvlUp?`· <b>Niveau ${lv.L} atteint : ${lv.title} !</b>`:""}</p>${md?`<span class="medal ${md[0]}" style="font-size:15px;padding:6px 14px">Médaille ${md[1]}</span>`:""}
    <div class="qnext" style="justify-content:center;margin-top:10px">${quiz.lesson?`<button class="btn ghost" data-lesson="${quiz.lesson}">Revoir le cours</button><button class="btn ghost" data-lex="${quiz.lesson}">Refaire l’exercice</button>`:""}${quiz.th!=="rev"&&!quiz.ai&&!quiz.lesson?`<button class="btn ghost" data-replay="${quiz.th}">Rejouer</button>`:""}<button class="btn" data-qclose="force">Terminer</button></div></div></div>`}
 
@@ -3277,7 +3599,7 @@ document.addEventListener("click",e=>{
   if(D.lclose)return closeLesson();
   if(D.lprev)return lessonGo(-1);
   if(D.lnext)return lessonGo(1);
-  if(D.lsay){if(lesson.speaking)return stopSpeak();return speakFr(LESSON[lesson.id].steps[lesson.i].say)}
+  if(D.lsay){if(lesson.speaking)return stopSpeak();return speakFr(lesson.steps[lesson.i].say||"")}
   if(D.sub){lvlFilter="Tout";return go("subject",D.sub)}
   if(D.lvl){lvlFilter=D.lvl;return render()}
   if(D.theme)return startTheme(D.theme);
@@ -3305,7 +3627,11 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("change",e=>{if(e.target.id==="l-auto"){state.voiceAuto=e.target.checked;save();if(!e.target.checked)stopSpeak()}});
 document.addEventListener("change",e=>{if(e.target.id!=="imp-file"||!e.target.files[0])return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||d.v!==1||!Array.isArray(d.planning))throw 0;state=Object.assign(defaults(),d);state.updatedAt=Date.now();saveLocal();toast("Sauvegarde restaurée.");render()}catch(err){toast("Ce fichier n’est pas une sauvegarde de l’appli.")}};r.readAsText(e.target.files[0])});
-document.addEventListener("submit",e=>{if(e.target.dataset.form){e.preventDefault();const v=document.getElementById("q-ans").value;if(v.trim())answer(v)}});
+document.addEventListener("click",e=>{if(!lesson)return;const t=e.target.closest&&e.target.closest("[data-vtoggle],[data-vseg],[data-vmute],[data-gpick],[data-ghint],[data-gsol]");if(!t)return;const D=t.dataset;
+  if(D.vtoggle)return vidToggle();if(D.vseg)return vidShow(+D.vseg,"play");
+  if(D.vmute){vidMute=!vidMute;t.textContent=vidMute?"🔇":"🔊";if(vidS&&vidS.mode==="play")vidShow(vidS.i,"play");return}
+  if(D.gpick)return gCheck(+D.gpick);if(D.ghint)return gHintBtn();if(D.gsol)return gSol()});
+document.addEventListener("submit",e=>{if(e.target.dataset.gform){e.preventDefault();const v=document.getElementById("g-ans").value;if(v.trim())gCheck(v);return}if(e.target.dataset.form){e.preventDefault();const v=document.getElementById("q-ans").value;if(v.trim())answer(v)}});
 document.addEventListener("keydown",e=>{if(!quiz||quiz.done)return;if(quiz.answered&&e.key==="Enter"&&document.activeElement?.id!=="q-ans"){e.preventDefault();nextQ()}
   const q=quiz.qs[quiz.i];if(!quiz.answered&&q&&q.type==="mcq"){const i="abcd".indexOf(e.key.toLowerCase());if(i>=0&&i<q.choices.length)answer(i)}});
 if(canSpeak())speechSynthesis.onvoiceschanged=()=>{};
